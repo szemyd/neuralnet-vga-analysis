@@ -9,8 +9,6 @@ public class FirstEclipse extends PApplet {
 
 	PeasyCam cam;
 
-	public int division = 100;
-	float roomSize = 80f;
 	ManageBoxes manBox= new ManageBoxes(this);
 
 	public void settings() {
@@ -32,7 +30,7 @@ public class FirstEclipse extends PApplet {
 
 	public void draw() {
 		background(210);
-		rect(0, 0, roomSize, roomSize);
+		rect(0, 0, Glv.roomSize, Glv.roomSize);
 
 		lights();
 

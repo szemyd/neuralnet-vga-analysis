@@ -1,7 +1,7 @@
 package firsteclipse;
 
 public class Glv {
-	public static int division = 100;
-	public static float roomSize = 80f;
+	public static int division = 10;
+	public static float roomSize = 1420f;
 
 }
