@@ -1,17 +1,7 @@
 package firsteclipse;
 
-import java.util.Random;
-
-import javax.print.attribute.standard.PrinterLocation;
-
-import com.jogamp.common.util.Bitfield.Util;
-import com.sun.javafx.geom.Vec3d;
-
-import javafx.scene.shape.Box;
-import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 import processing.core.PApplet;
 import processing.core.PVector;
-import sun.net.www.content.text.plain;
 
 public class ManageBoxes {
 
@@ -50,10 +40,8 @@ public class ManageBoxes {
 			for (int j = 0; j < hArray[i].length; j++) {
 				PApplet.println("i: " + i + " | j: " + j + "hArray: ");
 
-				float num = choose(p.random(100f));
-
-				PApplet.println(num);
-				hArray[i][j] = num; // new float(choose(p.random(100f)));
+				hArray[i][j] = choose(p.random(100f)); // new
+														// float(choose(p.random(100f)));
 			}
 		}
 

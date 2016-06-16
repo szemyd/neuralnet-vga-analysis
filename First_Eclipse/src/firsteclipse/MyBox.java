@@ -24,7 +24,9 @@ public class MyBox {
 
 		p.pushMatrix();
 		{
+			
 			p.translate(position.x, position.y, position.z);
+			p.box(Glv.roomSize/Glv.division, Glv.roomSize/Glv.division, height);
 			p.point(0, 0, 0);
 		}
 		p.popMatrix();
