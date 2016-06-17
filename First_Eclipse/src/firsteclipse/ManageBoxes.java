@@ -6,7 +6,7 @@ import processing.core.PVector;
 public class ManageBoxes {
 
 	private PApplet p;
-	private float[][] hArray;// = new float[Glv.division][Glv.division];
+	// private float[][] hArray;// = new float[Glv.division][Glv.division];
 	private MyBox[][] boxes = new MyBox[Glv.division][Glv.division];
 
 	public ManageBoxes(PApplet _p) {
@@ -15,16 +15,17 @@ public class ManageBoxes {
 
 	void setup() {
 
-		hArray = new float[Glv.division][Glv.division];
-		createHeights();
+		// hArray = new float[Glv.division][Glv.division];
 
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				PVector position = new PVector((Glv.roomSize / Glv.division * i) - (Glv.roomSize) * 0.5f,
-						(Glv.roomSize / Glv.division * j) - (Glv.roomSize) * 0.5f, hArray[i][j] * 0.5f);
-				boxes[i][j] = new MyBox(p, hArray[i][j], position);
+						(Glv.roomSize / Glv.division * j) - (Glv.roomSize) * 0.5f, 0);
+				boxes[i][j] = new MyBox(p, position);
 			}
 		}
+
+		createHeights();
 	}
 
 	void draw() {
@@ -36,17 +37,15 @@ public class ManageBoxes {
 	}
 
 	public void createHeights() {
-		for (int i = 0; i < hArray.length; i++) {
-			for (int j = 0; j < hArray[i].length; j++) {
-				PApplet.println("i: " + i + " | j: " + j + "hArray: ");
-
-				hArray[i][j] = choose(p.random(100f)); // new
-														// float(choose(p.random(100f)));
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				boxes[i][j].height = choose(p.random(100f)); // new
+				// float(choose(p.random(100f)));
 			}
 		}
 
 		// for (int i = 0; i < 10; i++) {
-		// checkNeighbourhood();
+		checkNeighbourhood();
 		// }
 	}
 
@@ -54,9 +53,11 @@ public class ManageBoxes {
 
 		calculateSum();
 
-		for (int i = 0; i < hArray.length; i++) {
-			for (int j = 0; j < hArray[i].length; j++) {
-				hArray[i][j] = decideH(i, j);
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				boxes[i][j].height = walls(i, j);
+				p.println(boxes[i][j].height);
+				// boxes[i][j].height = separation(i, j);
 			}
 		}
 		// for (int i = hArray.length - 1; i > 0; i--) {
@@ -69,35 +70,38 @@ public class ManageBoxes {
 	public void calculateSum() {
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				boxes[i][j].neighbourSum = +hArray[(i - 1)][j] + hArray[i][(j - 1)] + hArray[(i + 1)][j]
-						+ hArray[i][(j + 1)] + hArray[i + 1][j + 1] + hArray[i - 1][j - 1] + hArray[i - 1][j + 1]
-						+ hArray[i + 1][j - 1];
+				for (int k = -1; k < 2; k++) {
+					for (int l = -1; l < 2; l++) {
+
+						if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+							// p.println(i + k);
+							// p.println(j + l);
+							boxes[i][j].neighbourSum += boxes[(i + k)][(j + l)].height;
+
+						}
+					}
+					p.println(boxes[i][j].neighbourSum);
+				}
 			}
 		}
 	}
 
 	public float choose(float chance) {
-
-		// PApplet.println("im here");
-		float myHeight = 0f;
-
 		if (chance > 60.0f) {
-			myHeight = 1.0f; // p.random(16000f, 80000f);
-			// } else if (chance > 99.65f)
-			// myHeight = p.random(8000f);
+			return 1.0f;
 		} else
 			return 0.0f;
-
-		return myHeight;
 	}
 
-	public float decideH(int i, int j) {
-		int counter=0;
+	public float walls(int i, int j) {
+		int counter = 0;
 
-		for (int k = 0; k < 1; k++) {
-			for (int k2 = 0; k2 < 1; k2++) {
-				if (boxes[i][j].neighbourSum > boxes[k][k2].neighbourSum)
-					counter++;
+		for (int k = -1; k < 2; k++) {
+			for (int l = -1; l < 2; l++) {
+				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+					if (boxes[i][j].neighbourSum > boxes[k + i][l + j].neighbourSum)
+						counter++;
+				}
 			}
 		}
 
@@ -105,47 +109,9 @@ public class ManageBoxes {
 			return 0f;
 		else
 			return 1.0f;
-
-		
-		
-		//float myHeight = 0f;
-		//
-		// if (hArray[i][j] > 1f)
-		// return hArray[i][j];
-		// else
-		
-		//
-		// if (i > 0 && j > 0 && i < hArray.length - 1 && j < hArray[i].length -
-		// 1) {
-		// float neighBourSum = +hArray[(i - 1)][j] + hArray[i][(j - 1)] +
-		// hArray[(i + 1)][j] + hArray[i][(j + 1)]
-		// + hArray[i + 1][j + 1] + hArray[i - 1][j - 1] + hArray[i - 1][j + 1]
-		// + hArray[i + 1][j - 1];
-		// if (boxes[i][j] < 2f && neighBourSum > 0f) {
-		// myHeight = 1.0f;
-		// }
-		// }
-
-		// if (i > 0 && j > 0 && i < hArray.length - 1 && j < hArray[i].length -
-		// 1) {
-		// float neighBourSum = +hArray[(i - 1)][j] + hArray[i][(j - 1)] +
-		// hArray[(i + 1)][j] + hArray[i][(j + 1)]
-		// + hArray[i + 1][j + 1] + hArray[i - 1][j - 1] + hArray[i - 1][j + 1]
-		// + hArray[i + 1][j - 1];
-		// if (neighBourSum < 2f && neighBourSum > 0f) {
-		// myHeight = 1.0f;
-		// }
-		// }
-
-		// if (i > 0 && j > 0 && i < hArray.length - 1 && j < hArray[i].length -
-		// 1)
-		// myHeight = (+hArray[(i - 1)][j] + hArray[i][(j - 1)] + hArray[(i +
-		// 1)][j] + hArray[i][(j + 1)]
-		// + hArray[i + 1][j + 1] + hArray[i - 1][j - 1] + hArray[i - 1][j + 1]
-		// // + (hArray[i][j])
-		// + hArray[i + 1][j - 1]) / 8.3f;
-
-		//return myHeight;
 	}
 
+	// public float separation(int i, int j) {
+
+	// }
 }

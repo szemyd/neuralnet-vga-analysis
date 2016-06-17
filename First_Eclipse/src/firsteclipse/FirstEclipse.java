@@ -37,7 +37,6 @@ public class FirstEclipse extends PApplet {
 
 		manBox.draw();
 
-		println(Glv.seed);
 	}
 
 	public void keyPressed() {

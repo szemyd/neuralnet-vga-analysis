@@ -6,14 +6,14 @@ import processing.core.PVector;
 public class MyBox {
 
 	private PApplet p;
-	private float height;
+	public float height;
 	PVector position;
 	float neighbourSum;
 
-	public MyBox(PApplet _p, float _height, PVector _position) {
+	public MyBox(PApplet _p, PVector _position) {
 		p = _p;
 
-		height = _height*1.5f;
+		//height = _height;
 		position = _position;
 		p.noStroke();
 		//p.strokeWeight(5f);
@@ -25,8 +25,8 @@ public class MyBox {
 
 		p.pushMatrix();
 		{
-			p.translate(position.x, position.y, height*0.5f);
-			p.box(Glv.roomSize/Glv.division, Glv.roomSize/Glv.division, height);
+			p.translate(position.x, position.y, height*1.5f*0.5f);
+			p.box(Glv.roomSize/Glv.division, Glv.roomSize/Glv.division, height*1.5f);
 			//p.point(0, 0, 0);
 		}
 		p.popMatrix();
