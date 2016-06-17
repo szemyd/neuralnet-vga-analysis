@@ -9,18 +9,19 @@ public class FirstEclipse extends PApplet {
 
 	PeasyCam cam;
 
-	ManageBoxes manBox= new ManageBoxes(this);
+	ManageBoxes manBox = new ManageBoxes(this);
 
 	public void settings() {
-		size(800, 800, P3D);
+		size(1600, 1200, P3D);
 	}
 
 	public void setup() {
 		// size(800, 800, P3D);
-		cam = new PeasyCam(this, 120);
+		cam = new PeasyCam(this, 160);
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
 
+		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 		manBox.setup();
 
@@ -29,12 +30,24 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void draw() {
-		background(210);
+		background(0);
 		rect(0, 0, Glv.roomSize, Glv.roomSize);
 
 		lights();
 
 		manBox.draw();
+
+		println(Glv.seed);
+	}
+
+	public void keyPressed() {
+
+		if (keyCode == LEFT)
+			Glv.seed--;
+		manBox.setup();
+		if (keyCode == RIGHT)
+			Glv.seed++;
+		manBox.setup();
 
 	}
 
