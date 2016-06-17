@@ -8,6 +8,7 @@ public class MyBox {
 	private PApplet p;
 	private float height;
 	PVector position;
+	float neighbourSum;
 
 	public MyBox(PApplet _p, float _height, PVector _position) {
 		p = _p;
@@ -30,5 +31,4 @@ public class MyBox {
 		}
 		p.popMatrix();
 	}
-
 }
