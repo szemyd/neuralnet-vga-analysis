@@ -21,7 +21,7 @@ public class MyBox {
 
 	void draw() {
 		//p.fill(p.map(height, 0, 360, 0, 360) * 3f, 180, 360);
-		p.fill(height/1.5f * 20 + 250, 220, 290);
+		p.fill(0, 0, height/1.5f * 75 + 250);
 
 		p.pushMatrix();
 		{

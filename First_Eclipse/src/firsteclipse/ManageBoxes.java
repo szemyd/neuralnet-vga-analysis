@@ -2,7 +2,10 @@ package firsteclipse;
 
 import java.util.Random;
 
+import javax.print.attribute.standard.PrinterLocation;
+
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 public class ManageBoxes {
@@ -30,7 +33,9 @@ public class ManageBoxes {
 		createHeights();
 	}
 
-	void draw() {
+	void draw() { // Draws the boxes
+		//checkNeighbourhood();
+		//p.println(p.frameCount);
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				boxes[i][j].draw();
@@ -38,7 +43,9 @@ public class ManageBoxes {
 		}
 	}
 
-	public void createHeights() {
+	public void createHeights() { // Creates the height 1. choose randomly which
+									// one to switch on 2. iterate through and
+									// change rest accordingly
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				boxes[i][j].height = choose(p.random(100f)); // new
@@ -46,9 +53,10 @@ public class ManageBoxes {
 			}
 		}
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 50; i++) {
 			checkNeighbourhood();
-	}
+		}
+	boxes[i][j].height = separation(i, j);
 	}
 
 	public void checkNeighbourhood() {
@@ -59,7 +67,11 @@ public class ManageBoxes {
 			for (int j = 0; j < boxes[i].length; j++) {
 				boxes[i][j].height = walls(i, j);
 				// p.println(boxes[i][j].height);
-				boxes[i][j].height = separation(i, j);
+				for (int j2 = 0; j2 < 1; j2++) {
+//					boxes[i][j].height = separation(i, j);
+				}
+
+				// boxes[i][j].height = separation2(i, j);
 			}
 		}
 		// for (int i = hArray.length - 1; i > 0; i--) {
@@ -82,17 +94,10 @@ public class ManageBoxes {
 
 						}
 					}
-					p.println(boxes[i][j].neighbourSum);
+					// p.println(boxes[i][j].neighbourSum);
 				}
 			}
 		}
-	}
-
-	public float choose(float chance) {
-		if (chance > 98.0f) {
-			return 1.0f;
-		} else
-			return 0.0f;
 	}
 
 	public float walls(int i, int j) {
@@ -107,8 +112,8 @@ public class ManageBoxes {
 			}
 		}
 
-		if (counter < 3)
-			return 0f;
+		if (counter < 5)
+			return 0.0f;
 		else
 			return 1.0f;
 	}
@@ -116,6 +121,29 @@ public class ManageBoxes {
 	public float separation(int i, int j) {
 		for (int k = -2; k < 3; k++) {
 			for (int l = -2; l < 3; l++) {
+				if (k < -1 || k > 1 && l < -1 || l > 1) {
+					//p.println("im here");
+					if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+						if (boxes[i + k][j + l].height > 0) {
+							if (p.random(100) > 50f) {
+								boxes[i + k][j + l].height = 0.0f;
+								
+							} else
+								return 0.0f;
+							
+						}
+
+					}
+				}
+			}
+		}
+		
+		return boxes[i][j].height;
+	}
+
+	public float separation2(int i, int j) {
+		for (int k = -4; k < 5; k++) {
+			for (int l = -4; l < 5; l++) {
 				if (k < -1 && k > 1 && l < -1 && l > 1) {
 					if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
 						if (boxes[i + k][j + l].height > 0) {
@@ -131,4 +159,12 @@ public class ManageBoxes {
 		}
 		return boxes[i][j].height;
 	}
+
+	public float choose(float chance) {
+		if (chance > 98.0f) {
+			return 1.0f;
+		} else
+			return 0.0f;
+	}
+
 }
