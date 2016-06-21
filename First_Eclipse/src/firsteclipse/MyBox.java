@@ -21,12 +21,12 @@ public class MyBox {
 
 	void draw() {
 		//p.fill(p.map(height, 0, 360, 0, 360) * 3f, 180, 360);
-		p.fill(0, 0, height/1.5f * 75 + 250);
+		p.fill(360, height*110, height/4.0f * 75 + 250);
 
 		p.pushMatrix();
 		{
-			p.translate(position.x, position.y, height*1.5f*0.5f);
-			p.box(Glv.roomSize/Glv.division, Glv.roomSize/Glv.division, height*1.5f);
+			p.translate(position.x, position.y, height*4.0f*0.5f);
+			p.box(Glv.roomSizeX/Glv.divisionX, Glv.roomSizeY/Glv.divisionY, height*4.0f);
 			//p.point(0, 0, 0);
 		}
 		p.popMatrix();
