@@ -15,6 +15,7 @@ public class FirstEclipse extends PApplet {
 	PImage i;
 
 	ManageBoxes manBox = new ManageBoxes(this);
+	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 
 	public void settings() {
 		size(1600, 1200, P3D);
@@ -28,7 +29,10 @@ public class FirstEclipse extends PApplet {
 
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
+		
 		manBox.setup();
+		spaceSyntax.setup(manBox.boxes);
+
 
 		s = loadShape("solid.OBJ");
 		i = loadImage("map2D.PNG");
@@ -40,18 +44,6 @@ public class FirstEclipse extends PApplet {
 	public void draw() {
 		background(0);
 		lights();
-		//stroke(GRAY);
-
-//		pushStyle();
-//		{
-//			fill(120,0,360);
-//			rect(0, 0, Glv.roomSizeX, Glv.roomSizeY);
-//			// s.disableStyle();
-//		}
-//		popStyle();
-
-		
-
 		
 		pushMatrix();
 		{
@@ -69,7 +61,9 @@ public class FirstEclipse extends PApplet {
 		}
 		popStyle();
 
+		
 		manBox.draw();
+		spaceSyntax.draw();
 
 	}
 

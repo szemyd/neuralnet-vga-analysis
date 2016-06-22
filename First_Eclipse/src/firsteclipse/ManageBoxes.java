@@ -6,7 +6,7 @@ import processing.core.PVector;
 public class ManageBoxes {
 
 	private PApplet p;
-	private MyBox[][] boxes = new MyBox[Glv.divisionX][Glv.divisionY];
+	public MyBox[][] boxes = new MyBox[Glv.divisionX][Glv.divisionY];
 
 	public ManageBoxes(PApplet _p) {
 		p = _p;
@@ -16,8 +16,8 @@ public class ManageBoxes {
 
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				PVector position = new PVector((Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f,
-						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f, 0);
+				PVector position = new PVector((Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f+(Glv.roomSizeX/Glv.divisionX)*0.5f,
+						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f + (Glv.roomSizeY/Glv.divisionY)*0.5f, 0);
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}
@@ -33,32 +33,46 @@ public class ManageBoxes {
 		}
 	}
 
-	public void createHeights() { // Creates the height 1. choose randomly which one to switch on 2. iterate through and change rest accordingly
+	public void createHeights() { // Creates the height 1. choose randomly which
+									// one to switch on 2. iterate through and
+									// change rest accordingly
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				boxes[i][j].height = choose(p.random(100f)); // Assign a height value to each box
+				boxes[i][j].height = choose(p.random(100f)); // Assign a height
+																// value to each
+																// box
 			}
 		}
 
 		for (int i = 0; i < 50; i++) {
+			calculateSum(); // Calculates number of neighbours
 			checkNeighbourhood(); // Runs CA for a set number of iteration.
 		}
+		 dimReduction();
 
-		
 	}
 
 	public void checkNeighbourhood() {
-
-		calculateSum();
-
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
+				// boxes[i][j].height = ca(i, j);
 				boxes[i][j].height = walls(i, j);
-				//boxes[i][j].height = walls2(i, j);
+				// boxes[i][j].height = walls2(i, j);
 				// boxes[i][j].height = separation(i, j);
 			}
 		}
+	}
 
+	public float ca(int i, int j) {
+		// p.println(boxes[i][j].neighbourSum);
+		if (boxes[i][j].neighbourSum >= 5)
+			return 0.0f;
+		else if (boxes[i][j].neighbourSum >= 4)
+			return boxes[i][j].height;
+		else if (boxes[i][j].neighbourSum < 2)
+			return 0.0f;
+		else
+			return 1.0f;
 	}
 
 	public float walls2(int i, int j) {
@@ -75,8 +89,8 @@ public class ManageBoxes {
 
 		if (counter <= 3)
 			return 1.0f;
-		else return 0.0f;
-		
+		else
+			return 0.0f;
 
 		/*
 		 * if (counter > 4) return 1.0f; else if (counter == 2) return
@@ -100,7 +114,6 @@ public class ManageBoxes {
 			return 1.0f;
 		else if (counter >= 4)
 			return boxes[i][j].height;
-
 		else
 			return 0.0f;
 
@@ -152,7 +165,8 @@ public class ManageBoxes {
 		return boxes[i][j].height;
 	}
 
-	public void calculateSum() { // Fills up for each box how many neighbours it has. ƒ
+	public void calculateSum() { // Fills up for each box how many neighbours it
+									// has. ƒ
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				for (int k = -1; k < 2; k++) {
@@ -167,11 +181,44 @@ public class ManageBoxes {
 		}
 	}
 
-	public float choose(float chance) { // Gives either an on or an off value to the boxes according to a predefined chance. ƒ
+	public float choose(float chance) { // Gives either an on or an off value to
+										// the boxes according to a predefined
+										// chance. ƒ
 		if (chance > 99.95f) {
 			return 1.0f;
 		} else
 			return 0.0f;
 	}
 
+	public void dimReduction() {
+
+		for (int i = 0; i < boxes.length; i += Glv.cubeSizeReduced / Glv.cubeSize) {
+			for (int j = 0; j < boxes[i].length; j += Glv.cubeSizeReduced / Glv.cubeSize) {
+
+				float counter = 0;
+				for (int k = 0; k < Glv.cubeSizeReduced / Glv.cubeSize; k++) {
+					for (int l = 0; l < Glv.cubeSizeReduced / Glv.cubeSize; l++) {
+						if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+							counter += boxes[i + k][j + l].height;
+						}
+					}
+				}
+
+				if (counter > 5.0f)
+					changeVal(1.0f, i, j);
+				else
+					changeVal(0.0f, i, j);
+			}
+		}
+	}
+
+	private void changeVal(float num, int i, int j) {
+		for (int k = 0; k < Glv.cubeSizeReduced / Glv.cubeSize; k++) {
+			for (int l = 0; l < Glv.cubeSizeReduced / Glv.cubeSize; l++) {
+				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+					boxes[i + k][j + l].height = num;
+				}
+			}
+		}
+	}
 }
