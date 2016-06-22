@@ -12,4 +12,6 @@ public class Glv {
 	public static int seed = 0;
 
 	public static float cubeSizeReduced = 4.0f;
+	
+	public static boolean shouldDimReduction = false;
 }

@@ -48,7 +48,7 @@ public class ManageBoxes {
 			calculateSum(); // Calculates number of neighbours
 			checkNeighbourhood(); // Runs CA for a set number of iteration.
 		}
-		 dimReduction();
+		if(Glv.shouldDimReduction) dimReduction();
 
 	}
 

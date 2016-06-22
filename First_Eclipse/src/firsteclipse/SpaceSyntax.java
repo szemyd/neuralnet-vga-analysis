@@ -17,7 +17,10 @@ public class SpaceSyntax {
 
 	public void setup(MyBox[][] boxes) {
 		/*
-		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
+		 * for vi in V(G) 
+		 * { 
+		 * for vj in V(G) 
+		 * if vi sees vj then add vj to V(T); }
 		 */
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
