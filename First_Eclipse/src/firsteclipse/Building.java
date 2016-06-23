@@ -10,7 +10,7 @@ import processing.core.PVector;
 
 public class Building {
 
-	private PApplet p;
+	private  PApplet p;
 	public ArrayList<PVector> bLines = new ArrayList<PVector>();
 
 	public Building(PApplet _p, PVector dataIn) {
@@ -20,13 +20,15 @@ public class Building {
 	}
 
 	public void draw() {
-
-	
 			for (int i = 0; i < bLines.size() - 1; i++) {
-				PVector me = bLines.get(i % (bLines.size() - 1));
-				PVector next = bLines.get((i + 1) % (bLines.size() - 1));
+				PVector me = bLines.get(i % (bLines.size()));
+				PVector next = bLines.get((i + 1) % (bLines.size()));
 
-				p.line(me.x, me.y, 0,next.x, next.y,0);
+				float x1=me.x;
+				float y1=me.y;
+						
+				p.println("me: " + me + " | next: " + next);
+				p.line((float)me.x, (float)me.y, 0.0f,(float)next.x, (float)next.y,0.0f);
 			}
 	
 	}
