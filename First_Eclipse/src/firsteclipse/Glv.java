@@ -9,6 +9,13 @@ public class Glv {
 	public static float roomSizeY = 160.42f;
 	public static int divisionX = ((int) roomSizeX / (int) cubeSize);
 	public static int divisionY = ((int) roomSizeY / (int) cubeSize);
+	
+	public static float spaceRoomSizeX = 129.4f;
+	public static float spaceRoomSizeY = 160.42f;
+	public static int spaceDivisionX = ((int) roomSizeX / (int) cubeSize);
+	public static int spaceDivisionY = ((int) roomSizeY / (int) cubeSize);
+	
+	
 	public static int seed = 0;
 
 	public static float cubeSizeReduced = 20.0f;

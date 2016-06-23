@@ -8,10 +8,11 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import sun.net.www.content.text.plain;
 
 public class Environment {
 
-	private  PApplet p;
+	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
 
 	public Environment(PApplet _p) {
@@ -19,13 +20,20 @@ public class Environment {
 	}
 
 	public static void draw() {
-	
+		p.pushStyle();
+		{
+			p.strokeWeight(5.0f);
+			p.stroke(360, 0, 360);
 			for (Building building : buildings) {
 				building.draw();
 			}
 		}
+		p.popStyle();
+	}
 
-	public  void loadData() {
+
+
+	public void loadData() {
 
 		String csvFile = "C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/CODE/PHASE 1_Generating Data/First_Eclipse/src/data/sur.csv";
 		BufferedReader br = null;
@@ -40,15 +48,15 @@ public class Environment {
 				// use comma as separator
 				String[] thisRow = line.split(cvsSplitBy);
 
-				temp.x = Float.parseFloat(thisRow[1])/100;
-				temp.y = Float.parseFloat(thisRow[2])/100;
+				temp.x = Float.parseFloat(thisRow[1]) / 100;
+				temp.y = Float.parseFloat(thisRow[2]) / 100;
 				temp.z = Float.parseFloat(thisRow[4]);
 
-				//p.println(buildings.size() + " temp.z: " + temp.z);
+				// p.println(buildings.size() + " temp.z: " + temp.z);
 				if (buildings.size() < (int) temp.z)
 					buildings.add(new Building(p, temp));
 				else {
-					Building tempBuilding = buildings.get((int) temp.z-1);
+					Building tempBuilding = buildings.get((int) temp.z - 1);
 					tempBuilding.bLines.add(temp);
 				}
 			}

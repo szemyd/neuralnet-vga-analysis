@@ -6,35 +6,36 @@ import com.sun.javafx.geom.AreaOp.AddOp;
 import com.sun.javafx.css.CalculatedValue;
 import com.sun.javafx.geom.Line2D;
 
-import oracle.jrockit.jfr.VMJFR;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 public class SpaceSyntax {
 	private static PApplet p;
 	public static PVector highLow = new PVector();
+	
+	
 
 	public SpaceSyntax(PApplet _p) {
 		p = _p;
 	}
 
-	public static void setup(MyBox[][] boxes) {
+	public static void setup(MyBox [][] boxes, MyRect [][] rectangles) {
 
-		highLow = new PVector(0f, 1000f);
+		highLow = new PVector(0f, 1000f); // This is so that the colours are rightly mapped
 		/*
 		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
 		 */
-		for (int i = 0; i < boxes.length; i++) {
-			for (int j = 0; j < boxes[i].length; j++) {
-				for (int k = 0; k < boxes.length; k++) {
-					for (int l = 0; l < boxes[k].length; l++) {
-						if (canIsee(boxes[i][j], boxes[k][l], boxes)) {
-							boxes[i][j].neighbourhood.add(boxes[k][l]);
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				for (int k = 0; k < rectangles.length; k++) {
+					for (int l = 0; l < rectangles[k].length; l++) {
+						if (canIsee(rectangles[i][j], rectangles[k][l], boxes, rectangles)) {
+							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
 				}
 				//p.println(boxes[i][j].neighbourhood.size());
-				calcHighLow(boxes[i][j].neighbourhood.size());
+				calcHighLow(rectangles[i][j].neighbourhood.size());
 			}
 		}
 		//p.println("high: " + highLow.x + " | low: " + highLow.y);
@@ -44,7 +45,7 @@ public class SpaceSyntax {
 
 	}
 
-	private static boolean canIsee(MyBox me, MyBox other, MyBox[][] boxes) {
+	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes, MyRect [][] rectangles) { // Check if the lines intersect
 
 		// Rectangle r1 = new Rectangle(100, 100, 100, 100);
 		// Line2D l1 = new Line2D(0, 200, 200, 0);
@@ -55,11 +56,11 @@ public class SpaceSyntax {
 
 		if (me.height < 0.1f && other.height < 0.1f) {
 
-			for (int i = 0; i < boxes.length; i++) {
-				for (int j = 0; j < boxes[i].length; j++) {
+			for (int i = 0; i < rectangles.length; i++) {
+				for (int j = 0; j < rectangles[i].length; j++) {
 
-					if (boxes[i][j].height > 0.1f) {
-						if (boxes[i][j] != me && boxes[i][j] != other) {
+					if (rectangles[i][j].height > 0.1f) {
+						if (rectangles[i][j] != me && rectangles[i][j] != other) {
 
 							if (boxes[i][j].height > 0.1f) {
 								Line2D line2 = new Line2D(
@@ -203,7 +204,7 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private static void calcHighLow(float num) {
+	private static void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
 		if (num < 700f) {
 			if (num >= highLow.x)
 				highLow.x = num;
