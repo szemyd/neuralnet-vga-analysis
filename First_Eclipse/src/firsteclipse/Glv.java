@@ -12,8 +12,7 @@ public class Glv {
 	public static int seed = 0;
 
 	public static float cubeSizeReduced = 20.0f;
-	
 	public static boolean shouldDimReduction = false;
 	
-	public static float chance = 98.0f;
+	public static float chance = 99.5f;
 }

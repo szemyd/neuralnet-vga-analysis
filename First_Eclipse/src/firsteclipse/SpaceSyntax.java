@@ -19,8 +19,8 @@ public class SpaceSyntax {
 	}
 
 	public static void setup(MyBox[][] boxes) {
-		
-		highLow = new PVector(0f,1000f);
+
+		highLow = new PVector(0f, 1000f);
 		/*
 		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
 		 */
@@ -33,13 +33,12 @@ public class SpaceSyntax {
 						}
 					}
 				}
-				// p.println(boxes[i][j].neighbourhood.size());
+				p.println(boxes[i][j].neighbourhood.size());
 				calcHighLow(boxes[i][j].neighbourhood.size());
 			}
 		}
-	p.println("high: " + highLow.x + " | low: " + highLow.y);
+		p.println("high: " + highLow.x + " | low: " + highLow.y);
 	}
-	
 
 	public static void draw() {
 
@@ -205,10 +204,12 @@ public class SpaceSyntax {
 	}
 
 	private static void calcHighLow(float num) {
-		if (num >= highLow.x)
-			highLow.x = num;
-		if (num <= highLow.y)
-			highLow.y = num;
+		if (num < 700f) {
+			if (num >= highLow.x)
+				highLow.x = num;
+			if (num <= highLow.y)
+				highLow.y = num;
+		}
 	}
 
 }
