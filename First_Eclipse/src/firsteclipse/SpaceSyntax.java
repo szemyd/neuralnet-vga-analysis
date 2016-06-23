@@ -33,11 +33,11 @@ public class SpaceSyntax {
 						}
 					}
 				}
-				p.println(boxes[i][j].neighbourhood.size());
+				//p.println(boxes[i][j].neighbourhood.size());
 				calcHighLow(boxes[i][j].neighbourhood.size());
 			}
 		}
-		p.println("high: " + highLow.x + " | low: " + highLow.y);
+		//p.println("high: " + highLow.x + " | low: " + highLow.y);
 	}
 
 	public static void draw() {

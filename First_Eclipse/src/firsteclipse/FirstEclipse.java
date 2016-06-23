@@ -32,6 +32,7 @@ public class FirstEclipse extends PApplet {
 		
 		manBox.setup();
 		SpaceSyntax.setup(manBox.boxes);
+		Environment.loadData();
 
 
 		s = loadShape("solid.OBJ");
@@ -42,7 +43,7 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void draw() {
-		background(0);
+		background(110);
 		lights();
 		
 		pushMatrix();
@@ -56,7 +57,7 @@ public class FirstEclipse extends PApplet {
 		pushStyle();
 		{
 			fill(360);
-			shape(s, 0, 0);
+			//shape(s, 0, 0);
 			// s.disableStyle();
 		}
 		popStyle();
@@ -64,6 +65,9 @@ public class FirstEclipse extends PApplet {
 		
 		manBox.draw();
 		//SpaceSyntax.draw();
+		Environment.draw();
+
+		
 
 	}
 
