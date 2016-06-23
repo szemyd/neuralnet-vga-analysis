@@ -24,7 +24,14 @@ public class MyBox {
 
 	void draw() {
 		//p.fill(p.map(height, 0, 360, 0, 360) * 3f, 180, 360);
-		p.fill(360, height*110, neighbourhood.size() + 250);
+		//float myFill = 0;
+		if (height>0.1f) p.fill(360, 0, 110);// myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
+		else p.fill(p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360), 360, 360); 
+		//myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,110,360);
+		//float myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,height,360);
+		//p.println(myFill);
+		//p.fill(myFill, 360, 360);// + 250);
+//		p.fill(360, height*110, p.map(neighbourhood.size(),0,360,360,800));// + 250);
 
 		p.pushMatrix();
 		{

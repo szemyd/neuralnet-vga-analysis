@@ -184,7 +184,7 @@ public class ManageBoxes {
 	public float choose(float chance) { // Gives either an on or an off value to
 										// the boxes according to a predefined
 										// chance. ƒ
-		if (chance > 99.95f) {
+		if (chance > Glv.chance) {
 			return 1.0f;
 		} else
 			return 0.0f;
