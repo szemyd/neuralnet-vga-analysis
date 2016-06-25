@@ -7,24 +7,12 @@ public class ManageBoxes {
 
 	private PApplet p;
 	public MyBox[][] boxes = new MyBox[Glv.divisionX][Glv.divisionY];
-	public MyRect[][] rectangles = new MyRect[Glv.spaceDivisionX][Glv.spaceDivisionY];
 
 	public ManageBoxes(PApplet _p) {
 		p = _p;
 	}
 
 	void setup() {
-		for (int i = 0; i < rectangles.length; i++) {
-			for (int j = 0; j < rectangles[i].length; j++) {
-				PVector position = new PVector(
-						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
-								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
-								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-						0);
-				rectangles[i][j] = new MyRect(p, position);
-			}
-		}
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				PVector position = new PVector(
@@ -36,6 +24,17 @@ public class ManageBoxes {
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}
+//		for (int i = 0; i < boxes.length; i++) {
+//			for (int j = 0; j < boxes[i].length; j++) {
+//				PVector position = new PVector(
+//						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
+//								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
+//						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
+//								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
+//						0);
+//				boxes[i][j] = new MyBox(p, position);
+//			}
+//		}
 
 		createHeights();
 	}
@@ -56,7 +55,7 @@ public class ManageBoxes {
 				float randomity = choose(p.random(100f));
 				boxes[i][j].height = randomity; // Assign a height
 												// value to each
-				rectangles[i][j].height = randomity; // box
+				boxes[i][j].height = randomity; // box
 			}
 		}
 

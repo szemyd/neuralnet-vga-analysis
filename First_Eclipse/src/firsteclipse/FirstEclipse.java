@@ -17,6 +17,7 @@ public class FirstEclipse extends PApplet {
 	ManageBoxes manBox = new ManageBoxes(this);
 	// SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	Environment env = new Environment(this);
+	SpaceSyntax spaceSyntax=new SpaceSyntax(this);
 
 	public void settings() {
 		size(1600, 1200, P3D);
@@ -32,7 +33,7 @@ public class FirstEclipse extends PApplet {
 		colorMode(PConstants.HSB, 360);
 
 		manBox.setup();
-		SpaceSyntax.setup(manBox.boxes, manBox.rectangles);
+		spaceSyntax.setup(manBox.boxes);
 		env.loadData();
 
 		s = loadShape("solid.OBJ");
@@ -63,7 +64,8 @@ public class FirstEclipse extends PApplet {
 		popStyle();
 
 		manBox.draw();
-		// SpaceSyntax.draw();
+		
+		spaceSyntax.draw();
 		Environment.draw();
 
 	}
@@ -73,12 +75,12 @@ public class FirstEclipse extends PApplet {
 		if (keyCode == LEFT) {
 			Glv.seed--;
 			manBox.setup();
-			SpaceSyntax.setup(manBox.boxes, manBox.rectangles);
+			spaceSyntax.setup(manBox.boxes);
 		}
 		if (keyCode == RIGHT) {
 			Glv.seed++;
 			manBox.setup();
-			SpaceSyntax.setup(manBox.boxes, manBox.rectangles);
+			spaceSyntax.setup(manBox.boxes);
 		}
 	}
 

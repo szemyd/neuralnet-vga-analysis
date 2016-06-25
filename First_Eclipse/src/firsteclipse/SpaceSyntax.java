@@ -13,14 +13,29 @@ public class SpaceSyntax {
 	private static PApplet p;
 	public static PVector highLow = new PVector();
 	
+
+	public static MyRect[][] rectangles = new MyRect[Glv.spaceDivisionX][Glv.spaceDivisionY];
+	
 	
 
 	public SpaceSyntax(PApplet _p) {
 		p = _p;
 	}
 
-	public static void setup(MyBox [][] boxes, MyRect [][] rectangles) {
+	public  void setup(MyBox [][] boxes) {
 
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				PVector position = new PVector(
+						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
+								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
+						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
+								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
+						0);
+				rectangles[i][j] = new MyRect(p, position);
+			}
+		}
+		
 		highLow = new PVector(0f, 1000f); // This is so that the colours are rightly mapped
 		/*
 		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
@@ -41,8 +56,12 @@ public class SpaceSyntax {
 		//p.println("high: " + highLow.x + " | low: " + highLow.y);
 	}
 
-	public static void draw() {
-
+	public void draw() {
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				rectangles[i][j].draw();
+			}
+		}
 	}
 
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes, MyRect [][] rectangles) { // Check if the lines intersect
