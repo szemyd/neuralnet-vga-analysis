@@ -42,7 +42,7 @@ public class ManageBoxes {
 	void draw() { // Draws the boxes
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				boxes[i][j].draw();
+				if(boxes[i][j].height>0.1f) boxes[i][j].draw();
 			}
 		}
 	}

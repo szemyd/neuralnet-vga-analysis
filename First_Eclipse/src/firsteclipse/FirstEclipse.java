@@ -17,7 +17,7 @@ public class FirstEclipse extends PApplet {
 	ManageBoxes manBox = new ManageBoxes(this);
 	// SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	Environment env = new Environment(this);
-	SpaceSyntax spaceSyntax=new SpaceSyntax(this);
+	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 
 	public void settings() {
 		size(1600, 1200, P3D);
@@ -55,16 +55,21 @@ public class FirstEclipse extends PApplet {
 		}
 		popMatrix();
 
-		pushStyle();
+		pushMatrix();
 		{
-			fill(360);
-			// shape(s, 0, 0);
-			// s.disableStyle();
+			pushStyle();
+			{
+				fill(360);
+				translate(0, 0, -.01f);
+				shape(s, 0, 0);
+				// s.disableStyle();
+			}
+			popStyle();
 		}
-		popStyle();
+		popMatrix();
 
 		manBox.draw();
-		
+
 		spaceSyntax.draw();
 		Environment.draw();
 
