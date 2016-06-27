@@ -66,7 +66,7 @@ public class SpaceSyntax {
 					for (int l = 0; l < rectangles[k].length; l++) {
 						if (canIsee(rectangles[i][j], rectangles[k][l], boxes)
 								&& canIsee2(rectangles[i][j], rectangles[k][l])) {
-							//p.println("this is true");
+							// p.println("this is true");
 							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
@@ -97,9 +97,10 @@ public class SpaceSyntax {
 				for (int j = 0; j < boxes[i].length; j++) {
 
 					// if (rectangles[i][j].height > 0.1f) {
-					//if (rectangles[i][j] != me && rectangles[i][j] != other) {
+					// if (rectangles[i][j] != me && rectangles[i][j] != other)
+					// {
 
-						// if (boxes[i][j].height > 0.1f) {
+					if (boxes[i][j].height > 0.1f) {
 						Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
 								boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
 								boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
@@ -136,30 +137,30 @@ public class SpaceSyntax {
 								line1.y2))
 							return false;
 
-						//
-						// Line2D line3 = new Line2D(150, 150, 150,
-						// 200);
-						// Line2D line4 = new Line2D(150, 150, 150,
-						// 200);
-						// Line2D line5 = new Line2D(150, 150, 150,
-						// 200);
+					}
+					//
+					// Line2D line3 = new Line2D(150, 150, 150,
+					// 200);
+					// Line2D line4 = new Line2D(150, 150, 150,
+					// 200);
+					// Line2D line5 = new Line2D(150, 150, 150,
+					// 200);
 
-						// if (line2.intersectsLine(line1))
-						// result = true;
-						// if (line3.intersectsLine(line1))
-						// result = true;
-						// if (line4.intersectsLine(line1))
-						// result = true;
-						// if (line5.intersectsLine(line1))
-						// result = true;
-						// }
-						// }
-					//}
+					// if (line2.intersectsLine(line1))
+					// result = true;
+					// if (line3.intersectsLine(line1))
+					// result = true;
+					// if (line4.intersectsLine(line1))
+					// result = true;
+					// if (line5.intersectsLine(line1))
+					// result = true;
+					// }
+					// }
+					// }
 				}
 			}
 
-		}
-		else if(me.height > 0.1f) {
+		} else if (me.height > 0.1f) {
 			return false;
 		}
 
@@ -190,15 +191,14 @@ public class SpaceSyntax {
 
 		Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
 
-		for (int i = 0; i < Environment.buildings.size()-1; i++) {
+		for (int i = 0; i < Environment.buildings.size() - 1; i++) {
 			Building tempBuilding = Environment.buildings.get(i);
 
-			for (int j = 0; j < tempBuilding.bLines.size()-1; j++) {
+			for (int j = 0; j < tempBuilding.bLines.size() - 1; j++) {
 
-				Line2D line2 = new Line2D(tempBuilding.bLines.get(j).x, 
-						tempBuilding.bLines.get(j).y,
-						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size()-1)).x,
-						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size()-1)).y);
+				Line2D line2 = new Line2D(tempBuilding.bLines.get(j).x, tempBuilding.bLines.get(j).y,
+						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size() - 1)).x,
+						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size() - 1)).y);
 
 				if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2, line1.y2))
 					return false;
