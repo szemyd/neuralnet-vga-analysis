@@ -4,6 +4,7 @@ import processing.core.PShape;
 
 public class Glv {
 	public static float cubeSize = 5f;
+	public static float spaceCubeSize = 7f;
 
 	public static float roomSizeX = 129.4f;
 	public static float roomSizeY = 160.42f;
@@ -12,8 +13,8 @@ public class Glv {
 	
 	public static float spaceRoomSizeX = 129.4f*1.2f;
 	public static float spaceRoomSizeY = 160.42f*1.2f;
-	public static int spaceDivisionX = ((int) spaceRoomSizeX / (int) cubeSize);
-	public static int spaceDivisionY = ((int) spaceRoomSizeY / (int) cubeSize);
+	public static int spaceDivisionX = ((int) spaceRoomSizeX / (int) spaceCubeSize);
+	public static int spaceDivisionY = ((int) spaceRoomSizeY / (int) spaceCubeSize);
 	
 	
 	public static int seed = 0;

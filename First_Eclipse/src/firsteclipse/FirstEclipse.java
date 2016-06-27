@@ -43,7 +43,7 @@ public class FirstEclipse extends PApplet {
 		background(110);
 		lights();
 
-		// manBox.draw();
+		manBox.draw();
 		spaceSyntax.draw();
 		env.draw(s);
 	}
