@@ -31,11 +31,32 @@ public class SpaceSyntax {
 								+ (Glv.spaceRoomSizeY / Glv.spaceDivisionY) * 0.5f,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
+
+				for (int k = 0; k < boxes.length; k++) {
+					for (int l = 0; l < boxes[k].length; l++) {
+						if (boxes[k][l].position.x - Glv.cubeSize * 0.5f < rectangles[i][j].position.x
+								&& boxes[k][l].position.x + Glv.cubeSize * 0.5f > rectangles[i][j].position.x
+								&& boxes[k][l].position.y - Glv.cubeSize * 0.5f < rectangles[i][j].position.y
+								&& boxes[k][l].position.y + Glv.cubeSize * 0.5f > rectangles[i][j].position.y) {
+							rectangles[i][j].height = boxes[k][l].height;
+						}
+					}
+				}
 			}
 		}
+	}
 
+	public void draw() {
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				rectangles[i][j].draw();
+			}
+		}
+	}
+
+	public void VGA(MyBox[][] boxes) {
 		highLow = new PVector(0f, 1000f); // This is so that the colours are
-											// rightly mapped
+		// rightly mapped
 		/*
 		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
 		 */
@@ -45,7 +66,7 @@ public class SpaceSyntax {
 					for (int l = 0; l < rectangles[k].length; l++) {
 						if (canIsee(rectangles[i][j], rectangles[k][l], boxes)
 								&& canIsee2(rectangles[i][j], rectangles[k][l])) {
-							p.println("this is true");
+							//p.println("this is true");
 							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
@@ -55,14 +76,6 @@ public class SpaceSyntax {
 			}
 		}
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
-	}
-
-	public void draw() {
-		for (int i = 0; i < rectangles.length; i++) {
-			for (int j = 0; j < rectangles[i].length; j++) {
-				rectangles[i][j].draw();
-			}
-		}
 	}
 
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check
@@ -80,76 +93,76 @@ public class SpaceSyntax {
 
 		if (me.height < 0.1f && other.height < 0.1f) {
 
-			for (int i = 0; i < rectangles.length; i++) {
-				for (int j = 0; j < rectangles[i].length; j++) {
+			for (int i = 0; i < boxes.length; i++) {
+				for (int j = 0; j < boxes[i].length; j++) {
 
-					if (rectangles[i][j].height > 0.1f) {
-						if (rectangles[i][j] != me && rectangles[i][j] != other) {
+					// if (rectangles[i][j].height > 0.1f) {
+					//if (rectangles[i][j] != me && rectangles[i][j] != other) {
 
-							if (boxes[i][j].height > 0.1f) {
-								Line2D line2 = new Line2D(
-										boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-										boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f);
+						// if (boxes[i][j].height > 0.1f) {
+						Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
 
-								if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+						if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
+								line1.y2))
+							return false;
 
-								Line2D line3 = new Line2D(
-										boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-										boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f);
+						Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
 
-								if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+						if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
+								line1.y2))
+							return false;
 
-								Line2D line4 = new Line2D(
-										boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-										boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f);
+						Line2D line4 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
 
-								if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+						if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
+								line1.y2))
+							return false;
 
-								Line2D line5 = new Line2D(
-										boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-										boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-										boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f);
+						Line2D line5 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+								boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
 
-								if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+						if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
+								line1.y2))
+							return false;
 
-								//
-								// Line2D line3 = new Line2D(150, 150, 150,
-								// 200);
-								// Line2D line4 = new Line2D(150, 150, 150,
-								// 200);
-								// Line2D line5 = new Line2D(150, 150, 150,
-								// 200);
+						//
+						// Line2D line3 = new Line2D(150, 150, 150,
+						// 200);
+						// Line2D line4 = new Line2D(150, 150, 150,
+						// 200);
+						// Line2D line5 = new Line2D(150, 150, 150,
+						// 200);
 
-								// if (line2.intersectsLine(line1))
-								// result = true;
-								// if (line3.intersectsLine(line1))
-								// result = true;
-								// if (line4.intersectsLine(line1))
-								// result = true;
-								// if (line5.intersectsLine(line1))
-								// result = true;
-							}
-						}
-					}
+						// if (line2.intersectsLine(line1))
+						// result = true;
+						// if (line3.intersectsLine(line1))
+						// result = true;
+						// if (line4.intersectsLine(line1))
+						// result = true;
+						// if (line5.intersectsLine(line1))
+						// result = true;
+						// }
+						// }
+					//}
 				}
 			}
 
 		}
+		else if(me.height > 0.1f) {
+			return false;
+		}
+
 		return true;
 		//
 		// Line2D line1 = new Line2D(100, 100, 200, 200);
@@ -177,14 +190,15 @@ public class SpaceSyntax {
 
 		Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
 
-		for (int i = 0; i < Environment.buildings.size(); i++) {
+		for (int i = 0; i < Environment.buildings.size()-1; i++) {
 			Building tempBuilding = Environment.buildings.get(i);
 
-			for (int j = 0; j < tempBuilding.bLines.size(); j++) {
+			for (int j = 0; j < tempBuilding.bLines.size()-1; j++) {
 
-				Line2D line2 = new Line2D(tempBuilding.bLines.get(i).x, tempBuilding.bLines.get(i).y,
-						tempBuilding.bLines.get((i + 1) % tempBuilding.bLines.size()).x,
-						tempBuilding.bLines.get((i + 1) % tempBuilding.bLines.size()).y);
+				Line2D line2 = new Line2D(tempBuilding.bLines.get(j).x, 
+						tempBuilding.bLines.get(j).y,
+						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size()-1)).x,
+						tempBuilding.bLines.get((j + 1) % (tempBuilding.bLines.size()-1)).y);
 
 				if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2, line1.y2))
 					return false;
@@ -194,7 +208,7 @@ public class SpaceSyntax {
 				// * 0.5f,
 				// rectangles[i][j].position.y - (Glv.roomSizeY / Glv.divisionY)
 				// * 0.5f,
-				// rectangles[i][j].position.x - (Glv.roomSizeX / Glv.divisionX)
+				// rectangles[i][j].position.x - (Glv.cubeSize)
 				// * 0.5f,
 				// rectangles[i][j].position.y - (Glv.roomSizeY / Glv.divisionY)
 				// * 0.5f);

@@ -24,17 +24,17 @@ public class ManageBoxes {
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}
-//		for (int i = 0; i < boxes.length; i++) {
-//			for (int j = 0; j < boxes[i].length; j++) {
-//				PVector position = new PVector(
-//						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
-//								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-//						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
-//								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-//						0);
-//				boxes[i][j] = new MyBox(p, position);
-//			}
-//		}
+		// for (int i = 0; i < boxes.length; i++) {
+		// for (int j = 0; j < boxes[i].length; j++) {
+		// PVector position = new PVector(
+		// (Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
+		// + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
+		// (Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
+		// + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
+		// 0);
+		// boxes[i][j] = new MyBox(p, position);
+		// }
+		// }
 
 		createHeights();
 	}
@@ -42,7 +42,8 @@ public class ManageBoxes {
 	void draw() { // Draws the boxes
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				if(boxes[i][j].height>0.1f) boxes[i][j].draw();
+				if (boxes[i][j].height > 0.1f)
+					boxes[i][j].draw();
 			}
 		}
 	}
@@ -65,7 +66,6 @@ public class ManageBoxes {
 		}
 		if (Glv.shouldDimReduction)
 			dimReduction();
-
 	}
 
 	public void checkNeighbourhood() {

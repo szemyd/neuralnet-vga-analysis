@@ -38,7 +38,7 @@ public class MyRect {
 		p.pushMatrix();
 		{
 			//p.translate((Glv.roomSizeX/Glv.divisionX)*0.5f, (Glv.roomSizeY/Glv.divisionY)*0.5f, 0); // Shift because boxesare in center mode.
-			p.translate(position.x, position.y, height*4.0f*0.5f);
+			p.translate(position.x, position.y, height*4.0f);
 			p.rect(0,0,Glv.roomSizeX/Glv.divisionX, Glv.roomSizeY/Glv.divisionY);
 			//p.box(Glv.roomSizeX/Glv.divisionX, Glv.roomSizeY/Glv.divisionY, height*4.0f);
 			//p.point(0, 0, 0);

@@ -31,10 +31,12 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		manBox.setup(); // Creates the boxes in a random form.
-		spaceSyntax.setup(manBox.boxes); // Creates the spacesyntax VGA rectangle analysis.
-		env.loadData(); // Loads the CSV file for the surrounding buildings.
-
+		
+		manBox.setup(); // 02. Creates the boxes in a random form.
+		spaceSyntax.setup(manBox.boxes); // 01. Creates starting grid of rectangles for the spacesyntax VGA.
+		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
+		
 		s = loadShape("solid.OBJ"); // Load the 3D model of the public space.
 	
 		noStroke();
@@ -45,7 +47,7 @@ public class FirstEclipse extends PApplet {
 		background(110);
 		lights();
 
-		manBox.draw();
+		//manBox.draw();
 		spaceSyntax.draw();
 		env.draw(s);
 	}
