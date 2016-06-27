@@ -12,7 +12,7 @@ public class FirstEclipse extends PApplet {
 	PeasyCam cam;
 
 	PShape s;
-	PImage i;
+	//PImage i;
 
 	ManageBoxes manBox = new ManageBoxes(this);
 	// SpaceSyntax spaceSyntax = new SpaceSyntax(this);
@@ -24,7 +24,6 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void setup() {
-		// size(800, 800, P3D);
 		cam = new PeasyCam(this, 160);
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
@@ -32,13 +31,12 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		manBox.setup();
-		spaceSyntax.setup(manBox.boxes);
-		env.loadData();
+		manBox.setup(); // Creates the boxes in a random form.
+		spaceSyntax.setup(manBox.boxes); // Creates the spacesyntax VGA rectangle analysis.
+		env.loadData(); // Loads the CSV file for the surrounding buildings.
 
-		s = loadShape("solid.OBJ");
-		i = loadImage("map2D.PNG");
-
+		s = loadShape("solid.OBJ"); // Load the 3D model of the public space.
+	
 		noStroke();
 		rectMode(PConstants.CENTER);
 	}
@@ -47,32 +45,9 @@ public class FirstEclipse extends PApplet {
 		background(110);
 		lights();
 
-		pushMatrix();
-		{
-			// rotateX(HALF_PI);
-			translate(-556 * 0.5f, -556 * 0.5f);
-			// image(i, 0, 0);
-		}
-		popMatrix();
-
-		pushMatrix();
-		{
-			pushStyle();
-			{
-				fill(360);
-				translate(0, 0, -.01f);
-				shape(s, 0, 0);
-				// s.disableStyle();
-			}
-			popStyle();
-		}
-		popMatrix();
-
 		manBox.draw();
-
 		spaceSyntax.draw();
-		Environment.draw();
-
+		env.draw(s);
 	}
 
 	public void keyPressed() {

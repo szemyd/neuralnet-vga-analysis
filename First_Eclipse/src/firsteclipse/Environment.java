@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PShape;
 import processing.core.PVector;
 import sun.net.www.content.text.plain;
 
@@ -19,7 +20,7 @@ public class Environment {
 		p = _p;
 	}
 
-	public static void draw() {
+	public void draw(PShape s) {
 		p.pushStyle();
 		{
 			p.strokeWeight(5.0f);
@@ -29,6 +30,21 @@ public class Environment {
 			}
 		}
 		p.popStyle();
+		
+		
+
+		p.pushMatrix();
+		{
+			p.pushStyle();
+			{
+				p.fill(360);
+				p.translate(0, 0, -.01f);
+				p.shape(s, 0, 0);
+				// s.disableStyle();
+			}
+			p.popStyle();
+		}
+		p.popMatrix();
 	}
 
 

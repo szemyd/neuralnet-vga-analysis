@@ -45,6 +45,7 @@ public class SpaceSyntax {
 					for (int l = 0; l < rectangles[k].length; l++) {
 						if (canIsee(rectangles[i][j], rectangles[k][l], boxes)
 								&& canIsee2(rectangles[i][j], rectangles[k][l])) {
+							p.println("this is true");
 							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
