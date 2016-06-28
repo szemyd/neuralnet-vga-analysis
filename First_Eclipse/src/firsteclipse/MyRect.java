@@ -1,5 +1,6 @@
 package firsteclipse;
 
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -28,9 +29,10 @@ public class MyRect {
 		// if (height>0.1f) p.fill(360, 0, 110);// myFill =
 		// p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
 		// else
-		//p.println(neighbourhood.size());
-		if (height > 0.1f) p.fill(360);
-		else p.fill(p.map(neighbourhood.size(), SpaceSyntax.highLow.y, SpaceSyntax.highLow.x, 230, 360), 360, 360);
+		// p.println(neighbourhood.size());
+		// if (height > 0.1f) p.fill(360);
+		// else
+		p.fill(p.map(neighbourhood.size(), SpaceSyntax.highLow.y, SpaceSyntax.highLow.x, 230, 360), 360, 360);
 		// myFill =
 		// p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,110,360);
 		// float myFill =
@@ -39,20 +41,20 @@ public class MyRect {
 		// p.fill(myFill, 360, 360);// + 250);
 		// p.fill(360, height*110, p.map(neighbourhood.size(),0,360,360,800));//
 		// + 250);
-		
-		
+		if (height < 0.1f) {
 			p.pushMatrix();
 			{
 				// p.translate((Glv.roomSizeX/Glv.divisionX)*0.5f,
 				// (Glv.roomSizeY/Glv.divisionY)*0.5f, 0); // Shift because
 				// boxesare in center mode.
-				p.translate(position.x, position.y,0f);
-				p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
+				p.translate(position.x, position.y, 0f);
+				p.rect(0, 0, Glv.spaceRoomSizeX / Glv.spaceDivisionX, Glv.spaceRoomSizeY / Glv.spaceDivisionY);
 				// p.box(Glv.roomSizeX/Glv.divisionX,
 				// Glv.roomSizeY/Glv.divisionY, height*4.0f);
 				// p.point(0, 0, 0);
 			}
 			p.popMatrix();
-		
+		}
+
 	}
 }

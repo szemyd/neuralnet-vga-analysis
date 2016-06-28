@@ -56,7 +56,7 @@ public class ManageBoxes {
 				float randomity = choose(p.random(100f));
 				boxes[i][j].height = randomity; // Assign a height
 												// value to each
-				boxes[i][j].height = randomity; // box
+				//boxes[i][j].height = randomity; // box
 			}
 		}
 

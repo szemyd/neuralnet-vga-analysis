@@ -36,7 +36,14 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
+		
+		int ellapsedTime = second() + minute()*60 + hour()*360;
+		long startTime = System.nanoTime();
 		analysisSetup();
+		long endTime = System.nanoTime();
+		System.out.println("Took "+(endTime - startTime) + " ns"); 
+		
+		println("Loading Done. Ellapsed time: " + ((second() + minute()*60 + hour()*360) - ellapsedTime));
 	}
 
 	public void draw() {

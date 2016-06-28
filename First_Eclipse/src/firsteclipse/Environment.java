@@ -74,6 +74,7 @@ public class Environment {
 				else {
 					Building tempBuilding = buildings.get((int) temp.z - 1);
 					tempBuilding.bLines.add(temp);
+					tempBuilding.myPolygon.addPoint((int)temp.x,(int) temp.y);
 				}
 			}
 
