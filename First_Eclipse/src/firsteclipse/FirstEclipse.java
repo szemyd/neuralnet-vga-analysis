@@ -20,11 +20,11 @@ public class FirstEclipse extends PApplet {
 	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 
 	public void settings() {
-		size(1600, 1200, P3D);
+		size(2400, 1200, P3D);
 	}
 
 	public void setup() {
-		cam = new PeasyCam(this, 160);
+		cam = new PeasyCam(this, 180);
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
 
@@ -42,24 +42,29 @@ public class FirstEclipse extends PApplet {
 	public void draw() {
 		background(110);
 		lights();
+		rotate(HALF_PI);
 
 		manBox.draw();
-		if(Glv.shouldSpaceSyntax) spaceSyntax.draw();
+		if (Glv.shouldSpaceSyntax)
+			spaceSyntax.draw();
 		env.draw(s);
 	}
 
 	public void analysisSetup() {
-		
+
 		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-		
+
 		manBox.setup(); // 01. Creates the boxes in a random form.
-		if(Glv.shouldSpaceSyntax) spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
-											// rectangles for the spacesyntax
-											// VGA.
+		if (Glv.shouldSpaceSyntax)
+			spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
+		// rectangles for the spacesyntax
+		// VGA.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		if(Glv.shouldSpaceSyntax) spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which
-										// rect sees which).
-		
+		if (Glv.shouldSpaceSyntax)
+			spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis
+											// (Which
+		// rect sees which).
+
 		println("Loading Done. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
 	}
 

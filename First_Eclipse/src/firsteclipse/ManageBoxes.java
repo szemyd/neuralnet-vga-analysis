@@ -90,7 +90,7 @@ public class ManageBoxes {
 	private void reduceNumRandomly() {
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
-				if (p.random(100f) < 50.0f && boxes[i][j].height > 0.1f)
+				if (p.random(100f) < 35.0f && boxes[i][j].height > 0.1f)
 					boxes[i][j].height = 0.0f;
 				//p.println("I've reached this.");
 			}
