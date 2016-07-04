@@ -26,8 +26,8 @@ public class MyBox {
 		//p.fill(p.map(height, 0, 360, 0, 360) * 3f, 180, 360);
 		//float myFill = 0;
 		//p.println(p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,230));
-		if (height>0.1f) p.fill(360, 0, 110);// myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
-		else p.fill(p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,230,360), 360, 360); 
+		if (height>0.1f) p.fill(360, 360, 110);// myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
+		else p.fill (0,0,110); 
 		//myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,110,360);
 		//float myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,height,360);
 		//p.println(myFill);
