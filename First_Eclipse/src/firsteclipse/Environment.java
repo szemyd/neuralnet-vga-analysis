@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.jogamp.opengl.util.packrect.Rect;
+
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PShape;
 import processing.core.PVector;
 import sun.net.www.content.text.plain;
@@ -32,12 +35,18 @@ public class Environment {
 		p.popStyle();
 		
 		
+	
 
 		p.pushMatrix();
 		{
 			p.pushStyle();
 			{
-				p.fill(360);
+				p.rectMode(PConstants.CENTER);
+				p.fill(360,0,280);
+				
+			
+				p.translate(0, 0, -.005f);
+				p.rect(0, 0, 520f, 560f);
 				p.translate(0, 0, -.01f);
 				p.shape(s, 0, 0);
 				// s.disableStyle();
@@ -46,8 +55,6 @@ public class Environment {
 		}
 		p.popMatrix();
 	}
-
-
 
 	public void loadData() {
 

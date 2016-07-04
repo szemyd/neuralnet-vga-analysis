@@ -20,6 +20,8 @@ import java.util.*;
 import java.util.Arrays;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.awt.Polygon;
+
 
 public class SpaceSyntax {
 	private static PApplet p;
@@ -36,10 +38,8 @@ public class SpaceSyntax {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				PVector position = new PVector(
-						(Glv.spaceRoomSizeX / Glv.spaceDivisionX * i) - (Glv.spaceRoomSizeX) * 0.5f
-								+ (Glv.spaceRoomSizeX / Glv.spaceDivisionX) * 0.5f,
-						(Glv.spaceRoomSizeY / Glv.spaceDivisionY * j) - (Glv.spaceRoomSizeY) * 0.5f
-								+ (Glv.spaceRoomSizeY / Glv.spaceDivisionY) * 0.5f,
+						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize*Glv.spaceDivisionX)*0.5f,
+						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize*Glv.spaceDivisionY)*0.5f,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
 
@@ -84,6 +84,7 @@ public class SpaceSyntax {
 						// p.println(isItIn);
 						if (isItIn) {
 							rectangles[i][j].height = 1.0f;
+							p.println("It is in!");
 						}
 					}
 					// if (build.myPolygon.contains((int)

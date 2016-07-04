@@ -28,7 +28,7 @@ public class Building {
 				PVector next = bLines.get((i + 1) % (bLines.size()));
 						
 				//p.println("me: " + me + " | next: " + next);
-				//p.line((float)me.x, (float)me.y, 0.0f,(float)next.x, (float)next.y,0.0f);
+				p.line((float)me.x, (float)me.y, 0.0f,(float)next.x, (float)next.y,0.0f);
 			}
 	
 	}

@@ -42,7 +42,7 @@ public class FirstEclipse extends PApplet {
 	public void draw() {
 		background(110);
 		lights();
-		rotate(HALF_PI);
+		rotate(HALF_PI); // Rotate the whole scene.
 
 		manBox.draw();
 		if (Glv.shouldSpaceSyntax)
