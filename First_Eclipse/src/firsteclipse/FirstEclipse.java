@@ -55,11 +55,11 @@ public class FirstEclipse extends PApplet {
 		int ellapsedTime = second() + minute() * 60 + hour() * 360;
 
 		manBox.setup(); // 01. Creates the boxes in a random form.
-		if (Glv.shouldSpaceSyntax)
-			spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
+		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
 		// rectangles for the spacesyntax
 		// VGA.
-		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+
 		if (Glv.shouldSpaceSyntax)
 			spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis
 											// (Which
@@ -80,7 +80,7 @@ public class FirstEclipse extends PApplet {
 		}
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
-			analysisSetup();
+			spaceSyntax.VGA(manBox.boxes);
 		}
 	}
 

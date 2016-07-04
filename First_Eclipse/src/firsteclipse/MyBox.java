@@ -38,7 +38,7 @@ public class MyBox {
 		{
 			//p.translate((Glv.roomSizeX/Glv.divisionX)*0.5f, (Glv.roomSizeY/Glv.divisionY)*0.5f, 0); // Shift because boxesare in center mode.
 			p.translate(position.x, position.y, height*4.0f*0.5f);
-			p.box(Glv.roomSizeX/Glv.divisionX, Glv.roomSizeY/Glv.divisionY, height*4.0f);
+			p.box(Glv.cubeSize, Glv.cubeSize, height*4.0f);
 			//p.point(0, 0, 0);
 		}
 		p.popMatrix();

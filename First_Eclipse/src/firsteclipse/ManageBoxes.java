@@ -18,11 +18,11 @@ public class ManageBoxes {
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				PVector position = new PVector(
-						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
-								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
-								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
+						(Glv.cubeSize * i) - (Glv.cubeSize*Glv.divisionX)*0.5f,
+						(Glv.cubeSize * j) - (Glv.cubeSize*Glv.divisionY)*0.5f,
 						0);
+			
+				
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}

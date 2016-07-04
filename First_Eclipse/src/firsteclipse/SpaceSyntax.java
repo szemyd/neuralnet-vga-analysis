@@ -35,11 +35,27 @@ public class SpaceSyntax {
 
 	public void setup(MyBox[][] boxes) {
 
+		/*
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				PVector position = new PVector(
+						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
+								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
+						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
+								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
+						0);
+				boxes[i][j] = new MyBox(p, position);
+			}
+		}
+		*/
+
+		
+		
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				PVector position = new PVector(
-						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize*Glv.spaceDivisionX)*0.5f,
-						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize*Glv.spaceDivisionY)*0.5f,
+						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize*Glv.spaceDivisionX)*0.5f + Glv.spaceCubeSize*0.5f,
+						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize*Glv.spaceDivisionY)*0.5f + Glv.spaceCubeSize*0.5f,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
 
@@ -84,7 +100,6 @@ public class SpaceSyntax {
 						// p.println(isItIn);
 						if (isItIn) {
 							rectangles[i][j].height = 1.0f;
-							p.println("It is in!");
 						}
 					}
 					// if (build.myPolygon.contains((int)
