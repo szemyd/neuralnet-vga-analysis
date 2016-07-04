@@ -1,5 +1,7 @@
 package firsteclipse;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -24,17 +26,6 @@ public class ManageBoxes {
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}
-		// for (int i = 0; i < boxes.length; i++) {
-		// for (int j = 0; j < boxes[i].length; j++) {
-		// PVector position = new PVector(
-		// (Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
-		// + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-		// (Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
-		// + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-		// 0);
-		// boxes[i][j] = new MyBox(p, position);
-		// }
-		// }
 
 		createHeights();
 	}
@@ -56,25 +47,52 @@ public class ManageBoxes {
 				float randomity = choose(p.random(100f));
 				boxes[i][j].height = randomity; // Assign a height
 												// value to each
-				//boxes[i][j].height = randomity; // box
+				// boxes[i][j].height = randomity; // box
 			}
 		}
+
 
 		for (int i = 0; i < 50; i++) {
 			calculateSum(); // Calculates number of neighbours
 			checkNeighbourhood(); // Runs CA for a set number of iteration.
 		}
+
+		
+		if (calcHowManyAreUp()>boxes[0].length*boxes.length*0.3f) // If the numberOfBoxes up is higher than a certain %.
+			reduceNumRandomly();
+		
 		if (Glv.shouldDimReduction)
 			dimReduction();
 	}
 
-	public void checkNeighbourhood() {
+	private void checkNeighbourhood() {
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				// boxes[i][j].height = ca(i, j);
 				boxes[i][j].height = walls(i, j);
 				// boxes[i][j].height = walls2(i, j);
 				// boxes[i][j].height = separation(i, j);
+			}
+		}
+	}
+
+	private float calcHowManyAreUp()
+	{
+		float numUp=0.0f;
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				if(boxes[i][j].height>0.1f) numUp++;
+			}
+		}
+		return numUp;
+	}
+	
+	private void reduceNumRandomly() {
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				if (p.random(100f) < 50.0f && boxes[i][j].height > 0.1f)
+					boxes[i][j].height = 0.0f;
+				//p.println("I've reached this.");
 			}
 		}
 	}
@@ -91,28 +109,6 @@ public class ManageBoxes {
 			return 1.0f;
 	}
 
-	public float walls2(int i, int j) {
-		int counter = 0;
-
-		for (int k = -2; k < 3; k++) {
-			for (int l = -2; l < 3; l++) {
-				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
-					if (boxes[i][j].neighbourSum > boxes[k + i][l + j].neighbourSum)
-						counter++;
-				}
-			}
-		}
-
-		if (counter <= 3)
-			return 1.0f;
-		else
-			return 0.0f;
-
-		/*
-		 * if (counter > 4) return 1.0f; else if (counter == 2) return
-		 * boxes[i][j].height; else return 0.0f;
-		 */
-	}
 
 	public float walls(int i, int j) {
 		int counter = 0;
@@ -237,4 +233,28 @@ public class ManageBoxes {
 			}
 		}
 	}
+	
+	/*
+	public float walls2(int i, int j) {
+		int counter = 0;
+
+		for (int k = -2; k < 3; k++) {
+			for (int l = -2; l < 3; l++) {
+				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
+					if (boxes[i][j].neighbourSum > boxes[k + i][l + j].neighbourSum)
+						counter++;
+				}
+			}
+		}
+
+		if (counter <= 3) 
+			return 1.0f;
+		else
+			return 0.0f;
+
+//		
+//		 if (counter > 4) return 1.0f; else if (counter == 2) return
+//		 boxes[i][j].height; else return 0.0f;
+//		 
+	} */
 }
