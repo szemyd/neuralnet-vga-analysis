@@ -251,6 +251,8 @@ public class SpaceSyntax {
 			Glv.toNN.add("\n");
 		}
 		Glv.toNN.add("_");
+		Glv.toNN.add("\n");
+		
 		p.println("I have finished saving to string");
 	}
 }

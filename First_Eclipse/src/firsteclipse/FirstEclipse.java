@@ -74,6 +74,8 @@ public class FirstEclipse extends PApplet {
 	public void analysisSetup() {
 
 		manBox.setup(); // 01. Creates the boxes in a random form.
+		manBox.createHeights();
+		
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
 		// rectangles for the spacesyntax
@@ -85,14 +87,16 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void startThread() {
-		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-		spaceSyntax.VGA(manBox.boxes);
 
-		GenerateCSV.save();
-		
-	//	Glv.isDone = true;
-		//println(Glv.isDone);
-		println("Loading Done. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
+		for (int i = 0; i < 2; i++) {
+			int ellapsedTime = second() + minute() * 60 + hour() * 360;
+			spaceSyntax.VGA(manBox.boxes);
+			GenerateCSV.save();
+			Glv.seed++;
+			//	Glv.isDone = true;
+			//println(Glv.isDone);
+			println("Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
+		}
 	}
 
 	public static void main(String _args[]) {

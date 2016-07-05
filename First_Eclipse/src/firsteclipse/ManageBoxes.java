@@ -23,8 +23,6 @@ public class ManageBoxes {
 				boxes[i][j] = new MyBox(p, position);
 			}
 		}
-
-		createHeights();
 	}
 
 	void draw() { // Draws the boxes
