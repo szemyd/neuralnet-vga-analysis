@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.awt.Polygon;
 
-
 public class SpaceSyntax {
 	private static PApplet p;
 	public static PVector highLow = new PVector();
@@ -35,30 +34,17 @@ public class SpaceSyntax {
 
 	public void setup(MyBox[][] boxes) {
 
-		/*
-		for (int i = 0; i < boxes.length; i++) {
-			for (int j = 0; j < boxes[i].length; j++) {
-				PVector position = new PVector(
-						(Glv.roomSizeX / Glv.divisionX * i) - (Glv.roomSizeX) * 0.5f
-								+ (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-						(Glv.roomSizeY / Glv.divisionY * j) - (Glv.roomSizeY) * 0.5f
-								+ (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-						0);
-				boxes[i][j] = new MyBox(p, position);
-			}
-		}
-		*/
-
-		
-		
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				PVector position = new PVector(
-						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize*Glv.spaceDivisionX)*0.5f + Glv.spaceCubeSize*0.5f,
-						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize*Glv.spaceDivisionY)*0.5f + Glv.spaceCubeSize*0.5f,
+						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f
+								+ Glv.spaceCubeSize * 0.5f,
+						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize * Glv.spaceDivisionY) * 0.5f
+								+ Glv.spaceCubeSize * 0.5f,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
 
+				// Set rectangles according to boxes.
 				for (int k = 0; k < boxes.length; k++) {
 					for (int l = 0; l < boxes[k].length; l++) {
 						if (boxes[k][l].position.x - Glv.cubeSize * 0.5f < rectangles[i][j].position.x
@@ -90,14 +76,11 @@ public class SpaceSyntax {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				// Find if rectangle is inside a building or not!
-				// Look this up!
 				for (Building build : Environment.buildings) {
-					//
-					// p.println(build.myPolygon.contains((int)rectangles[i][j].position.x,(int)rectangles[i][j].position.y));
 					if (build.myPolygon.xpoints[0] < Glv.spaceRoomSizeY) {
 						boolean isItIn = build.myPolygon.contains((int) rectangles[i][j].position.x,
 								(int) rectangles[i][j].position.y);
-						// p.println(isItIn);
+
 						if (isItIn) {
 							rectangles[i][j].height = 1.0f;
 						}
@@ -116,11 +99,6 @@ public class SpaceSyntax {
 					// // rectangles.remove(build);
 					// }
 				}
-				// p.println("rectangle: " + rectangles[i][j].position);
-
-				// Environment.buildings.get(k)myPolygon.addPoint((int)dataIn.x,(int)
-				// dataIn.y);
-				// buildingSee(rectangles[i][j].position, new PVector(0,0,0));
 			}
 		}
 
@@ -130,7 +108,6 @@ public class SpaceSyntax {
 					for (int l = 0; l < rectangles[k].length; l++) {
 						if (canIsee(rectangles[i][j], rectangles[k][l], boxes)
 								&& buildingSee(rectangles[i][j].position, rectangles[k][l].position)) {
-							// p.println("this is true");
 							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
@@ -142,16 +119,8 @@ public class SpaceSyntax {
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
 	}
 
-	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check
-																				// if
-																				// the
-																				// lines
-																				// intersect
+	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
 
-		// Rectangle r1 = new Rectangle(100, 100, 100, 100);
-		// Line2D l1 = new Line2D(0, 200, 200, 0);
-		// System.out.println("l1.intsects(r1) = " + l1.intersects(r1));
-		//
 		if (me != null && other != null) {
 
 			Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
@@ -161,97 +130,138 @@ public class SpaceSyntax {
 				for (int i = 0; i < boxes.length; i++) {
 					for (int j = 0; j < boxes[i].length; j++) {
 
-						// if (rectangles[i][j].height > 0.1f) {
-						// if (rectangles[i][j] != me && rectangles[i][j] !=
-						// other)
-						// {
-
 						if (boxes[i][j].height > 0.1f) {
-							Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+							if (boxes[i][j].amIEdge) {
+								Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
 
-							if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
-									line1.y2))
-								return false;
+								if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
 
-							Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+								Line2D line3 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
 
-							if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
-									line1.y2))
-								return false;
-
-							Line2D line4 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
-
-							if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
-									line1.y2))
-								return false;
-
-							Line2D line5 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
-
-							if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
-									line1.y2))
-								return false;
-
+								if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
+							}
 						}
-						//
-						// Line2D line3 = new Line2D(150, 150, 150,
-						// 200);
-						// Line2D line4 = new Line2D(150, 150, 150,
-						// 200);
-						// Line2D line5 = new Line2D(150, 150, 150,
-						// 200);
-
-						// if (line2.intersectsLine(line1))
-						// result = true;
-						// if (line3.intersectsLine(line1))
-						// result = true;
-						// if (line4.intersectsLine(line1))
-						// result = true;
-						// if (line5.intersectsLine(line1))
-						// result = true;
-						// }
-						// }
-						// }
 					}
 				}
 
 			} else if (me.height > 0.1f) {
 				return false;
 			}
-
 			return true;
 		}
 		return false;
-		//
-		// Line2D line1 = new Line2D(100, 100, 200, 200);
-		// Line2D line2 = new Line2D(150, 150, 150, 200);
-		// boolean result = line2.intersectsLine(line1);
-		// System.out.println(result); // => true
-
-		// Also check out linesIntersect() if you do not need to construct the
-		// line objects
-		// It will probably be faster due to putting less pressure on the
-		// garbage collector
-		// if running it in a loop
-		// System.out.println(Line2D.linesIntersect(100,100,200,200,150,150,150,200));
-
 	}
 
-	private static boolean buildingSee(PVector me, PVector other) { // Check if
-																	// the
-																	// lines
-																	// intersect
+	/*	
+		private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
+	
+			// Rectangle r1 = new Rectangle(100, 100, 100, 100);
+			// Line2D l1 = new Line2D(0, 200, 200, 0);
+			// System.out.println("l1.intsects(r1) = " + l1.intersects(r1));
+			//
+			if (me != null && other != null) {
+	
+				Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
+	
+				if (me.height < 0.1f && other.height < 0.1f) {
+	
+					for (int i = 0; i < boxes.length; i++) {
+						for (int j = 0; j < boxes[i].length; j++) {
+	
+							if (boxes[i][j].height > 0.1f) {
+								Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+	
+								if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
+	
+								Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+	
+								if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
+	
+								Line2D line4 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
+	
+								if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
+	
+								Line2D line5 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
+	
+								if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
+										line1.y2))
+									return false;
+	
+							}
+							//
+							// Line2D line3 = new Line2D(150, 150, 150,
+							// 200);
+							// Line2D line4 = new Line2D(150, 150, 150,
+							// 200);
+							// Line2D line5 = new Line2D(150, 150, 150,
+							// 200);
+	
+							// if (line2.intersectsLine(line1))
+							// result = true;
+							// if (line3.intersectsLine(line1))
+							// result = true;
+							// if (line4.intersectsLine(line1))
+							// result = true;
+							// if (line5.intersectsLine(line1))
+							// result = true;
+							// }
+							// }
+							// }
+						}
+					}
+	
+				} else if (me.height > 0.1f) {
+					return false;
+				}
+	
+				return true;
+			}
+			return false;
+			//
+			// Line2D line1 = new Line2D(100, 100, 200, 200);
+			// Line2D line2 = new Line2D(150, 150, 150, 200);
+			// boolean result = line2.intersectsLine(line1);
+			// System.out.println(result); // => true
+	
+			// Also check out linesIntersect() if you do not need to construct the
+			// line objects
+			// It will probably be faster due to putting less pressure on the
+			// garbage collector
+			// if running it in a loop
+			// System.out.println(Line2D.linesIntersect(100,100,200,200,150,150,150,200));
+	
+		}
+	*/
+
+	private static boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
 
 		Line2D line1 = new Line2D(me.x, me.y, other.x, other.y);
 
@@ -316,8 +326,8 @@ public class SpaceSyntax {
 			double y3LessY1 = y3 - y1;
 			double collinearityTestForP3 = x1 * (y2 - y3) + x2 * (y3LessY1) + x3 * (y1 - y2); // see
 																								// http://mathworld.wolfram.com/Collinear.html
-			// If p3 is collinear with p1 and p2 then p4 will also be collinear,
-			// since p1-p2 is parallel with p3-p4
+																								// If p3 is collinear with p1 and p2 then p4 will also be collinear,
+																								// since p1-p2 is parallel with p3-p4
 			if (collinearityTestForP3 == 0) {
 				// The lines are collinear. Now check if they overlap.
 				if (x1 >= x3 && x1 <= x4 || x1 <= x3 && x1 >= x4 || x2 >= x3 && x2 <= x4 || x2 <= x3 && x2 >= x4
@@ -333,9 +343,7 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private static void calcHighLow(float num) { // Calculate which number is
-													// the highest and which one
-													// is the lowest.
+	private static void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
 		if (num < 10000f) {
 			if (num >= highLow.x)
 				highLow.x = num;

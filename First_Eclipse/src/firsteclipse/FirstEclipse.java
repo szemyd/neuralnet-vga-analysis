@@ -52,8 +52,6 @@ public class FirstEclipse extends PApplet {
 
 	public void analysisSetup() {
 
-		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-
 		manBox.setup(); // 01. Creates the boxes in a random form.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
@@ -61,11 +59,7 @@ public class FirstEclipse extends PApplet {
 		// VGA.
 
 		if (Glv.shouldSpaceSyntax)
-			spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis
-											// (Which
-		// rect sees which).
-
-		println("Loading Done. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
+			thread("startThread");// spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
 	}
 
 	public void keyPressed() {
@@ -80,8 +74,19 @@ public class FirstEclipse extends PApplet {
 		}
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
-			spaceSyntax.VGA(manBox.boxes);
+			thread("startThread");
+			
+//			Runnable r = new MyThread(spaceSyntax,manBox.boxes);
+//			new Thread(r).start();
+//			new Thread(r).run();
 		}
+	}
+	
+	public void startThread()
+	{
+		int ellapsedTime = second() + minute() * 60 + hour() * 360;
+		spaceSyntax.VGA(manBox.boxes);
+		println("Loading Done. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
 	}
 
 	public static void main(String _args[]) {

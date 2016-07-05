@@ -12,6 +12,8 @@ public class MyBox {
 	PVector position;
 	float neighbourSum;
 	ArrayList<MyBox> neighbourhood = new ArrayList<MyBox>();
+	
+	boolean amIEdge = true; // Check if after dimensionality reduction if the box is on the edge or not.
 
 	public MyBox(PApplet _p, PVector _position) {
 		p = _p;
@@ -23,16 +25,9 @@ public class MyBox {
 	}
 
 	void draw() {
-		//p.fill(p.map(height, 0, 360, 0, 360) * 3f, 180, 360);
-		//float myFill = 0;
-		//p.println(p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,230));
-		if (height>0.1f) p.fill(360, 0, 360);// myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
+		
+		if (height>0.1f) p.fill(360, 0, 360); // myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,0,360);
 		else p.fill (0,0,0); 
-		//myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,110,360);
-		//float myFill = p.map(neighbourhood.size(),SpaceSyntax.highLow.y,SpaceSyntax.highLow.x,height,360);
-		//p.println(myFill);
-		//p.fill(myFill, 360, 360);// + 250);
-//		p.fill(360, height*110, p.map(neighbourhood.size(),0,360,360,800));// + 250);
 
 		p.pushMatrix();
 		{
