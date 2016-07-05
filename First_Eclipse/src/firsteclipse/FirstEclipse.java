@@ -18,6 +18,7 @@ public class FirstEclipse extends PApplet {
 	// SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	Environment env = new Environment(this);
 	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
+	//GenerateCSV generateCSV = new GenerateCSV();
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -50,18 +51,6 @@ public class FirstEclipse extends PApplet {
 		env.draw(s);
 	}
 
-	public void analysisSetup() {
-
-		manBox.setup(); // 01. Creates the boxes in a random form.
-		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
-		// rectangles for the spacesyntax
-		// VGA.
-
-		if (Glv.shouldSpaceSyntax)
-			thread("startThread");// spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
-	}
-
 	public void keyPressed() {
 
 		if (keyCode == LEFT) {
@@ -75,17 +64,34 @@ public class FirstEclipse extends PApplet {
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
 			thread("startThread");
-			
-//			Runnable r = new MyThread(spaceSyntax,manBox.boxes);
-//			new Thread(r).start();
-//			new Thread(r).run();
+
+			//			Runnable r = new MyThread(spaceSyntax,manBox.boxes);
+			//			new Thread(r).start();
+			//			new Thread(r).run();
 		}
 	}
-	
-	public void startThread()
-	{
+
+	public void analysisSetup() {
+
+		manBox.setup(); // 01. Creates the boxes in a random form.
+		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
+		// rectangles for the spacesyntax
+		// VGA.
+
+		if (Glv.shouldSpaceSyntax) {
+			thread("startThread");// spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
+		}
+	}
+
+	public void startThread() {
 		int ellapsedTime = second() + minute() * 60 + hour() * 360;
 		spaceSyntax.VGA(manBox.boxes);
+
+		GenerateCSV.save();
+		
+	//	Glv.isDone = true;
+		//println(Glv.isDone);
 		println("Loading Done. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
 	}
 

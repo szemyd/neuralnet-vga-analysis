@@ -85,19 +85,6 @@ public class SpaceSyntax {
 							rectangles[i][j].height = 1.0f;
 						}
 					}
-					// if (build.myPolygon.contains((int)
-					// rectangles[i][j].position.x,
-					// (int) rectangles[i][j].position.y)) {
-					// rectangles[i][j] = null;
-					// }
-
-					// if (build.myPolygon.contains(rectangles[i][j].position.x,
-					// rectangles[i][j].position.y)) {
-					// rectangles[i][j] = null;
-					// // rectangles = ArrayUtils.removeElement(rectangles,
-					// // rectangles[i][j]);
-					// // rectangles.remove(build);
-					// }
 				}
 			}
 		}
@@ -117,6 +104,8 @@ public class SpaceSyntax {
 			}
 		}
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
+		save();
+		//return true;
 	}
 
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
@@ -161,105 +150,6 @@ public class SpaceSyntax {
 		}
 		return false;
 	}
-
-	/*	
-		private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
-	
-			// Rectangle r1 = new Rectangle(100, 100, 100, 100);
-			// Line2D l1 = new Line2D(0, 200, 200, 0);
-			// System.out.println("l1.intsects(r1) = " + l1.intersects(r1));
-			//
-			if (me != null && other != null) {
-	
-				Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
-	
-				if (me.height < 0.1f && other.height < 0.1f) {
-	
-					for (int i = 0; i < boxes.length; i++) {
-						for (int j = 0; j < boxes[i].length; j++) {
-	
-							if (boxes[i][j].height > 0.1f) {
-								Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
-	
-								if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
-	
-								Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
-	
-								if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
-	
-								Line2D line4 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
-	
-								if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
-	
-								Line2D line5 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
-	
-								if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
-	
-							}
-							//
-							// Line2D line3 = new Line2D(150, 150, 150,
-							// 200);
-							// Line2D line4 = new Line2D(150, 150, 150,
-							// 200);
-							// Line2D line5 = new Line2D(150, 150, 150,
-							// 200);
-	
-							// if (line2.intersectsLine(line1))
-							// result = true;
-							// if (line3.intersectsLine(line1))
-							// result = true;
-							// if (line4.intersectsLine(line1))
-							// result = true;
-							// if (line5.intersectsLine(line1))
-							// result = true;
-							// }
-							// }
-							// }
-						}
-					}
-	
-				} else if (me.height > 0.1f) {
-					return false;
-				}
-	
-				return true;
-			}
-			return false;
-			//
-			// Line2D line1 = new Line2D(100, 100, 200, 200);
-			// Line2D line2 = new Line2D(150, 150, 150, 200);
-			// boolean result = line2.intersectsLine(line1);
-			// System.out.println(result); // => true
-	
-			// Also check out linesIntersect() if you do not need to construct the
-			// line objects
-			// It will probably be faster due to putting less pressure on the
-			// garbage collector
-			// if running it in a loop
-			// System.out.println(Line2D.linesIntersect(100,100,200,200,150,150,150,200));
-	
-		}
-	*/
 
 	private static boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
 
@@ -351,95 +241,115 @@ public class SpaceSyntax {
 				highLow.y = num;
 		}
 	}
+
+	public void save() {
+		for (int j = 0; j < rectangles[0].length; j++) {
+			for (int i = 0; i < rectangles.length; i++) {
+				Glv.toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
+				Glv.toNN.add(",");
+			}
+			Glv.toNN.add("\n");
+		}
+		Glv.toNN.add("_");
+		p.println("I have finished saving to string");
+	}
 }
 
-// //if (me.height < 0.1f && other.height < 0.1f) {
-//
-// for (int i = 0; i < rectangles.length; i++) {
-// for (int j = 0; j < rectangles[i].length; j++) {
-//
-// if (rectangles[i][j].height > 0.1f) {
-// if (rectangles[i][j] != me && rectangles[i][j] != other) {
-//
-// if (boxes[i][j].height > 0.1f) {
-// Line2D line2 = new Line2D(
-// boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-// boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f);
-//
-// if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1,
-// line1.y1, line1.x2,
-// line1.y2))
-// return false;
-//
-// Line2D line3 = new Line2D(
-// boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-// boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f);
-//
-// if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1,
-// line1.y1, line1.x2,
-// line1.y2))
-// return false;
-//
-// Line2D line4 = new Line2D(
-// boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y - (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-// boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f);
-//
-// if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1,
-// line1.y1, line1.x2,
-// line1.y2))
-// return false;
-//
-// Line2D line5 = new Line2D(
-// boxes[i][j].position.x - (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f,
-// boxes[i][j].position.x + (Glv.roomSizeX / Glv.divisionX) * 0.5f,
-// boxes[i][j].position.y + (Glv.roomSizeY / Glv.divisionY) * 0.5f);
-//
-// if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1,
-// line1.y1, line1.x2,
-// line1.y2))
-// return false;
-//
-// //
-// // Line2D line3 = new Line2D(150, 150, 150,
-// // 200);
-// // Line2D line4 = new Line2D(150, 150, 150,
-// // 200);
-// // Line2D line5 = new Line2D(150, 150, 150,
-// // 200);
-//
-// // if (line2.intersectsLine(line1))
-// // result = true;
-// // if (line3.intersectsLine(line1))
-// // result = true;
-// // if (line4.intersectsLine(line1))
-// // result = true;
-// // if (line5.intersectsLine(line1))
-// // result = true;
-// }
-// }
-// }
-// }
-// }
-//
-// }return true;
-////
-//// Line2D line1 = new Line2D(100, 100, 200, 200);
-//// Line2D line2 = new Line2D(150, 150, 150, 200);
-//// boolean result = line2.intersectsLine(line1);
-//// System.out.println(result); // => true
-//
-//// Also check out linesIntersect() if you do not need to construct the
-//// line objects
-//// It will probably be faster due to putting less pressure on the
-//// garbage collector
-//// if running it in a loop
-//// System.out.println(Line2D.linesIntersect(100,100,200,200,150,150,150,200));
-//
-// }
+/*	
+	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
+
+		// Rectangle r1 = new Rectangle(100, 100, 100, 100);
+		// Line2D l1 = new Line2D(0, 200, 200, 0);
+		// System.out.println("l1.intsects(r1) = " + l1.intersects(r1));
+		//
+		if (me != null && other != null) {
+
+			Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
+
+			if (me.height < 0.1f && other.height < 0.1f) {
+
+				for (int i = 0; i < boxes.length; i++) {
+					for (int j = 0; j < boxes[i].length; j++) {
+
+						if (boxes[i][j].height > 0.1f) {
+							Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+
+							if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
+									line1.y2))
+								return false;
+
+							Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+
+							if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
+									line1.y2))
+								return false;
+
+							Line2D line4 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
+
+							if (linesIntersect(line4.x1, line4.y1, line4.x2, line4.y2, line1.x1, line1.y1, line1.x2,
+									line1.y2))
+								return false;
+
+							Line2D line5 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+									boxes[i][j].position.y + (Glv.cubeSize) * 0.5f);
+
+							if (linesIntersect(line5.x1, line5.y1, line5.x2, line5.y2, line1.x1, line1.y1, line1.x2,
+									line1.y2))
+								return false;
+
+						}
+						//
+						// Line2D line3 = new Line2D(150, 150, 150,
+						// 200);
+						// Line2D line4 = new Line2D(150, 150, 150,
+						// 200);
+						// Line2D line5 = new Line2D(150, 150, 150,
+						// 200);
+
+						// if (line2.intersectsLine(line1))
+						// result = true;
+						// if (line3.intersectsLine(line1))
+						// result = true;
+						// if (line4.intersectsLine(line1))
+						// result = true;
+						// if (line5.intersectsLine(line1))
+						// result = true;
+						// }
+						// }
+						// }
+					}
+				}
+
+			} else if (me.height > 0.1f) {
+				return false;
+			}
+
+			return true;
+		}
+		return false;
+		//
+		// Line2D line1 = new Line2D(100, 100, 200, 200);
+		// Line2D line2 = new Line2D(150, 150, 150, 200);
+		// boolean result = line2.intersectsLine(line1);
+		// System.out.println(result); // => true
+
+		// Also check out linesIntersect() if you do not need to construct the
+		// line objects
+		// It will probably be faster due to putting less pressure on the
+		// garbage collector
+		// if running it in a loop
+		// System.out.println(Line2D.linesIntersect(100,100,200,200,150,150,150,200));
+
+	}
+*/

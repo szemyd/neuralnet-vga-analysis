@@ -36,15 +36,11 @@ public class ManageBoxes {
 		}
 	}
 
-	public void createHeights() { // Creates the height 1. choose randomly which
-										// one to switch on 2. iterate through and
-									// change rest accordingly
+	public void createHeights() { // Creates the height 1. choose randomly which one to switch on 2. iterate through and change rest accordingly
 		for (int i = 0; i < boxes.length; i++) {
 			for (int j = 0; j < boxes[i].length; j++) {
 				float randomity = choose(p.random(100f));
-				boxes[i][j].height = randomity; // Assign a height
-												// value to each
-												// boxes[i][j].height = randomity; // box
+				boxes[i][j].height = randomity; // Assign a height value to each boxes[i][j].height = randomity; // box
 			}
 		}
 

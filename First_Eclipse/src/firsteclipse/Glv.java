@@ -1,5 +1,7 @@
 package firsteclipse;
 
+import java.util.ArrayList;
+
 public class Glv {
 	public static float cubeSize = 5f;
 	public static float spaceCubeSize = 5f;
@@ -19,7 +21,11 @@ public class Glv {
 
 	public static float cubeSizeReduced = 20.0f;
 	public static boolean shouldDimReduction = true;
-	public static boolean shouldSpaceSyntax = false;
+	public static boolean shouldSpaceSyntax = true;
 	
 	public static float chance = 99.5f;
+	
+	public static ArrayList<String> toNN = new ArrayList<String>();
+	
+	public static boolean isDone=false;
 }
