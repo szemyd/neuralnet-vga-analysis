@@ -70,10 +70,10 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void keyPressed() {
-
 		if (keyCode == LEFT) {
 			Glv.whichToDisplay--;
 		}
+		
 		if (keyCode == RIGHT) {
 			Glv.whichToDisplay++;
 		}
@@ -82,10 +82,6 @@ public class FirstEclipse extends PApplet {
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
 			thread("startThread");
-
-			//			Runnable r = new MyThread(spaceSyntax,manBox.boxes);
-			//			new Thread(r).start();
-			//			new Thread(r).run();
 		}
 	}
 

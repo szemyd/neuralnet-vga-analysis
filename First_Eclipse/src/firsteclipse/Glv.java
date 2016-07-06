@@ -31,5 +31,6 @@ public class Glv {
 	public static int isDone=0;
 	public static boolean isDoneBool=false;
 	
-	public static int numOfThreads = 8;
+	public static int numOfThreads = 15;
+	public static int numOfSolutions = 100;
 }
