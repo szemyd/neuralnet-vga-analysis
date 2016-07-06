@@ -4,6 +4,12 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 import processing.core.PShape;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+
+import com.jogamp.opengl.GLStateKeeper.Listener;
+
 import javafx.scene.shape.Box;
 import peasy.*;
 
@@ -12,13 +18,12 @@ public class FirstEclipse extends PApplet {
 	PeasyCam cam;
 
 	PShape s;
-	// PImage i;
 
 	ManageBoxes manBox = new ManageBoxes(this);
-	// SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	Environment env = new Environment(this);
 	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
-	//GenerateCSV generateCSV = new GenerateCSV();
+	
+	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -37,7 +42,20 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
+		
+		manBox.setup(); // 01. Creates the boxes in a random form.
+		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		
+
+		threads.add(new MyThread("First Thread", this, manBox));
+		threads.add(new MyThread("Second Thread", this, manBox));
+
 		analysisSetup();
+		
+//		for (int i = 0; i < 2; i++) {
+//			analysisSetup();
+//			Glv.seed++;
+//		}
 	}
 
 	public void draw() {
@@ -49,6 +67,15 @@ public class FirstEclipse extends PApplet {
 		if (Glv.shouldSpaceSyntax)
 			spaceSyntax.draw();
 		env.draw(s);
+
+		
+		if(!threads.get(0).isAlive() && !threads.get(1).isAlive())
+		{
+			GenerateCSV.save();
+		}
+//		if (thread.isAlive("startThread")) {
+//			GenerateCSV.save();
+//		}
 	}
 
 	public void keyPressed() {
@@ -73,31 +100,26 @@ public class FirstEclipse extends PApplet {
 
 	public void analysisSetup() {
 
-		manBox.setup(); // 01. Creates the boxes in a random form.
-		manBox.createHeights();
+		for (MyThread thread : threads) {
+			thread.start();
+		}
 		
-		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of
-		// rectangles for the spacesyntax
-		// VGA.
-
+		
 		if (Glv.shouldSpaceSyntax) {
-			thread("startThread");// spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
+			//thread("startThread");// spaceSyntax.VGA(manBox.boxes); // 04. Calculates the VGA analysis (Which rect sees which).
 		}
 	}
-
-	public void startThread() {
-
-		for (int i = 0; i < 2; i++) {
-			int ellapsedTime = second() + minute() * 60 + hour() * 360;
-			spaceSyntax.VGA(manBox.boxes);
-			GenerateCSV.save();
-			Glv.seed++;
-			//	Glv.isDone = true;
-			//println(Glv.isDone);
-			println("Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
-		}
-	}
+//
+//	public void startThread() {
+//
+//		int ellapsedTime = second() + minute() * 60 + hour() * 360;
+//		SpaceSyntax.VGA(manBox.boxes);
+//
+//		//	Glv.isDone = true;
+//		//println(Glv.isDone);
+//		println("Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
+//
+//	}
 
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });

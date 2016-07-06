@@ -6,24 +6,24 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class MyRect {
-	private PApplet p;
+	private static PApplet p;
 
-	PVector position;
-	ArrayList<MyRect> neighbourhood = new ArrayList<MyRect>();
-	float height = 0.0f;
+	public PVector position;
+	public ArrayList<MyRect> neighbourhood = new ArrayList<MyRect>();
+	public float height = 0.0f;
 
 	public MyRect(PApplet _p, PVector _position) {
 		p = _p;
 
-		position = _position;	
+		position = _position;
 	}
 
-	void draw() {
-		
+	public void draw() {
+
 		// if (height > 0.1f) p.fill(360);
 		// else
 		p.fill(p.map(neighbourhood.size(), SpaceSyntax.highLow.y, SpaceSyntax.highLow.x, 230, 360), 360, 360);
-	
+
 		if (height < 0.1f) {
 			p.pushMatrix();
 			{

@@ -32,7 +32,7 @@ public class SpaceSyntax {
 		p = _p;
 	}
 
-	public void setup(MyBox[][] boxes) {
+	public static void setup(MyBox[][] boxes) {
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
@@ -67,7 +67,7 @@ public class SpaceSyntax {
 		}
 	}
 
-	public void VGA(MyBox[][] boxes) {
+	public static void VGA(MyBox[][] boxes) {
 		highLow = new PVector(0f, 1000f); // This is so that the colours are
 		// rightly mapped
 		/*
@@ -242,7 +242,7 @@ public class SpaceSyntax {
 		}
 	}
 
-	public void save() {
+	public static void save() {
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
 				Glv.toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
@@ -256,6 +256,9 @@ public class SpaceSyntax {
 		p.println("I have finished saving to string");
 	}
 }
+
+
+
 
 /*	
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
