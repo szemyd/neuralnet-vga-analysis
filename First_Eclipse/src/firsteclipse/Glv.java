@@ -28,4 +28,6 @@ public class Glv {
 	public static ArrayList<String> toNN = new ArrayList<String>();
 	
 	public static boolean isDone=false;
+	
+	public static int numOfThreads = 3;
 }

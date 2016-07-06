@@ -8,7 +8,7 @@ import processing.core.PVector;
 public class MyBox {
 
 	private PApplet p;
-	public float height;
+	public float height=0.0f;
 	PVector position;
 	float neighbourSum;
 	ArrayList<MyBox> neighbourhood = new ArrayList<MyBox>();

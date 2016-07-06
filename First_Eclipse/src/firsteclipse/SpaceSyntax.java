@@ -23,16 +23,20 @@ import java.util.Scanner;
 import java.awt.Polygon;
 
 public class SpaceSyntax {
-	private static PApplet p;
-	public static PVector highLow = new PVector();
+	private  PApplet p;
+	public PVector highLow = new PVector();
+	
+	int threadID;
 
-	public static MyRect[][] rectangles = new MyRect[Glv.spaceDivisionX][Glv.spaceDivisionY];
+	public MyRect[][] rectangles = new MyRect[Glv.spaceDivisionX][Glv.spaceDivisionY];
 
-	public SpaceSyntax(PApplet _p) {
+	public SpaceSyntax(PApplet _p,int _threadID) {
 		p = _p;
+		
+		threadID = _threadID;
 	}
 
-	public static void setup(MyBox[][] boxes) {
+	public void setup(MyBox[][] boxes) {
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
@@ -62,12 +66,12 @@ public class SpaceSyntax {
 	public void draw() {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
-				rectangles[i][j].draw();
+				rectangles[i][j].draw(highLow);
 			}
 		}
 	}
 
-	public static void VGA(MyBox[][] boxes) {
+	public void VGA(MyBox[][] boxes) {
 		highLow = new PVector(0f, 1000f); // This is so that the colours are
 		// rightly mapped
 		/*
@@ -104,11 +108,11 @@ public class SpaceSyntax {
 			}
 		}
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
-		save();
+		save(boxes);
 		//return true;
 	}
 
-	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
+	private  boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
 
 		if (me != null && other != null) {
 
@@ -151,7 +155,7 @@ public class SpaceSyntax {
 		return false;
 	}
 
-	private static boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
+	private  boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
 
 		Line2D line1 = new Line2D(me.x, me.y, other.x, other.y);
 
@@ -171,7 +175,7 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private static boolean linesIntersect(float x1, float y1, float x2, float y2, float x3, float y3, float x4,
+	private  boolean linesIntersect(float x1, float y1, float x2, float y2, float x3, float y3, float x4,
 			float y4) {
 		// Return false if either of the lines have zero length
 		if (x1 == x2 && y1 == y2 || x3 == x4 && y3 == y4) {
@@ -233,7 +237,7 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private static void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
+	private  void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
 		if (num < 10000f) {
 			if (num >= highLow.x)
 				highLow.x = num;
@@ -242,7 +246,10 @@ public class SpaceSyntax {
 		}
 	}
 
-	public static void save() {
+	public  void save(MyBox[][] boxes) {
+		
+		Glv.toNN.add(Integer.toString(threadID));
+		
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
 				Glv.toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
@@ -250,6 +257,18 @@ public class SpaceSyntax {
 			}
 			Glv.toNN.add("\n");
 		}
+		Glv.toNN.add(":");
+		Glv.toNN.add("\n");
+		
+		for (int j = 0; j < boxes[0].length; j++) {
+			for (int i = 0; i < boxes.length; i++) {
+				Glv.toNN.add(Integer.toString((int)boxes[i][j].height));
+				Glv.toNN.add(",");
+			}
+			Glv.toNN.add("\n");
+		}
+				
+		
 		Glv.toNN.add("_");
 		Glv.toNN.add("\n");
 		

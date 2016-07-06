@@ -18,11 +18,11 @@ public class MyRect {
 		position = _position;
 	}
 
-	public void draw() {
+	public void draw(PVector highLow) {
 
 		// if (height > 0.1f) p.fill(360);
 		// else
-		p.fill(p.map(neighbourhood.size(), SpaceSyntax.highLow.y, SpaceSyntax.highLow.x, 230, 360), 360, 360);
+		p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 230, 360), 360, 360);
 
 		if (height < 0.1f) {
 			p.pushMatrix();
