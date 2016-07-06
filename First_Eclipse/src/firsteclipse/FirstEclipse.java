@@ -8,6 +8,8 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import org.omg.PortableInterceptor.ACTIVE;
+
 import com.jogamp.opengl.GLStateKeeper.Listener;
 
 import javafx.scene.shape.Box;
@@ -49,11 +51,6 @@ public class FirstEclipse extends PApplet {
 		}
 
 		analysisSetup();
-
-		//		for (int i = 0; i < 2; i++) {
-		//			analysisSetup();
-		//			Glv.seed++;
-		//		}
 	}
 
 	public void draw() {
@@ -61,35 +58,27 @@ public class FirstEclipse extends PApplet {
 		lights();
 		rotate(HALF_PI); // Rotate the whole scene.
 
-		if (threads.get(0).manBox.boxes[0][0] != null) {
-			threads.get(0).manBox.draw();
+		if (threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
+			threads.get(Glv.whichToDisplay).manBox.draw();
 		}
-		if (Glv.shouldSpaceSyntax && threads.get(0).spaceSyntax.highLow != null)
-			threads.get(0).spaceSyntax.draw();
+		if (Glv.shouldSpaceSyntax && threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+			threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 
-		env.draw(s);
+		env.draw(s); // Draws the environment.
 
-		
-		//println(threads.get(3).isAlive());
-		
-		if (!threads.get(0).isAlive() && !threads.get(1).isAlive()) {
-			GenerateCSV.save();
-		}
-		//		if (thread.isAlive("startThread")) {
-		//			GenerateCSV.save();
-		//		}
+		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
 	}
 
 	public void keyPressed() {
 
 		if (keyCode == LEFT) {
-			Glv.seed--;
-			analysisSetup();
+			Glv.whichToDisplay--;
 		}
 		if (keyCode == RIGHT) {
-			Glv.seed++;
-			analysisSetup();
+			Glv.whichToDisplay++;
 		}
+		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
+
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
 			thread("startThread");
@@ -101,23 +90,28 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void analysisSetup() {
-
 		for (MyThread thread : threads) {
 			thread.start();
 		}
+	}
+
+	private void writeToFile() {
+		if (Glv.isDone < threads.size()) {
+			Glv.isDone = 0;
+			for (MyThread thread : threads) {
+				//println(thread.t.isAlive());
+				if (!thread.t.isAlive()) {
+					Glv.isDone++;
+				}
+			}
+		}
+
+		if (Glv.isDone == threads.size() && !Glv.isDoneBool) {
+			GenerateCSV.save();
+			Glv.isDoneBool = true;
+		}
 
 	}
-	//
-	//	public void startThread() {
-	//
-	//		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-	//		SpaceSyntax.VGA(manBox.boxes);
-	//
-	//		//	Glv.isDone = true;
-	//		//println(Glv.isDone);
-	//		println("Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime));
-	//
-	//	}
 
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });

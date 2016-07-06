@@ -5,7 +5,7 @@ import org.omg.PortableServer.THREAD_POLICY_ID;
 import processing.core.PApplet;
 
 class MyThread extends Thread {
-	private Thread t;
+	public Thread t;
 	//ManageBoxes manBox;
 	
 

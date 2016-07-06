@@ -18,6 +18,7 @@ public class Glv {
 	
 	
 	public static int seed = 10;
+	public static int whichToDisplay=0;
 
 	public static float cubeSizeReduced = 20.0f;
 	public static boolean shouldDimReduction = true;
@@ -27,7 +28,8 @@ public class Glv {
 	
 	public static ArrayList<String> toNN = new ArrayList<String>();
 	
-	public static boolean isDone=false;
+	public static int isDone=0;
+	public static boolean isDoneBool=false;
 	
-	public static int numOfThreads = 3;
+	public static int numOfThreads = 8;
 }

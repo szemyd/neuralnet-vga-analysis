@@ -66,7 +66,7 @@ public class SpaceSyntax {
 	public void draw() {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
-				rectangles[i][j].draw(highLow);
+				if(highLow != null && rectangles[i][j] != null) rectangles[i][j].draw(highLow);
 			}
 		}
 	}
@@ -246,9 +246,10 @@ public class SpaceSyntax {
 		}
 	}
 
-	public  void save(MyBox[][] boxes) {
+	public  void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
 		
 		Glv.toNN.add(Integer.toString(threadID));
+		Glv.toNN.add("\n");
 		
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
