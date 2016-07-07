@@ -16,13 +16,13 @@ public class GenerateCSV {
 		File file = new File(filePath + "\\" + "GeneratedData");
 		if (!file.exists()) {
 			if (file.mkdir()) {
-				System.out.println("Directory is created!");
+				if(Glv.shP) System.out.println("Directory is created!");
 			} else {
-				System.out.println("Failed to create directory!");
+				if(Glv.shP) System.out.println("Failed to create directory!");
 			}
 		}
 
-		System.out.println(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
+		if(Glv.shP) System.out.println(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
 		generateCsvFile(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
 	}
 
@@ -41,13 +41,13 @@ public class GenerateCSV {
 
 				writer.flush();
 				writer.close();
-				System.out.println("Done writing CSV.");
+				if(Glv.shP) System.out.println("Done writing CSV.");
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else
-			System.out.println("File already exists.");
+			if(Glv.shP) System.out.println("File already exists.");
 
 	}
 }

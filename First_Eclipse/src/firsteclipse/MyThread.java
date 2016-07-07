@@ -21,7 +21,7 @@ class MyThread extends Thread {
 
 		threadID = id;
 
-		System.out.println("Creating " + threadID);
+		if(Glv.shP)System.out.println("Creating " + threadID);
 
 		//manBox = _manBox;
 
@@ -31,16 +31,16 @@ class MyThread extends Thread {
 	}
 
 	public void run() {
-		System.out.println("Running " + threadID);
+		if(Glv.shP) System.out.println("Running " + threadID);
 		try {
 			startThread();
 
 			Thread.sleep(50);
 
 		} catch (InterruptedException e) {
-			System.out.println("Thread " + threadID + " interrupted.");
+			if(Glv.shP) System.out.println("Thread " + threadID + " interrupted.");
 		}
-		System.out.println("Thread " + threadID + " exiting.");
+		if(Glv.shP) System.out.println("Thread " + threadID + " exiting.");
 	}
 
 	public void startThread() {
@@ -55,7 +55,7 @@ class MyThread extends Thread {
 		//while(VGADone ==false)
 		spaceSyntax();
 
-		p.println("Ellapsed time: " + ((p.second() + p.minute() * 60 + p.hour() * 360) - ellapsedTime));
+		if(Glv.shP) p.println("Ellapsed time: " + ((p.second() + p.minute() * 60 + p.hour() * 360) - ellapsedTime));
 	}
 
 	public void spaceSyntax() {
@@ -67,7 +67,7 @@ class MyThread extends Thread {
 	}
 
 	public void start() {
-		System.out.println("Starting " + threadID);
+		if(Glv.shP) System.out.println("Starting " + threadID);
 		if (t == null) {
 			t = new Thread(this, Integer.toString(threadID));
 			t.start();

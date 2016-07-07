@@ -116,7 +116,7 @@ public class FirstEclipse extends PApplet {
 				analysisSetup();
 				Glv.howManyUntilNow += Glv.numOfThreads;
 			} else {
-				println("All solutions done.");
+				if(Glv.shP) println("All solutions done.");
 				Glv.isDoneBool = true;
 			}
 		}
