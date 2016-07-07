@@ -87,8 +87,10 @@ public class FirstEclipse extends PApplet {
 
 		if (key == 's') {
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
-			thread("startThread");
 		}
+		
+		if (key == 'g')
+			Glv.globalHighLow = !Glv.globalHighLow;
 	}
 
 	private void setupGui() {

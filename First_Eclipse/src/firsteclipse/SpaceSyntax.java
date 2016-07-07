@@ -23,16 +23,16 @@ import java.util.Scanner;
 import java.awt.Polygon;
 
 public class SpaceSyntax {
-	private  PApplet p;
+	private PApplet p;
 	public PVector highLow = new PVector();
-	
+
 	int threadID;
 
 	public MyRect[][] rectangles = new MyRect[Glv.spaceDivisionX][Glv.spaceDivisionY];
 
-	public SpaceSyntax(PApplet _p,int _threadID) {
+	public SpaceSyntax(PApplet _p, int _threadID) {
 		p = _p;
-		
+
 		threadID = _threadID;
 	}
 
@@ -66,7 +66,8 @@ public class SpaceSyntax {
 	public void draw() {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
-				if(highLow != null && rectangles[i][j] != null) rectangles[i][j].draw(highLow);
+				if (highLow != null && rectangles[i][j] != null)
+					rectangles[i][j].draw(highLow);
 			}
 		}
 	}
@@ -112,7 +113,7 @@ public class SpaceSyntax {
 		//return true;
 	}
 
-	private  boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
+	private boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
 
 		if (me != null && other != null) {
 
@@ -155,7 +156,7 @@ public class SpaceSyntax {
 		return false;
 	}
 
-	private  boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
+	private boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
 
 		Line2D line1 = new Line2D(me.x, me.y, other.x, other.y);
 
@@ -175,8 +176,7 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private  boolean linesIntersect(float x1, float y1, float x2, float y2, float x3, float y3, float x4,
-			float y4) {
+	private boolean linesIntersect(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
 		// Return false if either of the lines have zero length
 		if (x1 == x2 && y1 == y2 || x3 == x4 && y3 == y4) {
 			return false;
@@ -237,20 +237,31 @@ public class SpaceSyntax {
 		return true;
 	}
 
-	private  void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
+	private void calcHighLow(float num) { // Calculate which number is the highest and which one is the lowest.
+
+		// Calculate local highLow, meaning find the local highest visibility and the lowest
+		if (num < 10000f) {
+			if (num >= Glv.highLow.x)
+				Glv.highLow.x = num;
+			if (num <= Glv.highLow.y)
+				Glv.highLow.y = num;
+		}
+
+		// Calculate the global highLow, meaning find the global highest visibility and the lowest
 		if (num < 10000f) {
 			if (num >= highLow.x)
 				highLow.x = num;
 			if (num <= highLow.y)
 				highLow.y = num;
 		}
+
 	}
 
-	public  void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
-		
+	public void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
+
 		Glv.toNN.add(Integer.toString(threadID));
 		Glv.toNN.add("\n");
-		
+
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
 				Glv.toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
@@ -260,25 +271,21 @@ public class SpaceSyntax {
 		}
 		Glv.toNN.add(":");
 		Glv.toNN.add("\n");
-		
+
 		for (int j = 0; j < boxes[0].length; j++) {
 			for (int i = 0; i < boxes.length; i++) {
-				Glv.toNN.add(Integer.toString((int)boxes[i][j].height));
+				Glv.toNN.add(Integer.toString((int) boxes[i][j].height));
 				Glv.toNN.add(",");
 			}
 			Glv.toNN.add("\n");
 		}
-				
-		
+
 		Glv.toNN.add("_");
 		Glv.toNN.add("\n");
-		
+
 		p.println("I have finished saving to string");
 	}
 }
-
-
-
 
 /*	
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
