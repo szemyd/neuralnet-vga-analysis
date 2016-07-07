@@ -6,8 +6,8 @@ import java.io.IOException;
 import sun.net.www.content.text.plain;
 
 public class GenerateCSV {
-	public static void save() {
-		generateCsvFile("C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/DOCUMENTATION/GeneratedData/colourValues.csv");
+	public static void save(String fileName) {
+		generateCsvFile("C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/DOCUMENTATION/GeneratedData/" + fileName + ".csv");
 	}
 
 	private static void generateCsvFile(String sFileName) {
