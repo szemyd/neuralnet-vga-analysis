@@ -8,12 +8,27 @@ import sun.net.www.content.text.plain;
 
 public class GenerateCSV {
 	public static void save(String fileName) {
-		generateCsvFile("C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/DOCUMENTATION/GeneratedData/" + fileName
-				+ ".csv");
+		String filePath = new File("").getAbsolutePath();
+
+		//		generateCsvFile("C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/DOCUMENTATION/GeneratedData/" + fileName
+		//				+ ".csv");
+
+		File file = new File(filePath + "\\" + "GeneratedData");
+		if (!file.exists()) {
+			if (file.mkdir()) {
+				System.out.println("Directory is created!");
+			} else {
+				System.out.println("Failed to create directory!");
+			}
+		}
+
+		System.out.println(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
+		generateCsvFile(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
 	}
 
 	private static void generateCsvFile(String sFileName) {
 		File f = new File(sFileName);
+
 		if (!f.isFile()) { // If the file doesn't exist yet
 
 			try {

@@ -8,6 +8,13 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.util.packrect.Rect;
 
+import controlP5.Accordion;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
+import controlP5.Group;
+import peasy.PeasyCam;
+import peasy.*;
+import controlP5.*;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PShape;
@@ -18,11 +25,48 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
+	
+	ControlP5 cp5;
+	Accordion accordion;
+
+	PeasyCam cam;
 
 	public Environment(PApplet _p) {
 		p = _p;
+			}
+
+	public void setupGui() {
+
+		cp5 = new ControlP5(p);
+		cam = new PeasyCam(p, 180);
+		// cam.setMinimumDistance(50);
+		// cam.setMaximumDistance(500);
+		
+		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		//cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
+		//.plugTo(this,	"shuffle");
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
+
+		accordion.open(0, 1, 2);
+		accordion.setCollapseMode(Accordion.MULTI);
+
+		cp5.setAutoDraw(false);
 	}
 
+	public void drawGui() {
+		//hint(DISABLE_DEPTH_TEST);
+		cam.beginHUD();
+		// group number 1, contains 2 bangs
+
+		cp5.draw();
+
+		cam.endHUD();
+		//hint(ENABLE_DEPTH_TEST);
+	}
+	
 	public void draw(PShape s) {
 		p.pushStyle();
 		{
@@ -125,6 +169,25 @@ public class Environment {
 		// }
 
 	}
+
+
+	void toggle(boolean theFlag) {
+		if (theFlag == true) {
+			Glv.shouldSpaceSyntax = true;
+//			for (MyThread thread : threads) {
+//				thread.spaceSyntax();
+//			}
+		} else {
+			Glv.shouldSpaceSyntax = false;
+			p.println("Off");
+		}
+		p.println("a toggle event.");
+	}
+
+	public void controlEvent(ControlEvent theEvent) {
+		p.println(theEvent.getController().getName());
+	}
+
 }
 
 //// --->Checking the biggest column size (if we have data that is not
