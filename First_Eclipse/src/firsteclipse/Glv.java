@@ -31,7 +31,7 @@ public class Glv {
 	public static int isDone=0;
 	public static boolean isDoneBool=false;
 	
-	public static int numOfThreads = 5;
-	public static int numOfSolutions = 20;
+	public static int numOfThreads = 2;
+	public static int numOfSolutions = 6;
 	public static int howManyUntilNow=0;
 }
