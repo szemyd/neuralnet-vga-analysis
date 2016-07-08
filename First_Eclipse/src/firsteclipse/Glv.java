@@ -17,8 +17,8 @@ public class Glv {
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
 	// Solution settings and optimal calculation
-	public static int numOfThreads = 15; // How many parallel threads should there be
-	public static int numOfSolutions =14; // How many solutions do I want to generate
+	public static int numOfThreads = 1; // How many parallel threads should there be
+	public static int numOfSolutions =1; // How many solutions do I want to generate
 
 	// Form generating settings
 	public static float cubeSize = 5f;

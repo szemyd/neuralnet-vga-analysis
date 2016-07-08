@@ -44,7 +44,7 @@ public class SpaceSyntax {
 						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f
 								+ Glv.spaceCubeSize * 0.5f,
 						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize * Glv.spaceDivisionY) * 0.5f
-								+ Glv.spaceCubeSize * 0.5f,
+								- Glv.spaceCubeSize,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
 
@@ -180,9 +180,6 @@ public class SpaceSyntax {
 	private boolean canIseeBigCube(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
 
 		if (me != null && other != null) {
-
-			Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
-
 			if (me.height < 0.1f && other.height < 0.1f) {
 
 				for (int i = 0; i < boxes.length; i++) {
@@ -202,6 +199,8 @@ public class SpaceSyntax {
 														+ Glv.cubeSizeReduced < other.position.y) {
 
 								} else {
+									Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
+									
 									Line2D line2 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
