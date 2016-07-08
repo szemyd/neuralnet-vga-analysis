@@ -20,11 +20,12 @@ public class MyRect {
 
 	public void draw(PVector highLow) {
 
-		// if (height > 0.1f) p.fill(360);
-		// else
 		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 230, 360), 360, 360);
 		else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 230, 360), 360, 360);
 
+//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
+//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);
+		
 		if (height < 0.1f) {
 			p.pushMatrix();
 			{

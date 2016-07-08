@@ -99,8 +99,11 @@ public class SpaceSyntax {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				for (int k = 0; k < rectangles.length; k++) {
 					for (int l = 0; l < rectangles[k].length; l++) {
-						if (canIsee(rectangles[i][j], rectangles[k][l], boxes)
-								&& buildingSee(rectangles[i][j].position, rectangles[k][l].position)) {
+						if (Glv.shouldDimReduction) {
+							if (canIseeBigCube(rectangles[i][j], rectangles[k][l], boxes)) {
+								rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+							}
+						} else if (canIsee(rectangles[i][j], rectangles[k][l], boxes)) {
 							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 						}
 					}
@@ -165,7 +168,65 @@ public class SpaceSyntax {
 					}
 				}
 
-			} else if (me.height > 0.1f) {
+			} else if (me.height > 0.1f || other.height > 0.1f) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+
+	}
+
+	private boolean canIseeBigCube(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
+
+		if (me != null && other != null) {
+
+			Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
+
+			if (me.height < 0.1f && other.height < 0.1f) {
+
+				for (int i = 0; i < boxes.length; i++) {
+					for (int j = 0; j < boxes[i].length; j++) {
+
+						if (boxes[i][j].height > 0.1f) { // Is the box up
+							if (boxes[i][j].amIEdge) { // Is the box on the edge of the obstacle (because of Dim Reduction)
+								if (boxes[i][j].position.x - Glv.cubeSize > me.position.x // Is the box surely not near any of the points?
+										&& boxes[i][j].position.x - Glv.cubeSize > other.position.x
+										|| boxes[i][j].position.x + Glv.cubeSize + Glv.cubeSizeReduced < me.position.x
+												&& boxes[i][j].position.x + Glv.cubeSize
+														+ Glv.cubeSizeReduced < other.position.x) { // Is the box surely not near any of the points?
+								} else if (boxes[i][j].position.y - Glv.cubeSize > me.position.y
+										&& boxes[i][j].position.y - Glv.cubeSize > other.position.y
+										|| boxes[i][j].position.y + Glv.cubeSize + Glv.cubeSizeReduced < me.position.y
+												&& boxes[i][j].position.y + Glv.cubeSize
+														+ Glv.cubeSizeReduced < other.position.y) {
+
+								} else {
+									Line2D line2 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
+											boxes[i][j].position.y - (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced);
+
+									if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1,
+											line1.x2, line1.y2))
+										return false;
+
+									Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
+											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y - (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced);
+
+									if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1,
+											line1.x2, line1.y2))
+										return false;
+
+								}
+							}
+						}
+					}
+				}
+
+			} else if (me.height > 0.1f || other.height > 0.1f) {
 				return false;
 			}
 			return true;

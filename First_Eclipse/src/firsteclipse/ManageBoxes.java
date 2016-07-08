@@ -215,12 +215,20 @@ public class ManageBoxes {
 				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
 					boxes[i + k][j + l].height = num;
 
-					if (k == 0 || k == (Glv.cubeSizeReduced / Glv.cubeSize) - 1 || l == 0
-							|| l == (Glv.cubeSizeReduced / Glv.cubeSize) - 1) {
+//					if (k == 0 || k == (Glv.cubeSizeReduced / Glv.cubeSize) - 1 || l == 0
+//							|| l == (Glv.cubeSizeReduced / Glv.cubeSize) - 1) {
+//						boxes[i + k][j + l].amIEdge = true;
+//					}
+//					else
+//						boxes[i + k][j + l].amIEdge = false; // Switch amIEdge off if you are not on the edge of the box.
+				
+				
+					if (k == 0 && l == 0) {
 						boxes[i + k][j + l].amIEdge = true;
 					}
 					else
 						boxes[i + k][j + l].amIEdge = false; // Switch amIEdge off if you are not on the edge of the box.
+				
 				}
 
 			}
