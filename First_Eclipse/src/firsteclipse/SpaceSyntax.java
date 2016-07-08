@@ -1,26 +1,12 @@
 package firsteclipse;
 
-import javax.swing.LookAndFeel;
 
-import com.jogamp.nativewindow.util.Point;
-import com.jogamp.nativewindow.util.Rectangle;
-import com.sun.java_cup.internal.runtime.virtual_parse_stack;
-import com.sun.javafx.geom.AreaOp.AddOp;
-import com.sun.javafx.css.CalculatedValue;
 import com.sun.javafx.geom.Line2D;
-import com.sun.xml.internal.bind.v2.model.util.ArrayInfoUtil;
-import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithmState;
 
-import jdk.nashorn.internal.runtime.FindProperty;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.awt.geom.Point2D;
-import java.util.*;
-import java.util.Arrays;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.awt.Polygon;
+
 
 public class SpaceSyntax {
 	private PApplet p;
@@ -43,8 +29,7 @@ public class SpaceSyntax {
 				PVector position = new PVector(
 						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f
 								+ Glv.spaceCubeSize * 0.5f,
-						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize * Glv.spaceDivisionY) * 0.5f
-								- Glv.spaceCubeSize,
+						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize * Glv.spaceDivisionY) * 0.5f - Glv.spaceCubeSize,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
 
@@ -73,11 +58,8 @@ public class SpaceSyntax {
 	}
 
 	public void VGA(MyBox[][] boxes) {
-		highLow = new PVector(0f, 1000f); // This is so that the colours are
-		// rightly mapped
-		/*
-		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
-		 */
+		highLow = new PVector(0f, 1000f); // This is so that the colours are rightly mapped.
+		 //for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); } // Alasdiars PseudoCode.		 
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
@@ -100,11 +82,13 @@ public class SpaceSyntax {
 				for (int k = 0; k < rectangles.length; k++) {
 					for (int l = 0; l < rectangles[k].length; l++) {
 						if (Glv.shouldDimReduction) {
-							if (canIseeBigCube(rectangles[i][j], rectangles[k][l], boxes)) {
+							if (canIseeBigCube(rectangles[i][j], rectangles[k][l], boxes)) { // Check big boxes.
 								rectangles[i][j].neighbourhood.add(rectangles[k][l]);
 							}
-						} else if (canIsee(rectangles[i][j], rectangles[k][l], boxes)) {
-							rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+						} else {
+							if (canIsee(rectangles[i][j], rectangles[k][l], boxes)) { // Check every box
+								rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+							}
 						}
 					}
 				}
@@ -199,8 +183,9 @@ public class SpaceSyntax {
 														+ Glv.cubeSizeReduced < other.position.y) {
 
 								} else {
-									Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x, other.position.y);
-									
+									Line2D line1 = new Line2D(me.position.x, me.position.y, other.position.x,
+											other.position.y);
+
 									Line2D line2 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
@@ -210,7 +195,8 @@ public class SpaceSyntax {
 											line1.x2, line1.y2))
 										return false;
 
-									Line2D line3 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
+									Line2D line3 = new Line2D(
+											boxes[i][j].position.x + (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced,
 											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
 											boxes[i][j].position.y - (Glv.cubeSize) * 0.5f + Glv.cubeSizeReduced);

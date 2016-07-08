@@ -10,8 +10,6 @@ public class GenerateCSV {
 	public static void save(String fileName) {
 		String filePath = new File("").getAbsolutePath();
 
-		//		generateCsvFile("C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/DOCUMENTATION/GeneratedData/" + fileName
-		//				+ ".csv");
 
 		File file = new File(filePath + "\\" + "GeneratedData");
 		if (!file.exists()) {
@@ -22,7 +20,7 @@ public class GenerateCSV {
 			}
 		}
 
-		if(Glv.shP) System.out.println(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
+		// if(Glv.shP) System.out.println(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
 		generateCsvFile(filePath + "\\" + "GeneratedData" + "\\" + fileName + ".csv");
 	}
 
@@ -48,6 +46,5 @@ public class GenerateCSV {
 			}
 		} else
 			if(Glv.shP) System.out.println("File already exists.");
-
 	}
 }

@@ -43,6 +43,8 @@ public class FirstEclipse extends PApplet {
 		rectMode(PConstants.CENTER);
 
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		env.checkFilesInFolder(); // Checks how many analysis have been done already.
+		
 		analysisSetup();
 	}
 
@@ -86,8 +88,6 @@ public class FirstEclipse extends PApplet {
 			Glv.globalHighLow = !Glv.globalHighLow;
 	}
 
-	
-
 	public void analysisSetup() {
 		for (int i = 0; i < Glv.numOfThreads; i++) {
 			threads.add(new MyThread(this, threads.size()));
@@ -112,7 +112,7 @@ public class FirstEclipse extends PApplet {
 
 		if (Glv.isDone == threads.size() && !Glv.isDoneBool) {
 			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow));
-			if (Glv.howManyUntilNow < Glv.numOfSolutions) {
+			if (Glv.howManyUntilNow < Glv.numOfSolutions-1) {
 				analysisSetup();
 				Glv.howManyUntilNow += Glv.numOfThreads;
 			} else {
@@ -120,7 +120,6 @@ public class FirstEclipse extends PApplet {
 				Glv.isDoneBool = true;
 			}
 		}
-
 	}
 
 	public static void main(String _args[]) {

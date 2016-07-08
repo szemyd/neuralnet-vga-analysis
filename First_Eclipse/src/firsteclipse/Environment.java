@@ -1,6 +1,7 @@
 package firsteclipse;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
-	
+
 	ControlP5 cp5;
 	Accordion accordion;
 
@@ -33,7 +34,7 @@ public class Environment {
 
 	public Environment(PApplet _p) {
 		p = _p;
-			}
+	}
 
 	public void setupGui() {
 
@@ -41,7 +42,7 @@ public class Environment {
 		cam = new PeasyCam(p, 180);
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
-		
+
 		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
@@ -66,7 +67,7 @@ public class Environment {
 		cam.endHUD();
 		//hint(ENABLE_DEPTH_TEST);
 	}
-	
+
 	public void draw(PShape s) {
 		p.pushStyle();
 		{
@@ -77,18 +78,14 @@ public class Environment {
 			}
 		}
 		p.popStyle();
-		
-		
-	
 
 		p.pushMatrix();
 		{
 			p.pushStyle();
 			{
 				p.rectMode(PConstants.CENTER);
-				p.fill(360,0,280);
-				
-			
+				p.fill(360, 0, 280);
+
 				p.translate(0, 0, -.005f);
 				p.rect(0, 0, 520f, 560f);
 				p.translate(0, 0, -.01f);
@@ -102,7 +99,13 @@ public class Environment {
 
 	public void loadData() {
 
-		String csvFile = "C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/CODE/PHASE 1_Generating Data/First_Eclipse/src/data/sur.csv";
+		String filePath = new File("").getAbsolutePath();
+
+		//File file = new File(filePath + "\\" + "GeneratedData");
+		
+		//String csvFile = "C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/CODE/PHASE 1_Generating Data/First_Eclipse/src/data/sur.csv";
+		String csvFile = filePath + "/src/data/sur.csv";
+				
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
@@ -125,7 +128,7 @@ public class Environment {
 				else {
 					Building tempBuilding = buildings.get((int) temp.z - 1);
 					tempBuilding.bLines.add(temp);
-					tempBuilding.myPolygon.addPoint((int)temp.x,(int) temp.y);
+					tempBuilding.myPolygon.addPoint((int) temp.x, (int) temp.y);
 				}
 			}
 
@@ -143,40 +146,20 @@ public class Environment {
 			}
 		}
 
-		if(Glv.shP) p.println("CSV Data Loaded!");
-		// System.out.println("Country [code= " + country[4]
-		// + " , name=" + country[5] + "]");
-		//
-		// String[] sData = p.loadStrings("sur.csv"); // Loading the file
-		// // to an array.
-		//
-		// for (int i = 1; i < sData.length; i++) {
-		// String[] thisRow = p.split(sData[i], ",");
-		// }
-		//
-		// for (int i = 0; i < sData.length; i++) {
-		// PVector temp = new PVector();
-		// String[] thisRow = p.split(sData[i], ",");
-		//
-		// temp.x = Float.parseFloat(thisRow[1]);
-		// temp.y = Float.parseFloat(thisRow[2]);
-		// temp.z = Float.parseFloat(thisRow[4]);
-		// p.println(temp);
-		// // for (int j=0; j<thisRow.length; j++)
-		// // {
-		// //
-		//
-		// }
-
+		if (Glv.shP)
+			p.println("CSV Data Loaded!");
 	}
 
+	public void checkFilesInFolder() {
+
+	}
 
 	void toggle(boolean theFlag) {
 		if (theFlag == true) {
 			Glv.shouldSpaceSyntax = true;
-//			for (MyThread thread : threads) {
-//				thread.spaceSyntax();
-//			}
+			//			for (MyThread thread : threads) {
+			//				thread.spaceSyntax();
+			//			}
 		} else {
 			Glv.shouldSpaceSyntax = false;
 			p.println("Off");
