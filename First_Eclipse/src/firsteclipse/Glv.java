@@ -12,13 +12,13 @@ public class Glv {
 	public static boolean shouldDimReduction = true; // Should the generated cubes be reduced.
 	public static boolean shouldSpaceSyntax = true; // Should the SpaceSyntax Analysis work
 	public static boolean globalHighLow = true; // Should the mapping of the SpaceSyntax colouring be local relative or global relative.
-	public static boolean shP = false; // Should it print to the console?
+	public static boolean shP = true; // Should it print to the console?
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
 	// Solution settings and optimal calculation
-	public static int numOfThreads = 8; // How many parallel threads should there be
-	public static int numOfSolutions = 400; // How many solutions do I want to generate
+	public static int numOfThreads = 15; // How many parallel threads should there be
+	public static int numOfSolutions = 30; // How many solutions do I want to generate
 
 	// Form generating settings
 	public static float cubeSize = 5f;

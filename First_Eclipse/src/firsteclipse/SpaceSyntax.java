@@ -78,6 +78,7 @@ public class SpaceSyntax {
 		/*
 		 * for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); }
 		 */
+
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				// Find if rectangle is inside a building or not!
@@ -108,6 +109,10 @@ public class SpaceSyntax {
 				calcHighLow(rectangles[i][j].neighbourhood.size());
 			}
 		}
+		float ellapsedTimeVGA = p.second() + p.minute() * 60f + p.hour() * 360f;
+		if (Glv.shP)
+			p.println("Ellapsed time VGA: " + ((p.second() + p.minute() * 60f + p.hour() * 360f) - ellapsedTimeVGA));
+
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
 		save(boxes);
 		//return true;
@@ -124,25 +129,37 @@ public class SpaceSyntax {
 				for (int i = 0; i < boxes.length; i++) {
 					for (int j = 0; j < boxes[i].length; j++) {
 
-						if (boxes[i][j].height > 0.1f) {
-							if (boxes[i][j].amIEdge) {
-								Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+						if (boxes[i][j].height > 0.1f) { // Is the box up
+							if (boxes[i][j].amIEdge) { // Is the box on the edge of the obstacle (because of Dim Reduction)
+								if (boxes[i][j].position.x - Glv.cubeSize > me.position.x // Is the box surely not near any of the points?
+										&& boxes[i][j].position.x - Glv.cubeSize > other.position.x
+										|| boxes[i][j].position.x + Glv.cubeSize < me.position.x
+												&& boxes[i][j].position.x + Glv.cubeSize < other.position.x) { // Is the box surely not near any of the points?
+								} else if (boxes[i][j].position.y - Glv.cubeSize > me.position.y
+										&& boxes[i][j].position.y - Glv.cubeSize > other.position.y
+										|| boxes[i][j].position.y + Glv.cubeSize < me.position.y
+												&& boxes[i][j].position.y + Glv.cubeSize < other.position.y) {
 
-								if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+								} else {
+									Line2D line2 = new Line2D(boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
 
-								Line2D line3 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
-										boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+									if (linesIntersect(line2.x1, line2.y1, line2.x2, line2.y2, line1.x1, line1.y1,
+											line1.x2, line1.y2))
+										return false;
 
-								if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1, line1.x2,
-										line1.y2))
-									return false;
+									Line2D line3 = new Line2D(boxes[i][j].position.x - (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.x + (Glv.cubeSize) * 0.5f,
+											boxes[i][j].position.y - (Glv.cubeSize) * 0.5f);
+
+									if (linesIntersect(line3.x1, line3.y1, line3.x2, line3.y2, line1.x1, line1.y1,
+											line1.x2, line1.y2))
+										return false;
+
+								}
 							}
 						}
 					}
@@ -154,6 +171,7 @@ public class SpaceSyntax {
 			return true;
 		}
 		return false;
+
 	}
 
 	private boolean buildingSee(PVector me, PVector other) { // Check if the lines intersect
@@ -283,7 +301,8 @@ public class SpaceSyntax {
 		Glv.toNN.add("_");
 		Glv.toNN.add("\n");
 
-		if(Glv.shP) p.println("I have finished saving to string");
+		if (Glv.shP)
+			p.println("I have finished saving to string");
 	}
 }
 

@@ -49,12 +49,11 @@ class MyThread extends Thread {
 		Glv.seed++;
 
 		manBox.setup(); // 01. Creates the boxes in a random form.
-		spaceSyntax.setup(manBox.boxes); // 02. Creates starting grid of rectangles for the spacesyntax VGA.
+		manBox.createHeights(); // 02. Iterates through the CA.
 		
-		manBox.createHeights(); // Iterates through the CA.
-		//while(VGADone ==false)
-		spaceSyntax();
-
+		spaceSyntax.setup(manBox.boxes); // 03. Creates starting grid of rectangles for the spacesyntax VGA, sets the rectangles according to cubes
+		spaceSyntax(); // 04. Does VGA Analysis
+		
 		if(Glv.shP) p.println("Ellapsed time: " + ((p.second() + p.minute() * 60 + p.hour() * 360) - ellapsedTime));
 	}
 
