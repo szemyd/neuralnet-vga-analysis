@@ -27,6 +27,7 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
+	public static ArrayList<MyData> allAnalysis = new ArrayList<MyData>();
 
 	ControlP5 cp5;
 	Accordion accordion;
@@ -102,9 +103,6 @@ public class Environment {
 
 		String filePath = new File("").getAbsolutePath();
 
-		//File file = new File(filePath + "\\" + "GeneratedData");
-
-		//String csvFile = "C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/CODE/PHASE 1_Generating Data/First_Eclipse/src/data/sur.csv";
 		String csvFile = filePath + "/src/data/sur.csv";
 
 		BufferedReader br = null;
@@ -172,7 +170,55 @@ public class Environment {
 			}
 		}
 		//if(Glv.shP) System.out.println(Glv.initialSeed);
-		if(Glv.shP) System.out.println("Biggest already available number (seed): " + Glv.seed);
+		if (Glv.shP)
+			System.out.println("Biggest already available number (seed): " + Glv.seed);
+	}
+
+	public boolean loadGenData() {
+		String filePath = new File("").getAbsolutePath();
+		File folder = new File(filePath + "\\" + "GeneratedData");
+		File[] listOfFiles = folder.listFiles();
+
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		String dataGroupSplitBy = "_";
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+
+			try {
+				br = new BufferedReader(new FileReader(filePath + "\\" + "GeneratedData" + "\\" + listOfFiles[i]));
+				while ((line = br.readLine()) != null) {
+
+					PVector temp = new PVector();
+					// use comma as separator
+					String[] thisRow = line.split(cvsSplitBy);
+
+					for (int j = 0; j < thisRow.length; j++) {
+						char c = thisRow[j].charAt(0);
+						if (c == '_') {
+
+						}
+					}
+				}
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return true;
+		//return false;
 	}
 
 	void toggle(boolean theFlag) {
