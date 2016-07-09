@@ -16,18 +16,18 @@ public class Glv {
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
-	// Solution settings and optimal calculation
-	public static int numOfThreads = 3; // How many parallel threads should there be
-	public static int numOfSolutions =6; // How many solutions do I want to generate
+	//---> Solution settings and optimal calculation
+	public static int numOfThreads = 15; // How many parallel threads should there be
+	public static int numOfSolutions =29; // How many solutions do I want to generate
 
-	// Form generating settings
-	public static float cubeSize = 5f;
-	public static float spaceCubeSize = 5f;
+	//---> Form generating settings
+	public static float cubeSize = 5f; // How big is the cube that we are using.
+	public static float spaceCubeSize = 5f; // How big is the one grid rectangle.
 
-	public static float roomSizeX = 129.4f;
-	public static float roomSizeY = 160.42f;
+	public static float roomSizeX = 129.4f; // How big is the park
+	public static float roomSizeY = 160.42f; 
 
-	public static float spaceRoomSizeX = 129.4f * 1.50f;
+	public static float spaceRoomSizeX = 129.4f * 1.50f; // How big is the SpaceSyntax analysis.
 	public static float spaceRoomSizeY = 160.42f * 1.50f;
 
 	/* 
@@ -41,7 +41,8 @@ public class Glv {
 	public static int spaceDivisionX = ((int) spaceRoomSizeX / (int) spaceCubeSize);
 	public static int spaceDivisionY = ((int) spaceRoomSizeY / (int) spaceCubeSize);
 
-	public static int seed = 10;
+	public static int seed = 1000;
+	public static int initialSeed = seed;
 	public static int whichToDisplay = 0;
 	public static int isDone = 0;
 	public static boolean isDoneBool = false;

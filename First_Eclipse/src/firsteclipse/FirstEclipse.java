@@ -111,7 +111,8 @@ public class FirstEclipse extends PApplet {
 		}
 
 		if (Glv.isDone == threads.size() && !Glv.isDoneBool) {
-			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow));
+			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
+			
 			if (Glv.howManyUntilNow < Glv.numOfSolutions-1) {
 				analysisSetup();
 				Glv.howManyUntilNow += Glv.numOfThreads;

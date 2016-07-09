@@ -323,7 +323,7 @@ public class SpaceSyntax {
 
 	public void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
 
-		Glv.toNN.add(Integer.toString(threadID));
+		Glv.toNN.add(Integer.toString(threadID + Glv.initialSeed));
 		Glv.toNN.add("\n");
 
 		for (int j = 0; j < rectangles[0].length; j++) {

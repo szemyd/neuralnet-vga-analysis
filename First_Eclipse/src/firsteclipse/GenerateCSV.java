@@ -3,6 +3,7 @@ package firsteclipse;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import sun.net.www.content.text.plain;
 
@@ -46,5 +47,7 @@ public class GenerateCSV {
 			}
 		} else
 			if(Glv.shP) System.out.println("File already exists.");
+		
+		Glv.toNN=new ArrayList<String>();
 	}
 }
