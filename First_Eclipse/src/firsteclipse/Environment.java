@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.jogamp.opengl.util.packrect.Rect;
+import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 
 import controlP5.Accordion;
 import controlP5.ControlEvent;
@@ -34,27 +35,6 @@ public class Environment {
 
 	public Environment(PApplet _p) {
 		p = _p;
-	}
-
-	public void setupGui() {
-
-		cp5 = new ControlP5(p);
-		cam = new PeasyCam(p, 180);
-		// cam.setMinimumDistance(50);
-		// cam.setMaximumDistance(500);
-
-		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		//cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
-		//.plugTo(this,	"shuffle");
-		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
-
-		accordion.open(0, 1, 2);
-		accordion.setCollapseMode(Accordion.MULTI);
-
-		cp5.setAutoDraw(false);
 	}
 
 	public void drawGui() {
@@ -97,15 +77,36 @@ public class Environment {
 		p.popMatrix();
 	}
 
+	public void setupGui() {
+
+		cp5 = new ControlP5(p);
+		cam = new PeasyCam(p, 180);
+		// cam.setMinimumDistance(50);
+		// cam.setMaximumDistance(500);
+
+		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		//cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
+		//.plugTo(this,	"shuffle");
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
+
+		accordion.open(0, 1, 2);
+		accordion.setCollapseMode(Accordion.MULTI);
+
+		cp5.setAutoDraw(false);
+	}
+
 	public void loadData() {
 
 		String filePath = new File("").getAbsolutePath();
 
 		//File file = new File(filePath + "\\" + "GeneratedData");
-		
+
 		//String csvFile = "C:/Users/Me/Google Drive/UCL/III_Semester/Final Thesis/CODE/PHASE 1_Generating Data/First_Eclipse/src/data/sur.csv";
 		String csvFile = filePath + "/src/data/sur.csv";
-				
+
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
@@ -150,8 +151,28 @@ public class Environment {
 			p.println("CSV Data Loaded!");
 	}
 
-	public void checkFilesInFolder() {
+	public void checkFilesUpdateSeed() {
+		String filePath = new File("").getAbsolutePath();
+		File folder = new File(filePath + "\\" + "GeneratedData");
 
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				String fileName = listOfFiles[i].getName();
+				if (fileName.contains(".")) {
+					int cutFilename = Integer.valueOf(fileName.substring(0, fileName.lastIndexOf('.')));
+					//if(Glv.shP) System.out.println("File " + cutFilename);
+
+					if (cutFilename > Glv.initialSeed) {
+						Glv.initialSeed = cutFilename;
+						Glv.seed = cutFilename;
+					}
+				}
+			}
+		}
+		//if(Glv.shP) System.out.println(Glv.initialSeed);
+		if(Glv.shP) System.out.println("Biggest already available number (seed): " + Glv.seed);
 	}
 
 	void toggle(boolean theFlag) {

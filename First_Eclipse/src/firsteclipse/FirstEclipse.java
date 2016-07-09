@@ -43,7 +43,7 @@ public class FirstEclipse extends PApplet {
 		rectMode(PConstants.CENTER);
 
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		env.checkFilesInFolder(); // Checks how many analysis have been done already.
+		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 		
 		analysisSetup();
 	}
