@@ -20,7 +20,7 @@ import controlP5.*;
 public class FirstEclipse extends PApplet {
 
 	PShape s;
-	
+
 	Environment env = new Environment(this);
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
@@ -31,7 +31,7 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void setup() {
-		
+
 		env.setupGui();
 
 		randomSeed(Glv.seed);
@@ -42,9 +42,11 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
+		env.loadGenData();
+		
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
-		
+
 		analysisSetup();
 	}
 
@@ -71,19 +73,17 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void keyPressed() {
-		if (keyCode == LEFT) {
+		if (keyCode == LEFT)
 			Glv.whichToDisplay--;
-		}
 
-		if (keyCode == RIGHT) {
+		if (keyCode == RIGHT)
 			Glv.whichToDisplay++;
-		}
+
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
 
-		if (key == 's') {
+		if (key == 's')
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
-		}
-		
+
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 	}
@@ -95,7 +95,7 @@ public class FirstEclipse extends PApplet {
 
 		for (MyThread thread : threads) {
 			if (!thread.VGADone) // If it is a new thread then start it!
-			thread.start();
+				thread.start();
 		}
 	}
 
@@ -112,12 +112,13 @@ public class FirstEclipse extends PApplet {
 
 		if (Glv.isDone == threads.size() && !Glv.isDoneBool) {
 			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
-			
-			if (Glv.howManyUntilNow < Glv.numOfSolutions-1) {
+
+			if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
 				analysisSetup();
 				Glv.howManyUntilNow += Glv.numOfThreads;
 			} else {
-				if(Glv.shP) println("All solutions done.");
+				if (Glv.shP)
+					println("All solutions done.");
 				Glv.isDoneBool = true;
 			}
 		}

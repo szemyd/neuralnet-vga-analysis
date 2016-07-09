@@ -6,8 +6,9 @@ import processing.core.PApplet;
 public class MyData {
 
 	PApplet p;
-	ArrayList<Integer> analysis = new ArrayList<Integer>();
-	ArrayList<Integer> form = new ArrayList<Integer>();
+	ArrayList<String []> analysis = new ArrayList<String [] >();
+	ArrayList<String []> form = new ArrayList<String []>();
+	int analysisID = -1;
 	
 	public MyData(PApplet _p) {
 		// TODO Auto-generated constructor stub

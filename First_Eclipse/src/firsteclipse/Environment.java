@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.jogamp.opengl.util.packrect.Rect;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
@@ -174,7 +175,7 @@ public class Environment {
 			System.out.println("Biggest already available number (seed): " + Glv.seed);
 	}
 
-	public boolean loadGenData() {
+	public void loadGenData() {
 		String filePath = new File("").getAbsolutePath();
 		File folder = new File(filePath + "\\" + "GeneratedData");
 		File[] listOfFiles = folder.listFiles();
@@ -187,19 +188,51 @@ public class Environment {
 		for (int i = 0; i < listOfFiles.length; i++) {
 
 			try {
-				br = new BufferedReader(new FileReader(filePath + "\\" + "GeneratedData" + "\\" + listOfFiles[i]));
+				allAnalysis.add(new MyData(p));
+				boolean analysisOrForm = false;
+
+				br = new BufferedReader(new FileReader(listOfFiles[i]));
 				while ((line = br.readLine()) != null) {
 
-					PVector temp = new PVector();
+					MyData data = allAnalysis.get(allAnalysis.size() - 1);
 					// use comma as separator
 					String[] thisRow = line.split(cvsSplitBy);
+					//p.println(thisRow);
 
 					for (int j = 0; j < thisRow.length; j++) {
-						char c = thisRow[j].charAt(0);
-						if (c == '_') {
 
+						//if (thisRow[j] != "/n") {
+						//char c = thisRow[j].charAt(0);
+						//p.print(c);
+						if (!thisRow[j].isEmpty()) {
+							char c = thisRow[j].charAt(0);
+
+							if (c == '_') {
+								allAnalysis.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
+								analysisOrForm = !analysisOrForm;
+								//p.println("true" + "_");
+								break;
+							} else if (c == ':') {
+								analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
+								//p.println("true" + ":");
+								break;
+							} else {
+								//int[] array = Arrays.stream(thisRow).mapToInt(Integer::parseInt).toArray();
+								if (analysisOrForm) {
+									//p.println("Form");
+									data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+									break;
+								} else {
+									//p.println("Analysing");
+									data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
+
+									break;
+								}
+								//}
+							}
 						}
 					}
+					//p.println();
 				}
 
 			} catch (FileNotFoundException e) {
@@ -217,8 +250,28 @@ public class Environment {
 			}
 		}
 
-		return true;
-		//return false;
+		//p.println("DataLoading: " + allAnalysis.get(0).analysis.get(0)[0]);
+		
+		for (MyData data : allAnalysis) {
+			for (String[] oneAnalysis : data.analysis) {
+				for (int i = 0; i < oneAnalysis.length; i++) {
+					System.out.print(oneAnalysis[i]);
+					System.out.print(',');
+				}
+				System.out.println();
+			}
+		}
+		/*
+		for (MyData data : allAnalysis) {
+			for (String[] oneForm : data.form) {
+				for (int i = 0; i < oneForm.length; i++) {
+					System.out.print(oneForm[i]);
+					System.out.print(',');
+				}
+				System.out.println();
+			}
+		}
+		*/
 	}
 
 	void toggle(boolean theFlag) {
