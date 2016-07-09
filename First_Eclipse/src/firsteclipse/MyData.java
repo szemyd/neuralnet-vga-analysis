@@ -8,7 +8,7 @@ public class MyData {
 	PApplet p;
 	ArrayList<String []> analysis = new ArrayList<String [] >();
 	ArrayList<String []> form = new ArrayList<String []>();
-	int analysisID = -1;
+	int analysisID = 0;
 	
 	public MyData(PApplet _p) {
 		// TODO Auto-generated constructor stub

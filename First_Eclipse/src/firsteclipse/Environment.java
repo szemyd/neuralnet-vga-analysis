@@ -7,9 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import com.jogamp.opengl.util.packrect.Rect;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
+import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import controlP5.Accordion;
 import controlP5.ControlEvent;
@@ -183,13 +186,13 @@ public class Environment {
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-		String dataGroupSplitBy = "_";
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 
 			try {
 				allAnalysis.add(new MyData(p));
 				boolean analysisOrForm = false;
+				boolean isItID = true;
 
 				br = new BufferedReader(new FileReader(listOfFiles[i]));
 				while ((line = br.readLine()) != null) {
@@ -207,13 +210,19 @@ public class Environment {
 						if (!thisRow[j].isEmpty()) {
 							char c = thisRow[j].charAt(0);
 
-							if (c == '_') {
+							if (isItID) {
+								data.analysisID = Integer.valueOf(thisRow[j]);
+								isItID = false;
+							} else if (c == '_') {
 								allAnalysis.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
 								analysisOrForm = !analysisOrForm;
+								isItID = true;
+
 								//p.println("true" + "_");
 								break;
 							} else if (c == ':') {
 								analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
+								isItID = false;
 								//p.println("true" + ":");
 								break;
 							} else {
@@ -221,11 +230,12 @@ public class Environment {
 								if (analysisOrForm) {
 									//p.println("Form");
 									data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+									isItID = false;
 									break;
 								} else {
 									//p.println("Analysing");
 									data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
-
+									isItID = false;
 									break;
 								}
 								//}
@@ -233,6 +243,17 @@ public class Environment {
 						}
 					}
 					//p.println();
+				}
+
+				//---> Remove element if it has an index of 0.
+				for (int k = 0; k < allAnalysis.size(); k++) {
+					if (k < allAnalysis.size() - 1) {
+						MyData data = allAnalysis.get(k + 1);
+
+						if (data.analysisID == 0) {
+							allAnalysis.remove(data);
+						}
+					}
 				}
 
 			} catch (FileNotFoundException e) {
@@ -250,17 +271,22 @@ public class Environment {
 			}
 		}
 
+		//		Collections.sort(allAnalysis, new Comparator<MyData>() {
+		//			@Override
+		//			public int compare(MyData p1, MyData p2) {
+		//				return p1.analysisID - p2.analysisID; // Ascending
+		//			}
+		//
+		//		});
+
 		//p.println("DataLoading: " + allAnalysis.get(0).analysis.get(0)[0]);
-		
-		for (MyData data : allAnalysis) {
-			for (String[] oneAnalysis : data.analysis) {
-				for (int i = 0; i < oneAnalysis.length; i++) {
-					System.out.print(oneAnalysis[i]);
-					System.out.print(',');
+		/*
+				for (MyData data : allAnalysis) {
+					p.println("ID of data: " + data.analysisID);
 				}
-				System.out.println();
-			}
-		}
+				p.println("The size of all loaded analysis: " + allAnalysis.size());
+			
+				*/
 		/*
 		for (MyData data : allAnalysis) {
 			for (String[] oneForm : data.form) {
