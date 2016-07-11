@@ -42,8 +42,7 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		env.loadGenData();
-		
+		env.loadGenData(); // Loads the generated data.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 

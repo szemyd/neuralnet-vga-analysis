@@ -200,49 +200,37 @@ public class Environment {
 					MyData data = allAnalysis.get(allAnalysis.size() - 1);
 					// use comma as separator
 					String[] thisRow = line.split(cvsSplitBy);
-					//p.println(thisRow);
+				
+					for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
 
-					for (int j = 0; j < thisRow.length; j++) {
-
-						//if (thisRow[j] != "/n") {
-						//char c = thisRow[j].charAt(0);
-						//p.print(c);
 						if (!thisRow[j].isEmpty()) {
 							char c = thisRow[j].charAt(0);
 
-							if (isItID) {
+							if (isItID) { // If this switch is on then store the file as an ID.
 								data.analysisID = Integer.valueOf(thisRow[j]);
 								isItID = false;
 							} else if (c == '_') {
 								allAnalysis.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
 								analysisOrForm = !analysisOrForm;
 								isItID = true;
-
-								//p.println("true" + "_");
 								break;
 							} else if (c == ':') {
 								analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
 								isItID = false;
-								//p.println("true" + ":");
 								break;
 							} else {
-								//int[] array = Arrays.stream(thisRow).mapToInt(Integer::parseInt).toArray();
 								if (analysisOrForm) {
-									//p.println("Form");
 									data.form.add(thisRow); // If form put line in ArrayList of MyData form.
 									isItID = false;
 									break;
 								} else {
-									//p.println("Analysing");
 									data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
 									isItID = false;
 									break;
 								}
-								//}
 							}
 						}
 					}
-					//p.println();
 				}
 
 				//---> Remove element if it has an index of 0.
@@ -316,18 +304,4 @@ public class Environment {
 	public void controlEvent(ControlEvent theEvent) {
 		p.println(theEvent.getController().getName());
 	}
-
 }
-
-//// --->Checking the biggest column size (if we have data that is not
-// homogenous).
-// for (int i=1; i<sData.length; i++)
-// {
-// String [] thisRow= split(sData[i], ",");
-//
-// cellCount=thisRow.length;
-// if (maxNum<cellCount)
-// {
-// maxNum=cellCount;
-// }
-// }
