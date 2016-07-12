@@ -12,6 +12,11 @@ public class Network {
 	public Network(PApplet _p, int inputs, int hidden, int outputs) {
 		p = _p;
 
+		m_input_layer = new Neuron[inputs];
+	    m_hidden_layer = new Neuron[hidden];
+	    m_output_layer = new Neuron[outputs];
+
+		
 		for (int i = 0; i < m_input_layer.length; i++) {
 			m_input_layer[i] = new Neuron(p);
 		}

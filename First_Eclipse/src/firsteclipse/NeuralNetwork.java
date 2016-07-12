@@ -120,37 +120,34 @@ public class NeuralNetwork {
 		if (Glv.shP)
 			p.println("Testing set size: " + testingSet.size());
 
-//		neuralnet = new Network(p, trainingSet.get(0).analysis.size(), trainingSet.get(0).analysis.size() / 10,
-//				trainingSet.get(0).form.size());
+		//		neuralnet = new Network(p, trainingSet.get(0).analysis.size(), trainingSet.get(0).analysis.size() / 10,
+		//				trainingSet.get(0).form.size());
 	}
 
 	private static void cleanupReadData() {
 
 		//---> Remove element if it has an index of 0.
 		for (int k = 0; k < testingSet.size(); k++) {
-			
-			
-			//if (k < testingSet.size() - 1) {
-				MyData data = testingSet.get((k + 1)%testingSet.size());
 
-				if (data.clean()) {
-					p.println("I'm removing: " + data.analysisID);
-					testingSet.remove(data);
-				}
-			//}
+			MyData data = testingSet.get((k + 1) % testingSet.size());
+
+			if (data.clean()) {
+				p.println("I'm removing: " + data.analysisID);
+				testingSet.remove(data);
+			}
 			testingSet.get(k).convert();
 		}
-		
-		for (int k = 0; k < trainingSet.size(); k++) {
-			trainingSet.get(k).convert();
-		//	if (k < trainingSet.size() - 1) {
-				MyData data = trainingSet.get((k + 1)%trainingSet.size());
 
-				if (data.clean()) {
-					p.println("I'm removing: " +  data.analysisID);
-					trainingSet.remove(data);
-				}
-			//}
+		for (int k = 0; k < trainingSet.size(); k++) {
+
+			MyData data = trainingSet.get((k + 1) % trainingSet.size());
+
+			if (data.clean()) {
+				p.println("I'm removing: " + data.analysisID);
+				trainingSet.remove(data);
+			}
+
+			trainingSet.get(k).convert();
 		}
 	}
 
@@ -163,5 +160,5 @@ public class NeuralNetwork {
 
 	public static float lookupSigmoid(float x) {
 		return g_sigmoid[(int) p.constrain(p.floor((x + 5f) * 20.0f), 0f, 199f)];
-	}}
-
+	}
+}
