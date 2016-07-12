@@ -31,7 +31,7 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
-	public static ArrayList<MyData> allAnalysis = new ArrayList<MyData>();
+	
 
 	ControlP5 cp5;
 	Accordion accordion;
@@ -176,116 +176,6 @@ public class Environment {
 		//if(Glv.shP) System.out.println(Glv.initialSeed);
 		if (Glv.shP)
 			System.out.println("Biggest already available number (seed): " + Glv.seed);
-	}
-
-	public void loadGenData() {
-		String filePath = new File("").getAbsolutePath();
-		File folder = new File(filePath + "\\" + "GeneratedData");
-		File[] listOfFiles = folder.listFiles();
-
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
-
-		for (int i = 0; i < listOfFiles.length; i++) {
-
-			try {
-				allAnalysis.add(new MyData(p));
-				boolean analysisOrForm = false;
-				boolean isItID = true;
-
-				br = new BufferedReader(new FileReader(listOfFiles[i]));
-				while ((line = br.readLine()) != null) {
-
-					MyData data = allAnalysis.get(allAnalysis.size() - 1);
-					// use comma as separator
-					String[] thisRow = line.split(cvsSplitBy);
-				
-					for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
-
-						if (!thisRow[j].isEmpty()) {
-							char c = thisRow[j].charAt(0);
-
-							if (isItID) { // If this switch is on then store the file as an ID.
-								data.analysisID = Integer.valueOf(thisRow[j]);
-								isItID = false;
-							} else if (c == '_') {
-								allAnalysis.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
-								analysisOrForm = !analysisOrForm;
-								isItID = true;
-								break;
-							} else if (c == ':') {
-								analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
-								isItID = false;
-								break;
-							} else {
-								if (analysisOrForm) {
-									data.form.add(thisRow); // If form put line in ArrayList of MyData form.
-									isItID = false;
-									break;
-								} else {
-									data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
-									isItID = false;
-									break;
-								}
-							}
-						}
-					}
-				}
-
-				//---> Remove element if it has an index of 0.
-				for (int k = 0; k < allAnalysis.size(); k++) {
-					if (k < allAnalysis.size() - 1) {
-						MyData data = allAnalysis.get(k + 1);
-
-						if (data.analysisID == 0) {
-							allAnalysis.remove(data);
-						}
-					}
-				}
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		//		Collections.sort(allAnalysis, new Comparator<MyData>() {
-		//			@Override
-		//			public int compare(MyData p1, MyData p2) {
-		//				return p1.analysisID - p2.analysisID; // Ascending
-		//			}
-		//
-		//		});
-
-		//p.println("DataLoading: " + allAnalysis.get(0).analysis.get(0)[0]);
-		/*
-				for (MyData data : allAnalysis) {
-					p.println("ID of data: " + data.analysisID);
-				}
-				p.println("The size of all loaded analysis: " + allAnalysis.size());
-			
-				*/
-		/*
-		for (MyData data : allAnalysis) {
-			for (String[] oneForm : data.form) {
-				for (int i = 0; i < oneForm.length; i++) {
-					System.out.print(oneForm[i]);
-					System.out.print(',');
-				}
-				System.out.println();
-			}
-		}
-		*/
 	}
 
 	void toggle(boolean theFlag) {

@@ -42,7 +42,8 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		env.loadGenData(); // Loads the generated data.
+		NeuralNetwork.loadGenData(); // Loads the generated data.
+		//env.loadGenData(); // Loads the generated data.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
@@ -53,6 +54,21 @@ public class FirstEclipse extends PApplet {
 		background(110);
 		lights();
 
+		switch (Glv.programMode) {
+		case 0:
+			drawGenerating();
+			break;
+
+		case 1:
+			drawTeaching();
+			break;
+		}
+
+		env.drawGui();
+		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
+	}
+
+	public void drawGenerating() {
 		pushMatrix();
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
@@ -66,9 +82,10 @@ public class FirstEclipse extends PApplet {
 			env.draw(s); // Draws the environment.
 		}
 		popMatrix();
+	}
 
-		env.drawGui();
-		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
+	public void drawTeaching() {
+
 	}
 
 	public void keyPressed() {
