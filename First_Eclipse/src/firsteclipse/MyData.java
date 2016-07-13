@@ -67,22 +67,11 @@ public class MyData {
 							}
 						}
 					}
-
-//					if (_form[i][j] != null)
-//						p.print(_form[i][j] + ",");
-
 				}
-				//p.println("");
 				i++;
 			}
 
-			//p.println("Id: " + analysisID + " done.");
-//			for (int j = 0; j < _analysis.length; j++) {
-//				for (int j2 = 0; j2 < _analysis[j].length; j2++) {
-//					p.print(_analysis[j][j2] + ",");
-//				}
-//				p.println("");
-//			}
+		
 		}
 	}
 

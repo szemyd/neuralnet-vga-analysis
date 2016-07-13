@@ -67,11 +67,9 @@ public class Network {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_input_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_input_layer[0].length));
+					p.translate(p.width / 4 - (Glv.neuronSize * 1.2f * m_input_layer.length)*0.5f,
+							p.height / 2 - (Glv.neuronSize * 1.2f * m_input_layer[0].length)*0.5f);
+					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 					//	p.translate(i * (p.width / 3f) / m_input_layer.length, j * p.width / m_input_layer[i].length);
 					m_input_layer[i][j].draw();
 				}
@@ -83,13 +81,10 @@ public class Network {
 			for (int j = 0; j < m_hidden_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_hidden_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_hidden_layer[0].length));
-//					p.translate((i * (p.width / 3f) / m_hidden_layer.length) + (p.width / 3f),
-//							j * p.width / m_hidden_layer[i].length);
+					p.translate(2f*p.width / 4 - (Glv.neuronSize * 1.2f * m_hidden_layer.length)*0.5f,
+							p.height / 2 - (Glv.neuronSize * 1.2f * m_hidden_layer[0].length)*0.5f);
+					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+					
 					m_hidden_layer[i][j].draw();
 				}
 				p.popMatrix();
@@ -100,17 +95,14 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_output_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_output_layer[0].length));
-//					p.translate((i * (p.width / 3f) / m_output_layer.length) + (2f * p.width / 3f),
-//							j * p.width / m_output_layer[i].length);
+					p.translate(3f*p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length)*0.5f,
+							p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length)*0.5f);
+					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 					m_output_layer[i][j].draw();
 				}
 				p.popMatrix();
 			}
 		}
+		
 	}
 }

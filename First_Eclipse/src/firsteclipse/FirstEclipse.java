@@ -26,6 +26,7 @@ public class FirstEclipse extends PApplet {
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
+	private MyBox[][] boxes;
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -62,6 +63,10 @@ public class FirstEclipse extends PApplet {
 		case 1:
 			drawTeaching();
 			break;
+
+		case 2:
+			drawFormLoaded();
+			break;
 		}
 
 		env.drawGui();
@@ -87,9 +92,16 @@ public class FirstEclipse extends PApplet {
 	public void drawTeaching() {
 		env.cam.beginHUD();
 		{
+			noLights();
 			net.neuralnet.draw();
 		}
 		env.cam.endHUD();
+	}
+
+	public void drawFormLoaded() {
+		if (net != null) {
+			boxes = new MyBox[Glv.divisionX][Glv.divisionY];
+		}
 	}
 
 	public void keyPressed() {
@@ -112,7 +124,7 @@ public class FirstEclipse extends PApplet {
 			Glv.globalHighLow = !Glv.globalHighLow;
 
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
-		Glv.programMode = constrain(Glv.programMode, 0, 1);
+		Glv.programMode = constrain(Glv.programMode, 0, 2);
 	}
 
 	public void analysisSetup() {

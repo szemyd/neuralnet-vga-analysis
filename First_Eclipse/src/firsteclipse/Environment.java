@@ -93,11 +93,12 @@ public class Environment {
 		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		//cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
+		//cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
 		//.plugTo(this,	"shuffle");
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
 
-		accordion.open(0, 1, 2);
+		//accordion.open(0, 1, 2);
+		accordion.close(0,1,2);
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		cp5.setAutoDraw(false);
