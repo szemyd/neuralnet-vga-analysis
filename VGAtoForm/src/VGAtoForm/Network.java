@@ -2,7 +2,6 @@ package firsteclipse;
 
 import com.sun.corba.se.spi.orbutil.fsm.Input;
 
-import controlP5.Println;
 import processing.core.PApplet;
 
 public class Network {
@@ -39,14 +38,10 @@ public class Network {
 	}
 
 	public void respond(MyData card) {
-
-		p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
-				p.print(card._analysis[i][j] + ",");
-				m_input_layer[i][j].m_output = (float) card._analysis[i][j];
+				m_input_layer[i][j].m_output = card._analysis[i][j];
 			}
-			p.println("");
 		}
 
 		for (int i = 0; i < m_hidden_layer.length; i++) {
@@ -56,23 +51,18 @@ public class Network {
 		}
 
 		for (int i = 0; i < m_output_layer.length; i++) {
-			for (int j = 0; j < m_output_layer[i].length; j++) {
+			for (int j = 0; j < m_output_layer.length; j++) {
 				m_output_layer[i][j].respond();
 			}
 		}
 	}
 
-	public void draw() {
+	public  void draw() {
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_input_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_input_layer[0].length));
-					//	p.translate(i * (p.width / 3f) / m_input_layer.length, j * p.width / m_input_layer[i].length);
+					p.translate(i * (p.width / 3f) / m_input_layer.length, j * p.width / m_input_layer[i].length);
 					m_input_layer[i][j].draw();
 				}
 				p.popMatrix();
@@ -83,13 +73,8 @@ public class Network {
 			for (int j = 0; j < m_hidden_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_hidden_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_hidden_layer[0].length));
-//					p.translate((i * (p.width / 3f) / m_hidden_layer.length) + (p.width / 3f),
-//							j * p.width / m_hidden_layer[i].length);
+					p.translate((i * (p.width / 3f) / m_hidden_layer.length) + (p.width / 3f),
+							j * p.width / m_hidden_layer[i].length);
 					m_hidden_layer[i][j].draw();
 				}
 				p.popMatrix();
@@ -100,13 +85,8 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(
-							Glv.neuronSize * 1.2f * i + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_output_layer.length) ,
-							Glv.neuronSize * 1.2f * j + p.width / 2
-									- (Glv.neuronSize * 1.2f * m_output_layer[0].length));
-//					p.translate((i * (p.width / 3f) / m_output_layer.length) + (2f * p.width / 3f),
-//							j * p.width / m_output_layer[i].length);
+					p.translate((i * (p.width / 3f) / m_output_layer.length) + (2f * p.width / 3f),
+							j * p.width / m_output_layer[i].length);
 					m_output_layer[i][j].draw();
 				}
 				p.popMatrix();

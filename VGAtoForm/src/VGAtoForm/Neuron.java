@@ -73,7 +73,7 @@ public class Neuron {
 
 	void draw() {
 		p.fill(128 * (1 - m_output));
-		p.ellipse(0, 0,Glv.neuronSize, Glv.neuronSize);
+		p.ellipse(0, 0, 16, 16);
 	}
 
 }

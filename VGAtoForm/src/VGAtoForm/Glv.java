@@ -58,5 +58,4 @@ public class Glv {
 	public static PVector highLow = new PVector(0f, 1000f);
 	public static ArrayList<String> toNN = new ArrayList<String>();
 
-	public static int neuronSize=16;
 }

@@ -10,10 +10,10 @@ public class MyData {
 	ArrayList<String[]> analysis = new ArrayList<String[]>();
 	ArrayList<String[]> form = new ArrayList<String[]>();
 
-	public Integer[][] _analysis;
-	public Integer[][] _form;
+	int[][] _analysis;
+	int[][] _form;
 
-	public Integer analysisID = 0;
+	Integer analysisID = 0;
 
 	public MyData(PApplet _p) {
 		// TODO Auto-generated constructor stub
@@ -22,8 +22,8 @@ public class MyData {
 
 	public void convert() {
 		if (analysis.size() > 0 && form.size() > 0) {
-			 _analysis = new Integer[analysis.size()][analysis.get(0).length];
-			_form = new Integer[form.size()][form.get(0).length];
+			Integer[][] _analysis = new Integer[analysis.size()][analysis.get(0).length];
+			Integer[][] _form = new Integer[form.size()][form.get(0).length];
 			//
 
 		//	p.println("Id: " + analysisID);
@@ -77,12 +77,6 @@ public class MyData {
 			}
 
 			//p.println("Id: " + analysisID + " done.");
-//			for (int j = 0; j < _analysis.length; j++) {
-//				for (int j2 = 0; j2 < _analysis[j].length; j2++) {
-//					p.print(_analysis[j][j2] + ",");
-//				}
-//				p.println("");
-//			}
 		}
 	}
 

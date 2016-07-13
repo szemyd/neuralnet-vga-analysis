@@ -113,22 +113,18 @@ public class NeuralNetwork {
 
 		}
 
+		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
+
 		if (Glv.shP)
 			p.println("Training set size: " + trainingSet.size());
 		if (Glv.shP)
 			p.println("Testing set size: " + testingSet.size());
 
-		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
-		setupNeuralNetwork();
-
-		//neuralnet = new Network(p, 47, 38, 10, 10, 32, 25);
-
-		//		for (MyData data : trainingSet) {
-		//			if(data._analysis !=null) p.println(data._analysis[0][0]);
-		//			else p.println("analysis is null");
-		//		}
-		//p.println(data._analysis[0][0]);
-
+		//		neuralnet = new Network(p, 
+		//				trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
+		//				trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
+		//				trainingSet.get(0)._form.length, 	 trainingSet.get(0)._form[0].length);
+		neuralnet = new Network(p, 38, 48, 10, 10, 25, 32);
 	}
 
 	private void cleanupReadData() {
@@ -156,14 +152,6 @@ public class NeuralNetwork {
 
 			trainingSet.get(k).convert();
 		}
-	}
-
-	private void setupNeuralNetwork() {
-		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
-				trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
-				trainingSet.get(0)._form.length, trainingSet.get(0)._form[0].length);
-
-		neuralnet.respond(trainingSet.get(0));
 	}
 
 	private void setupSigmoid() {
