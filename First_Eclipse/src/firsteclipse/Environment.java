@@ -31,7 +31,6 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
-	
 
 	ControlP5 cp5;
 	Accordion accordion;
@@ -45,10 +44,10 @@ public class Environment {
 	public void drawGui() {
 		//hint(DISABLE_DEPTH_TEST);
 		cam.beginHUD();
-		// group number 1, contains 2 bangs
-
-		cp5.draw();
-
+		{
+			p.noLights();
+			cp5.draw();
+		}
 		cam.endHUD();
 		//hint(ENABLE_DEPTH_TEST);
 	}
@@ -98,7 +97,7 @@ public class Environment {
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
 
 		//accordion.open(0, 1, 2);
-		accordion.close(0,1,2);
+		accordion.close(0, 1, 2);
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		cp5.setAutoDraw(false);

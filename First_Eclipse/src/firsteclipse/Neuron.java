@@ -18,11 +18,11 @@ public class Neuron {
 
 	Random r = new Random();
 
-	public Neuron(PApplet _p) {
+	public Neuron(PApplet _p) { // For INPUT neurons
 		p = _p;
 	}
 
-	public Neuron(PApplet _p, Neuron[][] inputs) {
+	public Neuron(PApplet _p, Neuron[][] inputs) { // For HIDDEN and OUTPUT neurons
 		p = _p;
 
 		m_inputs = new Neuron[inputs.length][inputs[0].length];
@@ -45,6 +45,12 @@ public class Neuron {
 		}
 	}
 
+	void draw() {
+		p.fill(128 * (1 - m_output));
+		p.ellipse(0, 0,Glv.neuronSize, Glv.neuronSize);
+	}
+
+	
 	void setError(float desired) {
 		m_error = desired - m_output;
 	}
@@ -53,7 +59,7 @@ public class Neuron {
 		float delta = (1.0f - m_output) * (1.0f + m_output) * m_error * Glv.LEARNING_RATE;
 
 		for (int i = 0; i < m_inputs.length; i++) {
-			for (int j = 0; j < m_inputs[i].length; i++) {
+			for (int j = 0; j < m_inputs[i].length; j++) {
 				m_inputs[i][j].m_error += m_weights[i][j] * m_error;
 				m_weights[i][j] += m_inputs[i][j].m_output * delta;
 			}
@@ -67,13 +73,8 @@ public class Neuron {
 				input += m_inputs[i][j].m_output * m_weights[i][j];
 			}
 		}
-		m_output = NeuralNetwork.lookupSigmoid(input);
+		m_output = NeuralNetworkManagment.lookupSigmoid(input);
 		m_error = 0.0f;
-	}
-
-	void draw() {
-		p.fill(128 * (1 - m_output));
-		p.ellipse(0, 0,Glv.neuronSize, Glv.neuronSize);
 	}
 
 }

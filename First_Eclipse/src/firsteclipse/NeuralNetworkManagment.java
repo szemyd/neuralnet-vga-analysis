@@ -15,7 +15,7 @@ import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 
 import processing.core.PApplet;
 
-public class NeuralNetwork {
+public class NeuralNetworkManagment {
 
 	private static PApplet p;
 	public ArrayList<MyData> trainingSet = new ArrayList<MyData>();
@@ -25,12 +25,13 @@ public class NeuralNetwork {
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
-	public NeuralNetwork(PApplet _p) {
+	public NeuralNetworkManagment(PApplet _p) {
 		p = _p;
 
 		setupSigmoid();
 	}
 
+	//---> Loading & Managing the data
 	public void loadGenData() {
 		String filePath = new File("").getAbsolutePath();
 		File folder = new File(filePath + "\\" + "GeneratedData");
@@ -119,7 +120,7 @@ public class NeuralNetwork {
 			p.println("Testing set size: " + testingSet.size());
 
 		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
-		
+
 		setHighLow(); // Calculates the range of visibility in the data
 		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
 		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
@@ -139,7 +140,7 @@ public class NeuralNetwork {
 
 		for (int k = 0; k < trainingSet.size(); k++) {
 			MyData data = trainingSet.get((k + 1) % trainingSet.size());
-			
+
 			if (data.clean()) { // If data is uneven (if there is one line that is smaller larger than the other.
 				//p.println("I'm removing: " + data.analysisID);
 				trainingSet.remove(data);
@@ -161,41 +162,62 @@ public class NeuralNetwork {
 		for (MyData data : testingSet) {
 			for (String[] strings : data.analysis) {
 				for (int i = 0; i < strings.length; i++) {
-					int num= Integer.valueOf(strings[i]);
+					int num = Integer.valueOf(strings[i]);
 					if (num > Glv.highLowForNN.x)
 						Glv.highLowForNN.x = num;
 					if (num < Glv.highLowForNN.y)
 						Glv.highLowForNN.y = num;
 				}
 			}
-//			for (int i = 0; i < data._analysis.length; i++) {
-//				for (int j = 0; j < data._analysis[i].length; j++) {
-//					if (data._analysis[i][j] > Glv.highLowForNN.x)
-//						Glv.highLowForNN.x = data._analysis[i][j];
-//					if (data._analysis[i][j] < Glv.highLowForNN.y)
-//						Glv.highLowForNN.y = data._analysis[i][j];
-//				}
-//			}
+			//			for (int i = 0; i < data._analysis.length; i++) {
+			//				for (int j = 0; j < data._analysis[i].length; j++) {
+			//					if (data._analysis[i][j] > Glv.highLowForNN.x)
+			//						Glv.highLowForNN.x = data._analysis[i][j];
+			//					if (data._analysis[i][j] < Glv.highLowForNN.y)
+			//						Glv.highLowForNN.y = data._analysis[i][j];
+			//				}
+			//			}
 		}
 		p.println("Max visibility: " + Glv.highLowForNN.x + " | Min visibility: " + Glv.highLowForNN.y);
 	}
+	//<---
 
+	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
-				p.floor(trainingSet.get(0)._analysis.length/5), p.floor(trainingSet.get(0)._analysis.length/5),
+				p.floor(trainingSet.get(0)._analysis.length / 5), p.floor(trainingSet.get(0)._analysis.length / 5),
 				trainingSet.get(0)._form.length, trainingSet.get(0)._form[0].length);
 
 		neuralnet.respond(trainingSet.get(0));
 	}
 
-	private void setupSigmoid() {
+	public void trainNN()
+	{
+		int row= (int) p.floor( p.random(0, trainingSet.size()));
+		for (int i = 0; i < 200; i++) {
+		neuralnet.respond(trainingSet.get(row));
+	      neuralnet.train(trainingSet.get(row)._form);
+		}
+	}
+
+	public void testNN()
+	{
+		int row= (int) p.floor( p.random(0, trainingSet.size()));
+		 neuralnet.respond(testingSet.get(row));
+	}
+	//<---
+	
+	
+	//---> Calculating sigmoid
+	private void setupSigmoid() { // Calculates the sigmoid function.
 		for (int i = 0; i < 200; i++) {
 			float x = (i / 20.0f) - 5.0f;
 			g_sigmoid[i] = 2.0f / (1.0f + p.exp(-2.0f * x)) - 1.0f;
 		}
 	}
 
-	public static float lookupSigmoid(float x) {
+	public static float lookupSigmoid(float x) { // Looks up for a certain x value the y value of the precalculated sigmoid
 		return g_sigmoid[(int) p.constrain(p.floor((x + 5f) * 20.0f), 0f, 199f)];
 	}
+	//<---
 }

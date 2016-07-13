@@ -22,7 +22,7 @@ public class FirstEclipse extends PApplet {
 	PShape s;
 
 	Environment env = new Environment(this);
-	NeuralNetwork net = new NeuralNetwork(this);
+	NeuralNetworkManagment net = new NeuralNetworkManagment(this);
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
@@ -123,10 +123,13 @@ public class FirstEclipse extends PApplet {
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 
+		if (key == ' ') net.trainNN(); 
+		if (keyCode == ENTER) net.testNN();
+			
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
 		Glv.programMode = constrain(Glv.programMode, 0, 2);
 	}
-
+	
 	public void analysisSetup() {
 		for (int i = 0; i < Glv.numOfThreads; i++) {
 			threads.add(new MyThread(this, threads.size()));
