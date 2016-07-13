@@ -18,8 +18,8 @@ public class Glv {
 	
 	
 	//---> Solution settings and optimal calculation
-	public static int numOfThreads = 10; // How many parallel threads should there be
-	public static int numOfSolutions =15; // How many solutions do I want to generate
+	public static int numOfThreads = 15; // How many parallel threads should there be
+	public static int numOfSolutions =500; // How many solutions do I want to generate
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
@@ -36,7 +36,7 @@ public class Glv {
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	
 	//---> For the ENVIRONMENT
-	public static int programMode = 0;
+	public static int programMode = 0; // Should it generate data or load Neural Network?
 	
 	/* 
 	 * OTHER GLOBAL VARIABLES
