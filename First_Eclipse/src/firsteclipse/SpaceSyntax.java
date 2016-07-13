@@ -1,6 +1,8 @@
 package firsteclipse;
 
 
+import java.util.ArrayList;
+
 import com.sun.javafx.geom.Line2D;
 
 import processing.core.PApplet;
@@ -11,6 +13,8 @@ import processing.core.PVector;
 public class SpaceSyntax {
 	private PApplet p;
 	public PVector highLow = new PVector();
+	
+	public  ArrayList<String> toNN= new ArrayList<String>();
 
 	int threadID;
 
@@ -323,29 +327,29 @@ public class SpaceSyntax {
 
 	public void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
 
-		Glv.toNN.add(Integer.toString(threadID + Glv.initialSeed));
-		Glv.toNN.add("\n");
+		toNN.add(Integer.toString(threadID + Glv.initialSeed));
+		toNN.add("\n");
 
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
-				Glv.toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
-				Glv.toNN.add(",");
+				toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
+				toNN.add(",");
 			}
-			Glv.toNN.add("\n");
+			toNN.add("\n");
 		}
-		Glv.toNN.add(":");
-		Glv.toNN.add("\n");
+		toNN.add(":");
+		toNN.add("\n");
 
 		for (int j = 0; j < boxes[0].length; j++) {
 			for (int i = 0; i < boxes.length; i++) {
-				Glv.toNN.add(Integer.toString((int) boxes[i][j].height));
-				Glv.toNN.add(",");
+				toNN.add(Integer.toString((int) boxes[i][j].height));
+				toNN.add(",");
 			}
-			Glv.toNN.add("\n");
+			toNN.add("\n");
 		}
 
-		Glv.toNN.add("_");
-		Glv.toNN.add("\n");
+		toNN.add("_");
+		toNN.add("\n");
 
 		if (Glv.shP)
 			p.println("I have finished saving to string");

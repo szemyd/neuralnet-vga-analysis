@@ -25,7 +25,7 @@ public class FirstEclipse extends PApplet {
 	NeuralNetworkManagment net = new NeuralNetworkManagment(this);
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
-	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
+
 	//private MyBox[][] boxes;
 
 	public void settings() {
@@ -55,12 +55,12 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void analysisSetup() {
-		threads = new ArrayList<MyThread>();
+		Glv.threads = new ArrayList<MyThread>();
 		for (int i = 0; i < Glv.numOfThreads; i++) {
-			threads.add(new MyThread(this, Glv.howManyUntilNow + i));
+			Glv.threads.add(new MyThread(this, Glv.howManyUntilNow + i));
 		}
 
-		for (MyThread thread : threads) {
+		for (MyThread thread : Glv.threads) {
 			if (!thread.VGADone) // If it is a new thread then start it!
 				thread.start();
 		}
@@ -96,11 +96,11 @@ public class FirstEclipse extends PApplet {
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
 
-			if (threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
-				threads.get(Glv.whichToDisplay).manBox.draw();
+			if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
+				Glv.threads.get(Glv.whichToDisplay).manBox.draw();
 			}
-			if (Glv.shouldSpaceSyntax && threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
-				threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
+			if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+				Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 
 			env.draw(s); // Draws the environment.
 		}
@@ -152,7 +152,7 @@ public class FirstEclipse extends PApplet {
 		if (keyCode == ENTER)
 			net.testNN();
 
-		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
+		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
 		Glv.programMode = constrain(Glv.programMode, 0, 2);
 	}
 
@@ -160,9 +160,9 @@ public class FirstEclipse extends PApplet {
 	 * OUTPUT
 	 */
 	private void writeToFile() {
-		if (Glv.isDone < threads.size()) {
-			Glv.isDone = 0;
-			for (MyThread thread : threads) {
+		Glv.isDone = 0;
+		if (Glv.isDone < Glv.threads.size()) {
+			for (MyThread thread : Glv.threads) {
 				//println(thread.t.isAlive());
 				if (!thread.t.isAlive()) {
 					Glv.isDone++;
@@ -170,11 +170,11 @@ public class FirstEclipse extends PApplet {
 			}
 		}
 
-		if (Glv.isDone == threads.size() && !Glv.isDoneBool) {
+		if (Glv.isDone == Glv.threads.size() && !Glv.isDoneBool) {
 			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
 
+			Glv.howManyUntilNow += Glv.numOfThreads;
 			if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
-				Glv.howManyUntilNow += Glv.numOfThreads;
 				analysisSetup();
 			} else {
 				if (Glv.shP)

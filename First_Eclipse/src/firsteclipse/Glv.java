@@ -19,7 +19,7 @@ public class Glv {
 	
 	//---> Solution settings and optimal calculation
 	public static int numOfThreads = 10; // How many parallel threads should there be
-	public static int numOfSolutions =10; // How many solutions do I want to generate
+	public static int numOfSolutions =15; // How many solutions do I want to generate
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
@@ -56,8 +56,10 @@ public class Glv {
 	public static boolean isDoneBool = false;
 
 	public static PVector highLow = new PVector(0f, 1000f);
-	public static ArrayList<String> toNN = new ArrayList<String>();
+	//public static ArrayList<String> toNN = new ArrayList<String>();
 	public static PVector highLowForNN = new PVector(0f, 1000f);
+	
+	public static ArrayList<MyThread> threads = new ArrayList<MyThread>();
 
 	public static int neuronSize=16;
 }

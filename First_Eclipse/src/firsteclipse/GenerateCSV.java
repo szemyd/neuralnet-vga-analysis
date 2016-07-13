@@ -33,9 +33,12 @@ public class GenerateCSV {
 			try {
 				FileWriter writer = new FileWriter(sFileName);
 
-				for (String s : Glv.toNN) {
-					writer.append(s);
+				for (MyThread thread : Glv.threads) {
+					for (String s : thread.spaceSyntax.toNN) {
+						writer.append(s);
+					}
 				}
+			
 				// writer.append("DisplayName");
 
 				writer.flush();
@@ -48,6 +51,6 @@ public class GenerateCSV {
 		} else
 			if(Glv.shP) System.out.println("File already exists.");
 		
-		Glv.toNN=new ArrayList<String>();
+		//Glv.toNN=new ArrayList<String>();
 	}
 }
