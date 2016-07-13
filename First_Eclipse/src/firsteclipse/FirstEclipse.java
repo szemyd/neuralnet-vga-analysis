@@ -26,12 +26,16 @@ public class FirstEclipse extends PApplet {
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
-	private MyBox[][] boxes;
+	//private MyBox[][] boxes;
 
 	public void settings() {
 		size(2400, 1200, P3D);
 	}
 
+	
+	/*
+	 * SETUPS
+	 */
 	public void setup() {
 
 		env.setupGui();
@@ -44,13 +48,28 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		net.loadGenData(); // Loads the generated data.
+		//net.loadGenData(); // Loads the generated data.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
 		analysisSetup();
 	}
 
+	public void analysisSetup() {
+		for (int i = 0; i < Glv.numOfThreads; i++) {
+			threads.add(new MyThread(this, threads.size()));
+		}
+
+		for (MyThread thread : threads) {
+			if (!thread.VGADone) // If it is a new thread then start it!
+				thread.start();
+		}
+	}
+
+	
+	/*
+	 * DRAW FUNCTIONS
+	 */
 	public void draw() {
 		background(110);
 		lights();
@@ -100,10 +119,13 @@ public class FirstEclipse extends PApplet {
 
 	public void drawFormLoaded() {
 		if (net != null) {
-			boxes = new MyBox[Glv.divisionX][Glv.divisionY];
+			//boxes = new MyBox[Glv.divisionX][Glv.divisionY];
 		}
 	}
-
+	
+	/*
+	 * INTERACTION
+	 */
 	public void keyPressed() {
 		if (keyCode == LEFT)
 			Glv.whichToDisplay--;
@@ -136,17 +158,9 @@ public class FirstEclipse extends PApplet {
 		Glv.programMode = constrain(Glv.programMode, 0, 2);
 	}
 
-	public void analysisSetup() {
-		for (int i = 0; i < Glv.numOfThreads; i++) {
-			threads.add(new MyThread(this, threads.size()));
-		}
-
-		for (MyThread thread : threads) {
-			if (!thread.VGADone) // If it is a new thread then start it!
-				thread.start();
-		}
-	}
-
+	/*
+	 * OUTPUT
+	 */
 	private void writeToFile() {
 		if (Glv.isDone < threads.size()) {
 			Glv.isDone = 0;
