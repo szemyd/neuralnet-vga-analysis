@@ -120,11 +120,9 @@ public class NeuralNetworkManagment {
 			p.println("Testing set size: " + testingSet.size());
 
 		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
-
-		setHighLow(); // Calculates the range of visibility in the data
+		setHighLow(); // Calculates the range of visibility in the data.
 		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
 		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
-
 	}
 
 	private void cleanupReadData() {
@@ -158,7 +156,7 @@ public class NeuralNetworkManagment {
 		}
 	}
 
-	private void setHighLow() {
+	private void setHighLow() { // Calculates the highest and the lowest number that exist in the analysis dataset.
 		for (MyData data : testingSet) {
 			for (String[] strings : data.analysis) {
 				for (int i = 0; i < strings.length; i++) {
@@ -184,30 +182,28 @@ public class NeuralNetworkManagment {
 
 	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
-		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
-				p.floor(trainingSet.get(0)._analysis.length / 5), p.floor(trainingSet.get(0)._analysis.length / 5),
-				trainingSet.get(0)._form.length, trainingSet.get(0)._form[0].length);
+		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
+				p.floor(trainingSet.get(0)._analysis.length / 3), p.floor(trainingSet.get(0)._analysis.length / 3),
+				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
 
 		neuralnet.respond(trainingSet.get(0));
 	}
 
-	public void trainNN()
-	{
-		int row= (int) p.floor( p.random(0, trainingSet.size()));
-		for (int i = 0; i < 200; i++) {
-		neuralnet.respond(trainingSet.get(row));
-	      neuralnet.train(trainingSet.get(row)._form);
+	public void trainNN() {
+		for (int i = 0; i < trainingSet.size(); i++) {
+			//int row = (int) p.floor(p.random(0, trainingSet.size()));
+			int row=i;
+			neuralnet.respond(trainingSet.get(row));
+			neuralnet.train(trainingSet.get(row)._form);
 		}
 	}
 
-	public void testNN()
-	{
-		int row= (int) p.floor( p.random(0, trainingSet.size()));
-		 neuralnet.respond(testingSet.get(row));
+	public void testNN() {
+		int row = (int) p.floor(p.random(0, testingSet.size()));
+		neuralnet.respond(testingSet.get(row));
 	}
 	//<---
-	
-	
+
 	//---> Calculating sigmoid
 	private void setupSigmoid() { // Calculates the sigmoid function.
 		for (int i = 0; i < 200; i++) {

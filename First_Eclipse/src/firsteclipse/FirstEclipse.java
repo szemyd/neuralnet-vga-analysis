@@ -123,13 +123,19 @@ public class FirstEclipse extends PApplet {
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 
-		if (key == ' ') net.trainNN(); 
-		if (keyCode == ENTER) net.testNN();
-			
+		if (key == ' ') {
+			net.trainNN();
+			redraw();
+		}
+		if (keyCode == ENTER) {
+			net.testNN();
+			redraw();
+		}
+
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
 		Glv.programMode = constrain(Glv.programMode, 0, 2);
 	}
-	
+
 	public void analysisSetup() {
 		for (int i = 0; i < Glv.numOfThreads; i++) {
 			threads.add(new MyThread(this, threads.size()));

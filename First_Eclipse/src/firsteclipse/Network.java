@@ -1,6 +1,7 @@
 package firsteclipse;
 
 import com.sun.corba.se.spi.orbutil.fsm.Input;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import controlP5.Println;
 import processing.core.PApplet;
@@ -85,13 +86,13 @@ public class Network {
 	//---> Neuron interaction
 	public void respond(MyData card) {
 
-		p.println(card.analysisID);
+		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
-				p.print(card._analysis[i][j] + ",");
-				m_input_layer[i][j].m_output = (float) card._analysis[i][j];
+				//p.print(card._analysis[i][j] + ",");
+				if (i < card._analysis.length && j < card._analysis[0].length)
+					m_input_layer[i][j].m_output = card._analysis[i][j];
 			}
-			p.println("");
 		}
 
 		for (int i = 0; i < m_hidden_layer.length; i++) {
@@ -107,10 +108,10 @@ public class Network {
 		}
 	}
 
-	public void train(Integer [][] outputs) {
+	public void train(Float[][] outputs) {
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
-				m_output_layer[i][j].setError((float) outputs[i][j]);
+				m_output_layer[i][j].setError(outputs[i][j]);
 				m_output_layer[i][j].train();
 			}
 

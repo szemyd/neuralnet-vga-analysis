@@ -18,7 +18,7 @@ public class Glv {
 	
 	
 	//---> Solution settings and optimal calculation
-	public static int numOfThreads = 1; // How many parallel threads should there be
+	public static int numOfThreads = 0; // How many parallel threads should there be
 	public static int numOfSolutions =0; // How many solutions do I want to generate
 
 	//---> Form generating settings
