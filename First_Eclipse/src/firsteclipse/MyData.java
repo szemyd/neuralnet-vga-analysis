@@ -2,6 +2,8 @@ package firsteclipse;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+
 import processing.core.PApplet;
 
 public class MyData {
@@ -16,7 +18,6 @@ public class MyData {
 	public Integer analysisID = 0;
 
 	public MyData(PApplet _p) {
-		// TODO Auto-generated constructor stub
 		p = _p;
 	}
 
@@ -28,12 +29,14 @@ public class MyData {
 			int i = 0;
 			for (String[] strings : analysis) {
 				for (int j = 0; j < _analysis[i].length; j++) {
-					if (strings[j].length() > 0 && strings[j] != null) {
-						if (Character.isDigit(strings[j].charAt(0))) {
-							float num = (float) Integer.valueOf(strings[j]);
-							if (i < _analysis.length && j < _analysis[i].length)
-								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, Glv.highLowForNN.x, -1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+					if (j>=0 && j<strings.length) {
+						//if (strings[j].length() > 0 && strings[j].length()<6) {
+							if (Character.isDigit(strings[j].charAt(0))) {
+								float num = (float) Integer.valueOf(strings[j]);
+								if (i < _analysis.length && j < _analysis[i].length)
+									//_analysis[i][j] = num; // Without mapping.
+									_analysis[i][j] = p.map(num,Glv.highLowForNN.y, 1000, -1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+							//}
 						}
 					}
 				}
@@ -45,7 +48,7 @@ public class MyData {
 				for (int j = 0; j < _form[i].length; j++) {
 					if (strings[j].length() > 0 && strings[j] != null) {
 						if (Character.isDigit(strings[j].charAt(0))) {
-							float num = (float)Integer.valueOf(strings[j]);
+							float num = (float) Integer.valueOf(strings[j]);
 							if (i < _form.length && j < _form[i].length) {
 								if (num == 0)
 									_form[i][j] = -1f;

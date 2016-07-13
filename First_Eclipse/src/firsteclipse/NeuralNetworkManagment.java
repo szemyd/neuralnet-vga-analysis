@@ -163,7 +163,7 @@ public class NeuralNetworkManagment {
 					int num = Integer.valueOf(strings[i]);
 					if (num > Glv.highLowForNN.x)
 						Glv.highLowForNN.x = num;
-					if (num < Glv.highLowForNN.y)
+					if (num < Glv.highLowForNN.y && num >6)
 						Glv.highLowForNN.y = num;
 				}
 			}
@@ -183,7 +183,7 @@ public class NeuralNetworkManagment {
 	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-				p.floor(trainingSet.get(0)._analysis.length / 3), p.floor(trainingSet.get(0)._analysis.length / 3),
+				p.floor(trainingSet.get(0)._analysis.length / 3f), p.floor(trainingSet.get(0)._analysis.length / 3f),
 				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
 
 		neuralnet.respond(trainingSet.get(0));

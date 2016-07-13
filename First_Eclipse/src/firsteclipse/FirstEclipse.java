@@ -32,7 +32,6 @@ public class FirstEclipse extends PApplet {
 		size(2400, 1200, P3D);
 	}
 
-	
 	/*
 	 * SETUPS
 	 */
@@ -56,8 +55,9 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void analysisSetup() {
+		threads = new ArrayList<MyThread>();
 		for (int i = 0; i < Glv.numOfThreads; i++) {
-			threads.add(new MyThread(this, threads.size()));
+			threads.add(new MyThread(this, Glv.howManyUntilNow + i));
 		}
 
 		for (MyThread thread : threads) {
@@ -66,7 +66,6 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
-	
 	/*
 	 * DRAW FUNCTIONS
 	 */
@@ -122,7 +121,7 @@ public class FirstEclipse extends PApplet {
 			//boxes = new MyBox[Glv.divisionX][Glv.divisionY];
 		}
 	}
-	
+
 	/*
 	 * INTERACTION
 	 */
@@ -145,14 +144,13 @@ public class FirstEclipse extends PApplet {
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 
-		if (key == ' ') {
-			net.trainNN();
-			redraw();
-		}
-		if (keyCode == ENTER) {
+		if (key == ' ')
+			for (int i = 0; i < 10; i++) {
+				net.trainNN();
+			}
+
+		if (keyCode == ENTER)
 			net.testNN();
-			redraw();
-		}
 
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
 		Glv.programMode = constrain(Glv.programMode, 0, 2);
@@ -176,8 +174,8 @@ public class FirstEclipse extends PApplet {
 			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
 
 			if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
-				analysisSetup();
 				Glv.howManyUntilNow += Glv.numOfThreads;
+				analysisSetup();
 			} else {
 				if (Glv.shP)
 					println("All solutions done.");
