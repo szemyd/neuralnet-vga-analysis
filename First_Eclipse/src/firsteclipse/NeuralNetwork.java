@@ -18,10 +18,10 @@ import processing.core.PApplet;
 public class NeuralNetwork {
 
 	private static PApplet p;
-	public static ArrayList<MyData> trainingSet = new ArrayList<MyData>();
-	public static ArrayList<MyData> testingSet = new ArrayList<MyData>();
+	public ArrayList<MyData> trainingSet = new ArrayList<MyData>();
+	public ArrayList<MyData> testingSet = new ArrayList<MyData>();
 
-	//private static Network neuralnet;
+	public Network neuralnet;
 
 	public static float[] g_sigmoid = new float[200];
 
@@ -31,7 +31,7 @@ public class NeuralNetwork {
 		setupSigmoid();
 	}
 
-	public static void loadGenData() {
+	public void loadGenData() {
 		String filePath = new File("").getAbsolutePath();
 		File folder = new File(filePath + "\\" + "GeneratedData");
 		File[] listOfFiles = folder.listFiles();
@@ -67,7 +67,7 @@ public class NeuralNetwork {
 
 							if (isItID) { // If this switch is on then store the file as an ID.
 								data.analysisID = Integer.valueOf(thisRow[j]);
-								p.println(thisRow[j]);
+								//p.println(thisRow[j]);
 								isItID = false;
 							} else if (c == '_') {
 								if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
@@ -113,18 +113,21 @@ public class NeuralNetwork {
 
 		}
 
-		cleanupReadData();
+		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
 
 		if (Glv.shP)
 			p.println("Training set size: " + trainingSet.size());
 		if (Glv.shP)
 			p.println("Testing set size: " + testingSet.size());
 
-		//		neuralnet = new Network(p, trainingSet.get(0).analysis.size(), trainingSet.get(0).analysis.size() / 10,
-		//				trainingSet.get(0).form.size());
+		//		neuralnet = new Network(p, 
+		//				trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
+		//				trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[0].length,
+		//				trainingSet.get(0)._form.length, 	 trainingSet.get(0)._form[0].length);
+		neuralnet = new Network(p, 38, 48, 10, 10, 25, 32);
 	}
 
-	private static void cleanupReadData() {
+	private void cleanupReadData() {
 
 		//---> Remove element if it has an index of 0.
 		for (int k = 0; k < testingSet.size(); k++) {
@@ -132,7 +135,7 @@ public class NeuralNetwork {
 			MyData data = testingSet.get((k + 1) % testingSet.size());
 
 			if (data.clean()) {
-				p.println("I'm removing: " + data.analysisID);
+				//p.println("I'm removing: " + data.analysisID);
 				testingSet.remove(data);
 			}
 			testingSet.get(k).convert();
@@ -143,7 +146,7 @@ public class NeuralNetwork {
 			MyData data = trainingSet.get((k + 1) % trainingSet.size());
 
 			if (data.clean()) {
-				p.println("I'm removing: " + data.analysisID);
+				//p.println("I'm removing: " + data.analysisID);
 				trainingSet.remove(data);
 			}
 

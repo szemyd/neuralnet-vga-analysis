@@ -22,6 +22,7 @@ public class FirstEclipse extends PApplet {
 	PShape s;
 
 	Environment env = new Environment(this);
+	NeuralNetwork net = new NeuralNetwork(this);
 	//	ManageBoxes manBox = new ManageBoxes(this);
 	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
 	public ArrayList<MyThread> threads = new ArrayList<MyThread>();
@@ -42,7 +43,7 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		NeuralNetwork.loadGenData(); // Loads the generated data.
+		net.loadGenData(); // Loads the generated data.
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
@@ -84,7 +85,11 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void drawTeaching() {
-
+		env.cam.beginHUD();
+		{
+			net.neuralnet.draw();
+		}
+		env.cam.endHUD();
 	}
 
 	public void keyPressed() {
@@ -94,13 +99,20 @@ public class FirstEclipse extends PApplet {
 		if (keyCode == RIGHT)
 			Glv.whichToDisplay++;
 
-		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
+		if (keyCode == UP)
+			Glv.programMode++;
+
+		if (keyCode == DOWN)
+			Glv.programMode--;
 
 		if (key == 's')
 			Glv.shouldSpaceSyntax = !Glv.shouldSpaceSyntax;
 
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
+
+		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, threads.size() - 1);
+		Glv.programMode = constrain(Glv.programMode, 0, 1);
 	}
 
 	public void analysisSetup() {
