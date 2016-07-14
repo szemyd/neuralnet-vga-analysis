@@ -18,8 +18,8 @@ public class Glv {
 	
 	
 	//---> Solution settings and optimal calculation
-	public static int numOfThreads = 15; // How many parallel threads should there be
-	public static int numOfSolutions =500; // How many solutions do I want to generate
+	public static int numOfThreads = 0; // How many parallel threads should there be
+	public static int numOfSolutions =0; // How many solutions do I want to generate
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
@@ -32,11 +32,11 @@ public class Glv {
 	public static float spaceRoomSizeY = 160.42f * 1.50f;
 
 	//---> NEURAL NETWORK
-	public static float LEARNING_RATE= 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
+	public static float LEARNING_RATE= 0.005f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	
 	//---> For the ENVIRONMENT
-	public static int programMode = 0; // Should it generate data or load Neural Network?
+	public static int programMode = 1; // Should it generate data or load Neural Network?
 	
 	/* 
 	 * OTHER GLOBAL VARIABLES

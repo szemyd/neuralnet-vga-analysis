@@ -54,7 +54,7 @@ class MyThread extends Thread {
 		spaceSyntax.setup(manBox.boxes); // 03. Creates starting grid of rectangles for the spacesyntax VGA, sets the rectangles according to cubes
 		spaceSyntax(); // 04. Does VGA Analysis
 		
-		if(Glv.shP) p.println("Ellapsed time: " + ((p.second() + p.minute() * 60 + p.hour() * 360) - ellapsedTime));
+		if(Glv.shP) p.println("< Ellapsed time: " + ((p.second() + p.minute() * 60 + p.hour() * 360) - ellapsedTime)+ " >");
 	}
 
 	public void spaceSyntax() {

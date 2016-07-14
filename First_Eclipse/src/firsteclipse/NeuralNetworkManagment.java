@@ -183,16 +183,16 @@ public class NeuralNetworkManagment {
 	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-				p.floor(trainingSet.get(0)._analysis.length / 3f), p.floor(trainingSet.get(0)._analysis.length / 3f),
+				p.floor(trainingSet.get(0)._analysis.length /3f), p.floor(trainingSet.get(0)._analysis.length/3f),
 				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
 
 		neuralnet.respond(trainingSet.get(0));
 	}
 
 	public void trainNN() {
-		for (int i = 0; i < trainingSet.size(); i++) {
-			//int row = (int) p.floor(p.random(0, trainingSet.size()));
-			int row=i;
+		for (int i = 0; i < 500; i++) {
+			int row = (int) p.floor(p.random(0, trainingSet.size()));
+			//int row=i;
 			neuralnet.respond(trainingSet.get(row));
 			neuralnet.train(trainingSet.get(row)._form);
 		}
