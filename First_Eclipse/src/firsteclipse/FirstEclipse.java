@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
+import com.sun.jmx.snmp.tasks.ThreadService;
 
 import javafx.scene.shape.Box;
 import peasy.*;
@@ -19,15 +20,8 @@ import controlP5.*;
 
 public class FirstEclipse extends PApplet {
 
-
-	
-
 	Environment env = new Environment(this);
 	NeuralNetworkManagment net = new NeuralNetworkManagment(this);
-	//	ManageBoxes manBox = new ManageBoxes(this);
-	//	SpaceSyntax spaceSyntax = new SpaceSyntax(this);
-
-	//private MyBox[][] boxes;
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -38,30 +32,29 @@ public class FirstEclipse extends PApplet {
 	 */
 	public void setup() {
 
-		env.setupGui();
+		env.setupGui(); // Sets up the user interface
+		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
+		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		
-
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
-
-		
-		analysisSetup();
+		//loadDataSetup();
+		//analysisSetup();
 	}
 
-	public void loadDataSetup()
-	{
+	public void loadDataSetup() {
 		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-		if(Glv.programMode==1) net.loadGenData(); // Loads the generated data.
-		if(Glv.shP) println("< Loading existing data. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+		if (Glv.programMode == 1)
+			net.loadGenData(); // Loads the generated data.
+		if (Glv.shP)
+			println("< Loading existing data. Ellapsed time: "
+					+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
 	}
-	
+
 	public void analysisSetup() {
 		Glv.threads = new ArrayList<MyThread>();
 		for (int i = 0; i < Glv.numOfThreads; i++) {
@@ -95,6 +88,8 @@ public class FirstEclipse extends PApplet {
 			break;
 		}
 
+		
+		//println(Glv.shouldDimReduction);
 		env.drawGui();
 		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
 	}
@@ -104,12 +99,13 @@ public class FirstEclipse extends PApplet {
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
 
-			if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
-				Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+			if (Glv.threads.size() > 0) {
+				if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
+					Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+				}
+				if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+					Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 			}
-			if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
-				Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
-
 			env.draw(); // Draws the environment.
 		}
 		popMatrix();
@@ -152,15 +148,16 @@ public class FirstEclipse extends PApplet {
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 
-		if (key == ' ')
-		{
+		if (key == ' ') {
 			int ellapsedTime = second() + minute() * 60 + hour() * 360;
 			for (int i = 0; i < 1; i++) {
 				net.trainNN();
 			}
-			if(Glv.shP) println("< Training NN. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+			if (Glv.shP)
+				println("< Training NN. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime)
+						+ " >");
 		}
-			
+
 		if (keyCode == ENTER)
 			net.testNN();
 
@@ -185,7 +182,7 @@ public class FirstEclipse extends PApplet {
 		if (Glv.isDone == Glv.threads.size() && !Glv.isDoneBool) {
 			Glv.howManyUntilNow += Glv.numOfThreads;
 			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
-			
+
 			if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
 				analysisSetup();
 			} else {
