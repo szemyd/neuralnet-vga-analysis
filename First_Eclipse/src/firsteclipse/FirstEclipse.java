@@ -19,7 +19,8 @@ import controlP5.*;
 
 public class FirstEclipse extends PApplet {
 
-	PShape s;
+
+	
 
 	Environment env = new Environment(this);
 	NeuralNetworkManagment net = new NeuralNetworkManagment(this);
@@ -42,15 +43,11 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		s = loadShape("solid.OBJ"); // Load the 3D model of the public space.
+		
 
 		noStroke();
 		rectMode(PConstants.CENTER);
 
-		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-		if(Glv.programMode==1) net.loadGenData(); // Loads the generated data.
-		if(Glv.shP) println("< Loading existing data. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
-		
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
@@ -58,6 +55,13 @@ public class FirstEclipse extends PApplet {
 		analysisSetup();
 	}
 
+	public void loadDataSetup()
+	{
+		int ellapsedTime = second() + minute() * 60 + hour() * 360;
+		if(Glv.programMode==1) net.loadGenData(); // Loads the generated data.
+		if(Glv.shP) println("< Loading existing data. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+	}
+	
 	public void analysisSetup() {
 		Glv.threads = new ArrayList<MyThread>();
 		for (int i = 0; i < Glv.numOfThreads; i++) {
@@ -106,7 +110,7 @@ public class FirstEclipse extends PApplet {
 			if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
 				Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 
-			env.draw(s); // Draws the environment.
+			env.draw(); // Draws the environment.
 		}
 		popMatrix();
 	}

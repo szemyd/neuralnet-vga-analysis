@@ -37,8 +37,33 @@ public class Environment {
 
 	PeasyCam cam;
 
+	PShape s;
+
 	public Environment(PApplet _p) {
 		p = _p;
+	}
+
+	public void setupGui() {
+
+		cp5 = new ControlP5(p);
+		cam = new PeasyCam(p, 180);
+		// cam.setMinimumDistance(50);
+		// cam.setMaximumDistance(500);
+
+		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+
+		cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		cp5.addToggle("Glv.shouldDimReduction").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
+		//.plugTo(this,	"shuffle");
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
+
+		//accordion.open(0, 1, 2);
+		accordion.close(0, 1, 2);
+		accordion.setCollapseMode(Accordion.MULTI);
+
+		cp5.setAutoDraw(false);
 	}
 
 	public void drawGui() {
@@ -52,7 +77,7 @@ public class Environment {
 		//hint(ENABLE_DEPTH_TEST);
 	}
 
-	public void draw(PShape s) {
+	public void draw() {
 		p.pushStyle();
 		{
 			p.strokeWeight(5.0f);
@@ -70,42 +95,27 @@ public class Environment {
 				p.rectMode(PConstants.CENTER);
 				p.fill(360, 0, 280);
 
+				
 				p.translate(0, 0, -.005f);
 				p.rect(0, 0, 520f, 560f);
+				
 				p.translate(0, 0, -.01f);
+			
+				s.disableStyle();
+				p.fill(250);
 				p.shape(s, 0, 0);
-				// s.disableStyle();
+				s.enableStyle();
+				
 			}
 			p.popStyle();
 		}
 		p.popMatrix();
 	}
 
-	public void setupGui() {
-
-		cp5 = new ControlP5(p);
-		cam = new PeasyCam(p, 180);
-		// cam.setMinimumDistance(50);
-		// cam.setMaximumDistance(500);
-
-		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		//cp5.addBang("bang").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		//cp5.addToggle("toggle").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
-		//.plugTo(this,	"shuffle");
-		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
-
-		//accordion.open(0, 1, 2);
-		accordion.close(0, 1, 2);
-		accordion.setCollapseMode(Accordion.MULTI);
-
-		cp5.setAutoDraw(false);
-	}
-
 	public void loadData() {
 
 		String filePath = new File("").getAbsolutePath();
+		s = p.loadShape(filePath + "/src/data/solid.obj"); // Load the 3D model of the public space.
 
 		String csvFile = filePath + "/src/data/sur.csv";
 
