@@ -186,7 +186,7 @@ public class NeuralNetworkManagment {
 	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-				p.floor(trainingSet.get(0)._analysis.length / 3f), p.floor(trainingSet.get(0)._analysis.length / 3f),
+				p.floor(trainingSet.get(0)._analysis.length *1.2f), p.floor(trainingSet.get(0)._analysis.length *1.2f),
 				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
 
 		neuralnet.respond(trainingSet.get(0));

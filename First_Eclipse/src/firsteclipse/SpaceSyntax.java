@@ -342,7 +342,7 @@ public class SpaceSyntax {
 
 		for (int j = 0; j < boxes[0].length; j++) {
 			for (int i = 0; i < boxes.length; i++) {
-				toNN.add(Integer.toString((int) boxes[i][j].height));
+				toNN.add(Integer.toString(boxes[i][j].height.intValue()));//.intValue());
 				toNN.add(",");
 			}
 			toNN.add("\n");

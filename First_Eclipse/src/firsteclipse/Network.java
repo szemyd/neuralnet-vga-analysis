@@ -12,6 +12,9 @@ public class Network {
 	private static Neuron[][] m_input_layer;
 	private static Neuron[][] m_hidden_layer;
 	private static Neuron[][] m_output_layer;
+	
+	MyData lastCard;
+	
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) {
 		p = _p;
@@ -72,6 +75,7 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
 				{
+					p.translate(0, -p.height/4);
 					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f,
 							p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f);
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
@@ -80,12 +84,14 @@ public class Network {
 				p.popMatrix();
 			}
 		}
-
+		if(lastCard != null) lastCard.draw(); 
 	}
-
+	
+	
 	//---> Neuron interaction
 	public void respond(MyData card) {
 
+		lastCard=card;
 		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {

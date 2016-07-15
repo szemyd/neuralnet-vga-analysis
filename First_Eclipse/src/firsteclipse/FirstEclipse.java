@@ -114,7 +114,7 @@ public class FirstEclipse extends PApplet {
 			rotate(HALF_PI); // Rotate the whole scene.
 
 			if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
-				if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
+				if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null && Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null) {
 					Glv.threads.get(Glv.whichToDisplay).manBox.draw();
 				}
 				if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
