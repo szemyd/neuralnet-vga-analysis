@@ -21,7 +21,7 @@ public class Glv {
 	
 	//---> Solution settings and optimal calculation
 	public static int numOfThreads = 1; // How many parallel threads should there be
-	public static int numOfSolutions =0; // How many solutions do I want to generate
+	public static int numOfSolutions =1; // How many solutions do I want to generate
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
@@ -30,8 +30,8 @@ public class Glv {
 	public static float roomSizeX = 129.4f; // How big is the park
 	public static float roomSizeY = 160.42f; 
 
-	public static float spaceRoomSizeX = 129.4f * 1.50f; // How big is the SpaceSyntax analysis.
-	public static float spaceRoomSizeY = 160.42f * 1.50f;
+	public static float spaceRoomSizeX = 129.4f * 1.5f; // How big is the SpaceSyntax analysis.
+	public static float spaceRoomSizeY = 160.42f * 1.5f;
 
 	//---> NEURAL NETWORK
 	public static float LEARNING_RATE= 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.

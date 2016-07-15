@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
+import controlP5.Println;
 import processing.core.PApplet;
 
 public class MyData {
@@ -15,6 +16,9 @@ public class MyData {
 	public Float[][] _analysis;
 	public Float[][] _form;
 
+	public Float[][] rAnalysis;
+	public Float[][] rForm;
+
 	public Integer analysisID = 0;
 
 	public MyData(PApplet _p) {
@@ -22,21 +26,45 @@ public class MyData {
 	}
 
 	public void draw() {
-		for (int i = 0; i < _form.length; i++) {
-			for (int j = 0; j < _form[i].length; j++) {
-				p.pushMatrix();
-				{
-					p.translate(0, p.height/4);
-					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * _form.length) * 0.5f,
-							p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
-					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
-					
-					if (_form[i][j] > 0.1f) p.fill(360);
-					else p.fill(0);
-					
-					p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+				for (int i = 0; i < _form.length; i++) {
+					for (int j = 0; j < _form[i].length; j++) {
+						p.pushMatrix();
+						{
+							p.translate(p.width/8, p.height/4);
+							p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * _form.length) * 0.5f,
+									p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
+							p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+							
+							if (_form[i][j] > 0.1f) p.fill(360);
+							else p.fill(0);
+							
+							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+						}
+						p.popMatrix();
+					}
 				}
-				p.popMatrix();
+
+		if (rForm != null) {
+			for (int i = 0; i < rForm.length; i++) {
+				for (int j = 0; j < rForm[i].length; j++) {
+					p.pushMatrix();
+					{
+						p.translate(-p.width/8, p.height / 4);
+						p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
+								p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f));
+						p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+
+						if (rForm[i][j] != null) {
+							if (rForm[i][j] > 0.1f)
+								p.fill(360);
+							else
+								p.fill(0);
+
+							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+						}
+					}
+					p.popMatrix();
+				}
 			}
 		}
 	}
@@ -101,4 +129,24 @@ public class MyData {
 		return false;
 	}
 
+	public void extractValuableData() {
+		if (_form != null) {
+			rForm = new Float[_form.length][_form[0].length];
+			rAnalysis = new Float[_analysis.length][_analysis[0].length];
+
+			for (int i = 0; i < _form.length; i += (int) Glv.cubeSizeReduced / Glv.cubeSize) {
+				for (int j = 0; j < _form[i].length; j += (int) Glv.cubeSizeReduced / Glv.cubeSize) {
+					rForm[i][j] = _form[i][j];
+					//p.print(rForm[i][j]);
+				}
+				//p.println();
+			}
+		}
+		//		
+		//		for (int i = 0; i < _analysis.length; i++) {
+		//			for (int j = 0; j < _analysis[i].length; j++) {
+		//				
+		//			}
+		//		}
+	}
 }

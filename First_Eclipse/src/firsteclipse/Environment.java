@@ -38,6 +38,7 @@ public class Environment {
 	PeasyCam cam;
 
 	PShape s;
+	
 
 	//Textarea myTextarea;
 	//Println console;
@@ -81,11 +82,13 @@ public class Environment {
 		cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		cp5.addToggle("DimensionalityReduction").setValue(false).setPosition(100, 100).setSize(100, 19).moveTo(g2);
+		cp5.addSlider("numberOfThreads").setPosition(10, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5).moveTo(g2);
+		cp5.addToggle("DimensionalityReduction").setValue(false).setPosition(80, 20).setSize(100, 19).moveTo(g2);
+		
 		//.plugTo(this,	"shuffle");
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
 
-		accordion.open(0,1, 2);
+		accordion.open(0, 1, 2);
 		//accordion.close(1);
 		accordion.setCollapseMode(Accordion.MULTI);
 
@@ -236,17 +239,27 @@ public class Environment {
 		p.println("a toggle event.");
 	}
 
+	public void numberOfThreads(float theValue) {
+		Glv.numOfThreads=(int)theValue;
+		}
+	
 	public void controlEvent(ControlEvent theEvent) {
-//		p.println(theEvent.getController().getName());
-//
-//		if (theEvent.isController()) {
-//
-//			p.print("control event from : " + theEvent.getController().getName()); //controller().name());
-//			p.println(", value : " + theEvent.getController().getValue());
-//
-//			if (theEvent.getController().getName() == "Glv.shouldDimReduction") {
-//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
-//			}
-//		}
+			p.println(theEvent.getController().getName());
+	
+		//
+		//		if (theEvent.isController()) {
+		//
+		//			p.print("control event from : " + theEvent.getController().getName()); //controller().name());
+		//			p.println(", value : " + theEvent.getController().getValue());
+		//
+		//			if (theEvent.getController().getName() == "Glv.shouldDimReduction") {
+		//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
+		//			}
+		//		}
+		if (theEvent.getName() == "Number_Of_Threads")
+		{
+			Glv.numOfThreads = (int) theEvent.getController().getValue();
+		}
+		p.println("Number of threads: " + Glv.numOfThreads);
 	}
 }

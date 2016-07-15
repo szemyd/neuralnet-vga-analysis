@@ -41,7 +41,7 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		noStroke();
+		//noStroke();
 		rectMode(PConstants.CENTER);
 
 		if (Glv.programMode == 1)
@@ -61,6 +61,8 @@ public class FirstEclipse extends PApplet {
 
 	public void analysisSetup() {
 		Glv.threads = new ArrayList<MyThread>();
+		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
+
 		for (int i = 0; i < Glv.numOfThreads; i++) {
 			Glv.threads.add(new MyThread(this, Glv.howManyUntilNow + i));
 		}
@@ -119,7 +121,7 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threads != null) {
 				if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
 					if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
-							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null) {
+							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null && Glv.threads.get(Glv.whichToDisplay).manBox != null) {
 						Glv.threads.get(Glv.whichToDisplay).manBox.draw();
 					}
 					if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
@@ -214,25 +216,27 @@ public class FirstEclipse extends PApplet {
 	 */
 	private void writeToFile() {
 		Glv.isDone = 0;
-		if (Glv.isDone < Glv.threads.size()) {
-			for (MyThread thread : Glv.threads) {
-				//println(thread.t.isAlive());
-				if (!thread.t.isAlive()) {
-					Glv.isDone++;
+		if (Glv.threads.size() > 0) {
+			if (Glv.isDone < Glv.threads.size()) {
+				for (MyThread thread : Glv.threads) {
+					//println(thread.t.isAlive());
+					if (!thread.t.isAlive()) {
+						Glv.isDone++;
+					}
 				}
 			}
-		}
 
-		if (Glv.isDone == Glv.threads.size() && !Glv.isDoneBool) {
-			Glv.howManyUntilNow += Glv.numOfThreads;
-			GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
+			if (Glv.isDone == Glv.threads.size() && !Glv.isDoneBool) {
+				Glv.howManyUntilNow += Glv.numOfThreads;
+				GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
 
-			if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
-				analysisSetup();
-			} else {
-				if (Glv.shP)
-					println("All solutions done.");
-				Glv.isDoneBool = true;
+				if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
+					analysisSetup();
+				} else {
+					if (Glv.shP)
+						println("All solutions done.");
+					Glv.isDoneBool = true;
+				}
 			}
 		}
 	}

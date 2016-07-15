@@ -124,6 +124,7 @@ public class NeuralNetworkManagment {
 		setHighLow(); // Calculates the range of visibility in the data.
 		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
 		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
+		extractValuableData();
 		
 		dataLoaded=true;
 	}
@@ -180,6 +181,17 @@ public class NeuralNetworkManagment {
 			//			}
 		}
 		p.println("Max visibility: " + Glv.highLowForNN.x + " | Min visibility: " + Glv.highLowForNN.y);
+	}
+	
+	public void extractValuableData()
+	{
+		for (MyData data : testingSet) {
+			data.extractValuableData();
+		}
+		
+		for (MyData data : trainingSet) {
+			data.extractValuableData();
+		}
 	}
 	//<---
 
