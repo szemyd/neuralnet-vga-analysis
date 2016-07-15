@@ -39,63 +39,65 @@ public class Environment {
 
 	PShape s;
 
-	Textarea myTextarea;
-	Println console;
+	//Textarea myTextarea;
+	//Println console;
 
 	public Environment(PApplet _p) {
 		p = _p;
 	}
 
-	private void keyPressed() {
-		switch (p.key) {
-		case ('1'):
-			console.pause();
-			break;
-		case ('2'):
-			console.play();
-			break;
-		case ('3'):
-			console.setMax(8);
-			break;
-		case ('4'):
-			console.setMax(-1);
-			break;
-		case ('5'):
-			console.clear();
-			break;
-		}
-	}
+	//	private void keyPressed() {
+	//		switch (p.key) {
+	//		case ('1'):
+	//			console.pause();
+	//			break;
+	//		case ('2'):
+	//			console.play();
+	//			break;
+	//		case ('3'):
+	//			console.setMax(8);
+	//			break;
+	//		case ('4'):
+	//			console.setMax(-1);
+	//			break;
+	//		case ('5'):
+	//			console.clear();
+	//			break;
+	//		}
+	//	}
 
-	public void setupGui() {
+	public void setupGui(boolean DimensionalityReduction) {
 
 		cp5 = new ControlP5(p);
 		cam = new PeasyCam(p, 180);
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
+		cp5.enableShortcuts();
 
-		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
 		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
 		cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		cp5.addBang("Load Data Setup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		cp5.addToggle("shouldDimReduction").setValue(false).setPosition(100, 100).setSize(200, 19).moveTo(g1);
+		cp5.addToggle("DimensionalityReduction").setValue(false).setPosition(100, 100).setSize(100, 19).moveTo(g2);
 		//.plugTo(this,	"shuffle");
-		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(200).addItem(g1).addItem(g2).addItem(g3);
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
 
-		accordion.open(0, 2);
-		accordion.close(1);
+		accordion.open(0,1, 2);
+		//accordion.close(1);
 		accordion.setCollapseMode(Accordion.MULTI);
 
-		cp5.enableShortcuts();
-		p.frameRate(50);
-		myTextarea = cp5.addTextarea("txt").setPosition(100, 100).setSize(200, 200).setFont(p.createFont("", 10))
-				.setLineHeight(14).setColor(p.color(200)).setColorBackground(p.color(0, 100))
-				.setColorForeground(p.color(255, 100)).moveTo(g3);
-		;
-
-		console = cp5.addConsole(myTextarea);//
+		/*	
+			p.frameRate(50);
+			myTextarea = cp5.addTextarea("txt").setPosition(100, 100).setSize(200, 200).setFont(p.createFont("", 10))
+					.setLineHeight(14).setColor(p.color(200)).setColorBackground(p.color(0, 100))
+					.setColorForeground(p.color(255, 100)).moveTo(g3);
+			;
+		
+			console = cp5.addConsole(myTextarea);//
+		*/
 
 		cp5.setAutoDraw(false);
 	}
@@ -235,16 +237,16 @@ public class Environment {
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
-		p.println(theEvent.getController().getName());
-
-		if (theEvent.isController()) {
-
-			p.print("control event from : " + theEvent.getController().getName()); //controller().name());
-			p.println(", value : " + theEvent.getController().getValue());
-
-			if (theEvent.getController().getName() == "Glv.shouldDimReduction") {
-				Glv.shouldDimReduction = !Glv.shouldDimReduction;
-			}
-		}
+//		p.println(theEvent.getController().getName());
+//
+//		if (theEvent.isController()) {
+//
+//			p.print("control event from : " + theEvent.getController().getName()); //controller().name());
+//			p.println(", value : " + theEvent.getController().getValue());
+//
+//			if (theEvent.getController().getName() == "Glv.shouldDimReduction") {
+//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
+//			}
+//		}
 	}
 }

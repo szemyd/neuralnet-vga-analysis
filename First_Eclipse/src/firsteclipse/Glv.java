@@ -2,6 +2,8 @@ package firsteclipse;
 
 import java.util.ArrayList;
 
+import com.sun.org.glassfish.external.statistics.Statistic;
+
 import processing.core.PVector;
 
 public class Glv {
@@ -18,7 +20,7 @@ public class Glv {
 	
 	
 	//---> Solution settings and optimal calculation
-	public static int numOfThreads = 0; // How many parallel threads should there be
+	public static int numOfThreads = 1; // How many parallel threads should there be
 	public static int numOfSolutions =0; // How many solutions do I want to generate
 
 	//---> Form generating settings
@@ -60,6 +62,8 @@ public class Glv {
 	public static PVector highLowForNN = new PVector(0f, 1000f);
 	
 	public static ArrayList<MyThread> threads = new ArrayList<MyThread>();
+	public static MyThreadNeuralNet threadNN;
+	public static boolean threadSuspended=false;
 
 	public static int neuronSize=16;
 }

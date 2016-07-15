@@ -22,6 +22,7 @@ public class NeuralNetworkManagment {
 	public ArrayList<MyData> testingSet = new ArrayList<MyData>();
 
 	public Network neuralnet;
+	public boolean dataLoaded=false;
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
@@ -123,6 +124,8 @@ public class NeuralNetworkManagment {
 		setHighLow(); // Calculates the range of visibility in the data.
 		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
 		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
+		
+		dataLoaded=true;
 	}
 
 	private void cleanupReadData() {
@@ -163,7 +166,7 @@ public class NeuralNetworkManagment {
 					int num = Integer.valueOf(strings[i]);
 					if (num > Glv.highLowForNN.x)
 						Glv.highLowForNN.x = num;
-					if (num < Glv.highLowForNN.y && num >6)
+					if (num < Glv.highLowForNN.y && num > 6)
 						Glv.highLowForNN.y = num;
 				}
 			}
@@ -183,24 +186,29 @@ public class NeuralNetworkManagment {
 	//---> NEURAL NETWORK
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-				p.floor(trainingSet.get(0)._analysis.length /3f), p.floor(trainingSet.get(0)._analysis.length/3f),
+				p.floor(trainingSet.get(0)._analysis.length / 3f), p.floor(trainingSet.get(0)._analysis.length / 3f),
 				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
 
 		neuralnet.respond(trainingSet.get(0));
 	}
 
 	public void trainNN() {
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < 10; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
 			//int row=i;
-			neuralnet.respond(trainingSet.get(row));
-			neuralnet.train(trainingSet.get(row)._form);
+			if (trainingSet.get(row)._analysis != null && trainingSet.get(row)._form != null) {
+				neuralnet.respond(trainingSet.get(row));
+				neuralnet.train(trainingSet.get(row)._form);
+			}
+			else p.println("Card was NULL");
 		}
 	}
 
 	public void testNN() {
 		int row = (int) p.floor(p.random(0, testingSet.size()));
-		neuralnet.respond(testingSet.get(row));
+		if (testingSet.get(row)._analysis != null && testingSet.get(row)._form != null) {
+			neuralnet.respond(testingSet.get(row));
+		}
 	}
 	//<---
 

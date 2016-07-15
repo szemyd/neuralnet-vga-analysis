@@ -1,4 +1,1 @@
-{
-  "/shouldDimReduction": {"value": 0},
-  "/txt": {"text": "CSV Data Loaded!\r\nBiggest already available number (seed): 5051\r\nFile already exists.\r\nAll solutions done.\r\nsaving with format controlP5.ControllerProperties$JSONFormat@6e5ac280 (json) C:\\Users\\Me\\Google Drive\\UCL\\III_Semester\\Final Thesis\\CODE\\PHASE 1_Generating Data\\First_Eclipse\\lib\\base\\controlP5\r\n"}
-}
+{"/DimensionalityReduction": {"value": 0}}

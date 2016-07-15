@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
+import com.sun.corba.se.spi.ior.IORFactories;
 import com.sun.jmx.snmp.tasks.ThreadService;
 
 import javafx.scene.shape.Box;
@@ -21,7 +22,6 @@ import controlP5.*;
 public class FirstEclipse extends PApplet {
 
 	Environment env = new Environment(this);
-	NeuralNetworkManagment net = new NeuralNetworkManagment(this);
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -32,7 +32,7 @@ public class FirstEclipse extends PApplet {
 	 */
 	public void setup() {
 
-		env.setupGui(); // Sets up the user interface
+		env.setupGui(Glv.shouldDimReduction); // Sets up the user interface
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
@@ -42,17 +42,18 @@ public class FirstEclipse extends PApplet {
 		noStroke();
 		rectMode(PConstants.CENTER);
 
+		if (Glv.programMode == 1)
+			loadDataSetup();
 		//loadDataSetup();
 		//analysisSetup();
 	}
 
 	public void loadDataSetup() {
-		int ellapsedTime = second() + minute() * 60 + hour() * 360;
-		if (Glv.programMode == 1)
-			net.loadGenData(); // Loads the generated data.
-		if (Glv.shP)
-			println("< Loading existing data. Ellapsed time: "
-					+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+		if (Glv.threadNN == null) {
+			Glv.threadNN = new MyThreadNeuralNet(this, 999);
+			Glv.threadNN.start();
+		} else
+			println("Data already loaded");
 	}
 
 	public void analysisSetup() {
@@ -64,6 +65,16 @@ public class FirstEclipse extends PApplet {
 		for (MyThread thread : Glv.threads) {
 			if (!thread.VGADone) // If it is a new thread then start it!
 				thread.start();
+		}
+	}
+
+	public void stopAnalysis() {
+		Glv.threadSuspended = !Glv.threadSuspended;
+
+		if (!Glv.threadSuspended) {
+			for (MyThread thread : Glv.threads) {
+				thread.notify();
+			}
 		}
 	}
 
@@ -86,20 +97,23 @@ public class FirstEclipse extends PApplet {
 		case 2:
 			drawFormLoaded();
 			break;
+			
+		case 3:
+			drawFormLoaded();
+			break;
 		}
 
-		
 		//println(Glv.shouldDimReduction);
 		env.drawGui();
 		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
-	}
+		}
 
 	public void drawGenerating() {
 		pushMatrix();
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
 
-			if (Glv.threads.size() > 0) {
+			if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
 				if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null) {
 					Glv.threads.get(Glv.whichToDisplay).manBox.draw();
 				}
@@ -112,18 +126,20 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void drawTeaching() {
-		env.cam.beginHUD();
-		{
-			noLights();
-			net.neuralnet.draw();
+		if (Glv.threadNN != null) {
+			if (Glv.threadNN.net.dataLoaded) {
+				env.cam.beginHUD();
+				{
+					noLights();
+					Glv.threadNN.net.neuralnet.draw();
+				}
+				env.cam.endHUD();
+			}
 		}
-		env.cam.endHUD();
 	}
 
 	public void drawFormLoaded() {
-		if (net != null) {
-			//boxes = new MyBox[Glv.divisionX][Glv.divisionY];
-		}
+
 	}
 
 	/*
@@ -148,21 +164,39 @@ public class FirstEclipse extends PApplet {
 		if (key == 'g')
 			Glv.globalHighLow = !Glv.globalHighLow;
 
+		if (key == 'l')
+			loadDataSetup();
+
+		if (key == 'q')
+			stopAnalysis();
+
 		if (key == ' ') {
-			int ellapsedTime = second() + minute() * 60 + hour() * 360;
-			for (int i = 0; i < 1; i++) {
-				net.trainNN();
-			}
-			if (Glv.shP)
-				println("< Training NN. Ellapsed time: " + ((second() + minute() * 60 + hour() * 360) - ellapsedTime)
-						+ " >");
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded) {
+					int ellapsedTime = second() + minute() * 60 + hour() * 360;
+					Glv.threadNN.net.trainNN();
+
+					if (Glv.shP)
+						println("< Training NN. Ellapsed time: "
+								+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+				} else
+					println("Load Cards first.");
+			} else
+				println("Load Cards first.");
 		}
 
-		if (keyCode == ENTER)
-			net.testNN();
+		if (keyCode == ENTER) {
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded) {
+					Glv.threadNN.net.testNN();
+				} else
+					println("Load Cards first.");
+			} else
+				println("Load Cards first.");
+		}
 
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
-		Glv.programMode = constrain(Glv.programMode, 0, 2);
+		Glv.programMode = constrain(Glv.programMode, 0, 3);
 	}
 
 	/*

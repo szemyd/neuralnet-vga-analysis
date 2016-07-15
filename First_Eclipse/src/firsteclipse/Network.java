@@ -54,19 +54,19 @@ public class Network {
 			}
 		}
 
-//		for (int i = 0; i < m_hidden_layer.length; i++) {
-//			for (int j = 0; j < m_hidden_layer[i].length; j++) {
-//				p.pushMatrix();
-//				{
-//					p.translate(2f * p.width / 4 - (Glv.neuronSize * 1.2f * m_hidden_layer.length) * 0.5f,
-//							p.height / 2 - (Glv.neuronSize * 1.2f * m_hidden_layer[0].length) * 0.5f);
-//					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
-//
-//					m_hidden_layer[i][j].draw();
-//				}
-//				p.popMatrix();
-//			}
-//		}
+		//		for (int i = 0; i < m_hidden_layer.length; i++) {
+		//			for (int j = 0; j < m_hidden_layer[i].length; j++) {
+		//				p.pushMatrix();
+		//				{
+		//					p.translate(2f * p.width / 4 - (Glv.neuronSize * 1.2f * m_hidden_layer.length) * 0.5f,
+		//							p.height / 2 - (Glv.neuronSize * 1.2f * m_hidden_layer[0].length) * 0.5f);
+		//					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+		//
+		//					m_hidden_layer[i][j].draw();
+		//				}
+		//				p.popMatrix();
+		//			}
+		//		}
 
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
@@ -90,8 +90,12 @@ public class Network {
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				//p.print(card._analysis[i][j] + ",");
-				if (i < card._analysis.length && j < card._analysis[0].length)
+				//p.print(	m_input_layer[i][j].m_output );
+
+			//	if (i < card._analysis.length && j < card._analysis[0].length && card._analysis[i][j] != null) {
+
 					m_input_layer[i][j].m_output = card._analysis[i][j];
+				//}
 			}
 		}
 
