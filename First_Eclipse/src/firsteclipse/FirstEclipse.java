@@ -13,6 +13,7 @@ import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
 import com.sun.corba.se.spi.ior.IORFactories;
+import com.sun.glass.ui.TouchInputSupport;
 import com.sun.jmx.snmp.tasks.ThreadService;
 
 import javafx.scene.shape.Box;
@@ -22,6 +23,7 @@ import controlP5.*;
 public class FirstEclipse extends PApplet {
 
 	Environment env = new Environment(this);
+	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
 		size(2400, 1200, P3D);
@@ -46,6 +48,7 @@ public class FirstEclipse extends PApplet {
 			loadDataSetup();
 		//loadDataSetup();
 		//analysisSetup();
+		//dataAnalysis.setup();
 	}
 
 	public void loadDataSetup() {
@@ -95,9 +98,9 @@ public class FirstEclipse extends PApplet {
 			break;
 
 		case 2:
-			drawFormLoaded();
+			drawAnalysis();
 			break;
-			
+
 		case 3:
 			drawFormLoaded();
 			break;
@@ -106,21 +109,24 @@ public class FirstEclipse extends PApplet {
 		//println(Glv.shouldDimReduction);
 		env.drawGui();
 		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
-		}
+	}
 
 	public void drawGenerating() {
 		pushMatrix();
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
 
-			if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
-				if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null && Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null) {
-					Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+			if (Glv.threads != null) {
+				if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
+					if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
+							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null) {
+						Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+					}
+					if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+						Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 				}
-				if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
-					Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
+				env.draw(); // Draws the environment.
 			}
-			env.draw(); // Draws the environment.
 		}
 		popMatrix();
 	}
@@ -140,6 +146,10 @@ public class FirstEclipse extends PApplet {
 
 	public void drawFormLoaded() {
 
+	}
+
+	public void drawAnalysis() {
+		//dataAnalysis.draw();
 	}
 
 	/*
