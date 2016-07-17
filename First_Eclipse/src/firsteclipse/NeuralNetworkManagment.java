@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import com.sun.webkit.ThemeClient;
 import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 
 import processing.core.PApplet;
@@ -123,8 +124,9 @@ public class NeuralNetworkManagment {
 		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
 		setHighLow(); // Calculates the range of visibility in the data.
 		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
+		extractValuableData(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
 		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
-		extractValuableData();
+		
 		
 		dataLoaded=true;
 	}
@@ -199,8 +201,11 @@ public class NeuralNetworkManagment {
 	private void setupNeuralNetwork() {
 		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
 				p.floor(trainingSet.get(0)._analysis.length *1.2f), p.floor(trainingSet.get(0)._analysis.length *1.2f),
-				trainingSet.get(0)._form.length, trainingSet.get(0)._form[2].length);
+				trainingSet.get(0).rForm.length, trainingSet.get(0).rForm[2].length);
 
+		p.println("InputSize: " + trainingSet.get(0)._analysis.length + " | " + trainingSet.get(0)._analysis[2].length + " HiddenSize: " + 
+				p.floor(trainingSet.get(0)._analysis.length *1.2f) + " | " +  p.floor(trainingSet.get(0)._analysis.length *1.2f) + " OutputSize: " + 
+				trainingSet.get(0).rForm.length +" | " + trainingSet.get(0).rForm[2].length);
 		neuralnet.respond(trainingSet.get(0));
 	}
 
@@ -208,9 +213,9 @@ public class NeuralNetworkManagment {
 		for (int i = 0; i < 10; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
 			//int row=i;
-			if (trainingSet.get(row)._analysis != null && trainingSet.get(row)._form != null) {
+			if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
 				neuralnet.respond(trainingSet.get(row));
-				neuralnet.train(trainingSet.get(row)._form);
+				neuralnet.train(trainingSet.get(row).rForm);
 			}
 			else p.println("Card was NULL");
 		}

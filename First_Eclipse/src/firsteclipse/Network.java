@@ -12,9 +12,8 @@ public class Network {
 	private static Neuron[][] m_input_layer;
 	private static Neuron[][] m_hidden_layer;
 	private static Neuron[][] m_output_layer;
-	
+
 	MyData lastCard;
-	
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) {
 		p = _p;
@@ -75,7 +74,7 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(0, -p.height/4);
+					p.translate(0, -p.height / 4);
 					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f,
 							p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f);
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
@@ -84,23 +83,23 @@ public class Network {
 				p.popMatrix();
 			}
 		}
-		if(lastCard != null) lastCard.draw(); 
+		if (lastCard != null)
+			lastCard.draw();
 	}
-	
-	
+
 	//---> Neuron interaction
 	public void respond(MyData card) {
 
-		lastCard=card;
+		lastCard = card;
 		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				//p.print(card._analysis[i][j] + ",");
 				//p.print(	m_input_layer[i][j].m_output );
 
-			//	if (i < card._analysis.length && j < card._analysis[0].length && card._analysis[i][j] != null) {
+				//	if (i < card._analysis.length && j < card._analysis[0].length && card._analysis[i][j] != null) {
 
-					m_input_layer[i][j].m_output = card._analysis[i][j];
+				m_input_layer[i][j].m_output = card._analysis[i][j];
 				//}
 			}
 		}
@@ -119,13 +118,18 @@ public class Network {
 	}
 
 	public void train(Float[][] outputs) {
+		p.println("m_output_layer.length: " + m_output_layer.length + " | m_output_layer[0].length: "
+				+ m_output_layer[0].length);
+		p.println(" outputs.length: " + outputs.length);
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
+				p.print(outputs[i][j] + ",");
 				m_output_layer[i][j].setError(outputs[i][j]);
 				m_output_layer[i][j].train();
 			}
-
+			p.println("");
 		}
+
 		for (int i = 0; i < m_hidden_layer.length; i++) {
 			for (int j = 0; j < m_hidden_layer[i].length; j++) {
 				m_hidden_layer[i][j].train();

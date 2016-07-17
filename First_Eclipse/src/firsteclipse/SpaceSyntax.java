@@ -31,8 +31,7 @@ public class SpaceSyntax {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				PVector position = new PVector(
-						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f
-								+ Glv.spaceCubeSize * 0.5f,
+						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f + Glv.spaceCubeSize * 0.5f-Glv.spaceCubeSize*3f,
 						(Glv.spaceCubeSize * j) - (Glv.spaceCubeSize * Glv.spaceDivisionY) * 0.5f - Glv.spaceCubeSize,
 						0);
 				rectangles[i][j] = new MyRect(p, position);
