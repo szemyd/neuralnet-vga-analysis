@@ -5,6 +5,7 @@ import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import controlP5.Println;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class Network {
 	private static PApplet p;
@@ -24,19 +25,35 @@ public class Network {
 
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
-				m_input_layer[i][j] = new Neuron(p);
+				PVector position = new PVector(
+						(Glv.neuronSize * 1.2f * i)
+								+ (p.width / 4 - (Glv.neuronSize * 1.2f * m_input_layer.length) * 0.5f),
+						(Glv.neuronSize * 1.2f * j)
+								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_input_layer[0].length) * 0.5f));
+				m_input_layer[i][j] = new Neuron(p, position);
 			}
 		}
 
 		for (int i = 0; i < m_hidden_layer.length; i++) {
 			for (int j = 0; j < m_hidden_layer[i].length; j++) {
-				m_hidden_layer[i][j] = new Neuron(p, m_input_layer);
+				PVector position = new PVector(
+						(Glv.neuronSize * 1.2f * i)
+								+ (2f * p.width / 4 - (Glv.neuronSize * 1.2f * m_hidden_layer.length) * 0.5f),
+						(Glv.neuronSize * 1.2f * j
+								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_hidden_layer[0].length) * 0.5f)));
+
+				m_hidden_layer[i][j] = new Neuron(p, position, m_input_layer);
 			}
 		}
 
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
-				m_output_layer[i][j] = new Neuron(p, m_hidden_layer);
+				PVector position = new PVector(
+						(Glv.neuronSize * 1.2f * i)
+								+ (3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f),
+						(Glv.neuronSize * 1.2f * j) - (p.height / 4)
+								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f));
+				m_output_layer[i][j] = new Neuron(p, position, m_hidden_layer);
 			}
 		}
 	}
@@ -46,9 +63,9 @@ public class Network {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(p.width / 4 - (Glv.neuronSize * 1.2f * m_input_layer.length) * 0.5f,
-							p.height / 2 - (Glv.neuronSize * 1.2f * m_input_layer[0].length) * 0.5f);
-					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+					//					p.translate(p.width / 4 - (Glv.neuronSize * 1.2f * m_input_layer.length) * 0.5f,
+					//							p.height / 2 - (Glv.neuronSize * 1.2f * m_input_layer[0].length) * 0.5f);
+					//					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 					//	p.translate(i * (p.width / 3f) / m_input_layer.length, j * p.width / m_input_layer[i].length);
 					m_input_layer[i][j].draw();
 				}
@@ -74,10 +91,10 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
 				{
-					p.translate(0, -p.height / 4);
-					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f,
-							p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f);
-					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
+					//					p.translate(0, -p.height / 4);
+					//					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f,
+					//							p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f);
+					//					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 					m_output_layer[i][j].draw();
 				}
 				p.popMatrix();
@@ -118,16 +135,16 @@ public class Network {
 	}
 
 	public void train(Float[][] outputs) {
-		p.println("m_output_layer.length: " + m_output_layer.length + " | m_output_layer[0].length: "
-				+ m_output_layer[0].length);
-		p.println(" outputs.length: " + outputs.length);
+		//		p.println("m_output_layer.length: " + m_output_layer.length + " | m_output_layer[0].length: "
+		//				+ m_output_layer[0].length);
+		//		p.println(" outputs.length: " + outputs.length);
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
-				p.print(outputs[i][j] + ",");
+				//		p.print(outputs[i][j] + ",");
 				m_output_layer[i][j].setError(outputs[i][j]);
 				m_output_layer[i][j].train();
 			}
-			p.println("");
+			//p.println("");
 		}
 
 		for (int i = 0; i < m_hidden_layer.length; i++) {

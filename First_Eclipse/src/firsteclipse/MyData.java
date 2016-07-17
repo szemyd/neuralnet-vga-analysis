@@ -51,7 +51,6 @@ public class MyData {
 			}
 		}
 
-		/*
 		if (rForm != null) {
 			for (int i = 0; i < rForm.length; i++) {
 				for (int j = 0; j < rForm[i].length; j++) {
@@ -61,13 +60,13 @@ public class MyData {
 						p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
 								p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f));
 						p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
-		
+
 						if (rForm[i][j] != null) {
 							if (rForm[i][j] > 0.1f)
 								p.fill(360);
 							else
 								p.fill(0);
-		
+
 							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 						}
 					}
@@ -75,7 +74,6 @@ public class MyData {
 				}
 			}
 		}
-		*/
 	}
 
 	public void convert() {
@@ -92,7 +90,7 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (i < _analysis.length && j < _analysis[i].length)
 								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, 1000, -1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, Glv.highLowForNN.x, -1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}
@@ -156,68 +154,61 @@ public class MyData {
 				}
 				k++;
 			}
+		}
+	}
+}
+
+/* MARKKAL!
+ * 
+
+Float[][] thisIsIt = new Float[10][5];
+
+for (int i = 0; i < thisIsIt.length; i++) {
+	for (int j = 0; j < thisIsIt[i].length; j++) {
+		thisIsIt[i][j] = i * j * 30f;
+		p.println(thisIsIt[i]);
+	}
+}
+
+
+String[][] myArray = IntStream.range(0, 3).mapToObj(x -> IntStream.range(0, 3)
+				.mapToObj(y -> String.format("%c%c", letter(x), letter(y))).toArray(String[]::new))
+		.toArray(String[][]::new);
+
+for (int i = 0; i < thisIsIt.length; i++) {
+	Float[] myArrayList = EntryStream.of(thisIsIt).filterKeyValue((index, item) -> index % 4 == 0).values()
+			.toArray(size -> new Float[size]);
+}
+*/
+
+//form.stream().map();
+
+//p.println(myArrayList[0]);
+/*
+			for (int i = 0; i < _form.length; i += numToAdd) {
+				for (int j = 0; j < _form[i].length; j += numToAdd) {
+					if (i < rForm.length && j < rForm[i].length) {
+						rForm[(int)i/numToAdd][(int)j/numToAdd] = _form[i][j];
+						p.print(rForm[i][j]+ ",");
+					}
+				}
+				p.println();
+			}
 
 			for (int i = 0; i < rForm.length; i++) {
 				for (int j = 0; j < rForm[i].length; j++) {
-					p.print(rForm[i][j]);
+					if (rForm[i][j] == null)
+						p.print("it's null :-(");
+					else
+						p.print(rForm[i][j] + ",");
 				}
 				p.println("");
 			}
-		}
+*/
 
-		/* MARKKAL!
-		 * 
-		
-		Float[][] thisIsIt = new Float[10][5];
-		
-		for (int i = 0; i < thisIsIt.length; i++) {
-			for (int j = 0; j < thisIsIt[i].length; j++) {
-				thisIsIt[i][j] = i * j * 30f;
-				p.println(thisIsIt[i]);
-			}
-		}
-		
-		
-		String[][] myArray = IntStream.range(0, 3).mapToObj(x -> IntStream.range(0, 3)
-						.mapToObj(y -> String.format("%c%c", letter(x), letter(y))).toArray(String[]::new))
-				.toArray(String[][]::new);
-		
-		for (int i = 0; i < thisIsIt.length; i++) {
-			Float[] myArrayList = EntryStream.of(thisIsIt).filterKeyValue((index, item) -> index % 4 == 0).values()
-					.toArray(size -> new Float[size]);
-		}
-		*/
-
-		//form.stream().map();
-
-		//p.println(myArrayList[0]);
-		/*
-					for (int i = 0; i < _form.length; i += numToAdd) {
-						for (int j = 0; j < _form[i].length; j += numToAdd) {
-							if (i < rForm.length && j < rForm[i].length) {
-								rForm[(int)i/numToAdd][(int)j/numToAdd] = _form[i][j];
-								p.print(rForm[i][j]+ ",");
-							}
-						}
-						p.println();
-					}
-		
-					for (int i = 0; i < rForm.length; i++) {
-						for (int j = 0; j < rForm[i].length; j++) {
-							if (rForm[i][j] == null)
-								p.print("it's null :-(");
-							else
-								p.print(rForm[i][j] + ",");
-						}
-						p.println("");
-					}
-		*/
-
-		//		
-		//		for (int i = 0; i < _analysis.length; i++) {
-		//			for (int j = 0; j < _analysis[i].length; j++) {
-		//				
-		//			}
-		//		}
-	}
-}
+//		
+//		for (int i = 0; i < _analysis.length; i++) {
+//			for (int j = 0; j < _analysis[i].length; j++) {
+//				
+//			}
+//		}

@@ -3,7 +3,10 @@ package firsteclipse;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.sun.org.apache.bcel.internal.generic.POP;
+
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class Neuron {
 
@@ -16,14 +19,19 @@ public class Neuron {
 
 	float m_error;
 
+	PVector position = new PVector();
+
 	Random r = new Random();
 
-	public Neuron(PApplet _p) { // For INPUT neurons
+	public Neuron(PApplet _p, PVector _position) { // For INPUT neurons
 		p = _p;
+		position = _position;
+
 	}
 
-	public Neuron(PApplet _p, Neuron[][] inputs) { // For HIDDEN and OUTPUT neurons
+	public Neuron(PApplet _p, PVector _position, Neuron[][] inputs) { // For HIDDEN and OUTPUT neurons
 		p = _p;
+		position = _position;
 
 		m_inputs = new Neuron[inputs.length][inputs[0].length];
 		m_weights = new float[inputs.length][inputs[0].length];
@@ -46,11 +54,15 @@ public class Neuron {
 	}
 
 	void draw() {
-		p.fill(128 * (1 - m_output));
-		p.ellipse(0, 0,Glv.neuronSize, Glv.neuronSize);
+		p.pushMatrix();
+		{
+			p.translate(position.x, position.y);
+			p.fill(180 * (1 - m_output));
+			p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+		}
+		p.popMatrix();
 	}
 
-	
 	void setError(float desired) {
 		m_error = desired - m_output;
 	}
