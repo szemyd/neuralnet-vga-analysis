@@ -55,8 +55,12 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN == null) {
 			Glv.threadNN = new MyThreadNeuralNet(this, 999);
 			Glv.threadNN.start();
-		} else
+			env.cp5.remove("setupNeuralNetwork");
+			env.cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(env.g1)
+					.plugTo(Glv.threadNN.net);
+		} else {
 			println("Data already loaded");
+		}
 	}
 
 	public void analysisSetup() {
@@ -121,7 +125,8 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threads != null) {
 				if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
 					if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
-							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null && Glv.threads.get(Glv.whichToDisplay).manBox != null) {
+							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null
+							&& Glv.threads.get(Glv.whichToDisplay).manBox != null) {
 						Glv.threads.get(Glv.whichToDisplay).manBox.draw();
 					}
 					if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
@@ -135,7 +140,7 @@ public class FirstEclipse extends PApplet {
 
 	public void drawTeaching() {
 		if (Glv.threadNN != null) {
-			if (Glv.threadNN.net.dataLoaded) {
+			if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
 				env.cam.beginHUD();
 				{
 					noLights();

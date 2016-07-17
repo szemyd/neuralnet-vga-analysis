@@ -142,9 +142,6 @@ public class MyData {
 			int numToAdd = (int) (Glv.cubeSizeReduced / Glv.cubeSize);
 			rForm = new Float[(int) (p.floor(_form.length / numToAdd))][(int) p.floor(_form[0].length / numToAdd)];
 
-			p.println("rForm.length: " + rForm.length + "rForm[0].length: " + rForm[0].length + "_form.length: "
-					+ _form.length + "_form[0].length: " + _form[0].length);
-
 			int k = 0;
 			for (int i = 0; i <= _form.length - numToAdd; i += numToAdd) {
 				int l = 0;

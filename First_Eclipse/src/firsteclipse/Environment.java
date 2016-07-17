@@ -39,6 +39,7 @@ public class Environment {
 
 	PShape s;
 	
+	public Group g1,g2;
 
 	//Textarea myTextarea;
 	//Println console;
@@ -75,24 +76,41 @@ public class Environment {
 		// cam.setMaximumDistance(500);
 		cp5.enableShortcuts();
 
-		Group g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
-		Group g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
+		g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		//Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
 		cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		cp5.addSlider("numberOfThreads").setPosition(10, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5).moveTo(g2);
+		cp5.addSlider("numberOfThreads").setPosition(10, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
+				.moveTo(g2);
 		cp5.addToggle("DimensionalityReduction").setValue(false).setPosition(80, 20).setSize(100, 19).moveTo(g2);
-		
-		//.plugTo(this,	"shuffle");
-		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
 
-		accordion.open(0, 1, 2);
+		//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
+		//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
+		//		;
+
+		//.plugTo(this,	"shuffle");
+
 		//accordion.close(1);
-		accordion.setCollapseMode(Accordion.MULTI);
+
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(440).addItem(g1);
+		accordion = cp5.addAccordion("what").setPosition(480, 40).setWidth(300).addItem(g2);
+
+		accordion.open(0, 1);
+
+		/*
+				accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
+				accordion.open(0, 1, 2);
+				accordion.setCollapseMode(Accordion.MULTI);
+				*/
 
 		/*	
+		  
+		 
 			p.frameRate(50);
 			myTextarea = cp5.addTextarea("txt").setPosition(100, 100).setSize(200, 200).setFont(p.createFont("", 10))
 					.setLineHeight(14).setColor(p.color(200)).setColorBackground(p.color(0, 100))
@@ -117,15 +135,15 @@ public class Environment {
 	}
 
 	public void draw() {
-		p.pushStyle();
-		{
-			p.strokeWeight(5.0f);
-			p.stroke(360, 0, 360);
-			for (Building building : buildings) {
-				building.draw();
-			}
-		}
-		p.popStyle();
+		//		p.pushStyle();
+		//		{
+		//			p.strokeWeight(5.0f);
+		//			p.stroke(360, 0, 360);
+		//			for (Building building : buildings) {
+		//				building.draw();
+		//			}
+		//		}
+		//		p.popStyle();
 
 		p.pushMatrix();
 		{
@@ -240,12 +258,12 @@ public class Environment {
 	}
 
 	public void numberOfThreads(float theValue) {
-		Glv.numOfThreads=(int)theValue;
-		}
-	
+		Glv.numOfThreads = (int) theValue;
+	}
+
 	public void controlEvent(ControlEvent theEvent) {
-			p.println(theEvent.getController().getName());
-	
+		p.println(theEvent.getController().getName());
+
 		//
 		//		if (theEvent.isController()) {
 		//
@@ -256,10 +274,14 @@ public class Environment {
 		//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
 		//			}
 		//		}
-		if (theEvent.getName() == "Number_Of_Threads")
-		{
+		if (theEvent.getName() == "Number_Of_Threads") {
 			Glv.numOfThreads = (int) theEvent.getController().getValue();
 		}
+
+		if (theEvent.getName() == "setupNeuralNetwork") {
+			System.out.println("Please load data first");
+		}
+
 		p.println("Number of threads: " + Glv.numOfThreads);
 	}
 }

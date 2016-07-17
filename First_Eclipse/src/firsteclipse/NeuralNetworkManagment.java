@@ -23,7 +23,7 @@ public class NeuralNetworkManagment {
 	public ArrayList<MyData> testingSet = new ArrayList<MyData>();
 
 	public Network neuralnet;
-	public boolean dataLoaded=false;
+	public boolean dataLoaded = false;
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
@@ -44,91 +44,93 @@ public class NeuralNetworkManagment {
 		String cvsSplitBy = ",";
 		int numberOfAnalysis = 0;
 
-		for (int i = 0; i < listOfFiles.length; i++) {
+		if (!dataLoaded) {
+			for (int i = 0; i < listOfFiles.length; i++) {
 
-			try {
-				testingSet.add(new MyData(p));
-				trainingSet.add(new MyData(p));
-				boolean analysisOrForm = false;
-				boolean isItID = true;
+				try {
+					testingSet.add(new MyData(p));
+					trainingSet.add(new MyData(p));
+					boolean analysisOrForm = false;
+					boolean isItID = true;
 
-				br = new BufferedReader(new FileReader(listOfFiles[i]));
-				while ((line = br.readLine()) != null) {
+					br = new BufferedReader(new FileReader(listOfFiles[i]));
+					while ((line = br.readLine()) != null) {
 
-					MyData data;
+						MyData data;
 
-					if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
-						data = trainingSet.get(trainingSet.size() - 1);
-					else
-						data = testingSet.get(testingSet.size() - 1);
-					String[] thisRow = line.split(cvsSplitBy);
+						if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
+							data = trainingSet.get(trainingSet.size() - 1);
+						else
+							data = testingSet.get(testingSet.size() - 1);
+						String[] thisRow = line.split(cvsSplitBy);
 
-					for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
+						for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
 
-						if (!thisRow[j].isEmpty()) {
-							char c = thisRow[j].charAt(0);
+							if (!thisRow[j].isEmpty()) {
+								char c = thisRow[j].charAt(0);
 
-							if (isItID) { // If this switch is on then store the file as an ID.
-								data.analysisID = Integer.valueOf(thisRow[j]);
-								//p.println(thisRow[j]);
-								isItID = false;
-							} else if (c == '_') {
-								if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
-									trainingSet.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
-								else
-									testingSet.add(new MyData(p));
-								analysisOrForm = false;
-								numberOfAnalysis++;
-								isItID = true;
-								break;
-							} else if (c == ':') {
-								analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
-								isItID = false;
-								break;
-							} else {
-								if (analysisOrForm) {
-									data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+								if (isItID) { // If this switch is on then store the file as an ID.
+									data.analysisID = Integer.valueOf(thisRow[j]);
+									//p.println(thisRow[j]);
+									isItID = false;
+								} else if (c == '_') {
+									if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
+										trainingSet.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
+									else
+										testingSet.add(new MyData(p));
+									analysisOrForm = false;
+									numberOfAnalysis++;
+									isItID = true;
+									break;
+								} else if (c == ':') {
+									analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
 									isItID = false;
 									break;
 								} else {
-									data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
-									isItID = false;
-									break;
+									if (analysisOrForm) {
+										data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+										isItID = false;
+										break;
+									} else {
+										data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
+										isItID = false;
+										break;
+									}
 								}
 							}
 						}
 					}
-				}
 
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (br != null) {
+						try {
+							br.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
+
 			}
 
-		}
+			if (Glv.shP)
+				p.println("Training set size: " + trainingSet.size());
+			if (Glv.shP)
+				p.println("Testing set size: " + testingSet.size());
 
-		if (Glv.shP)
-			p.println("Training set size: " + trainingSet.size());
-		if (Glv.shP)
-			p.println("Testing set size: " + testingSet.size());
+			cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
+			setHighLow(); // Calculates the range of visibility in the data.
+			convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
+			extractValuableData(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
+			//setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
 
-		cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
-		setHighLow(); // Calculates the range of visibility in the data.
-		convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
-		extractValuableData(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
-		setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
-		
-		
-		dataLoaded=true;
+			dataLoaded = true;
+		} else
+			System.out.println("Data has already been loaded.");
 	}
 
 	private void cleanupReadData() {
@@ -184,13 +186,12 @@ public class NeuralNetworkManagment {
 		}
 		p.println("Max visibility: " + Glv.highLowForNN.x + " | Min visibility: " + Glv.highLowForNN.y);
 	}
-	
-	public void extractValuableData()
-	{
+
+	public void extractValuableData() {
 		for (MyData data : testingSet) {
 			data.extractValuableData();
 		}
-		
+
 		for (MyData data : trainingSet) {
 			data.extractValuableData();
 		}
@@ -198,15 +199,25 @@ public class NeuralNetworkManagment {
 	//<---
 
 	//---> NEURAL NETWORK
-	private void setupNeuralNetwork() {
-		neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-				p.floor(trainingSet.get(0)._analysis.length *1.2f), p.floor(trainingSet.get(0)._analysis.length *1.2f),
-				trainingSet.get(0).rForm.length, trainingSet.get(0).rForm[2].length);
+	public void setupNeuralNetwork() {
+		if (dataLoaded) {
+			if (neuralnet == null) {
+				neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
+						p.floor(trainingSet.get(0)._analysis.length * 1.2f),
+						p.floor(trainingSet.get(0)._analysis.length * 1.2f), trainingSet.get(0).rForm.length,
+						trainingSet.get(0).rForm[2].length);
 
-		p.println("InputSize: " + trainingSet.get(0)._analysis.length + " | " + trainingSet.get(0)._analysis[2].length + " HiddenSize: " + 
-				p.floor(trainingSet.get(0)._analysis.length *1.2f) + " | " +  p.floor(trainingSet.get(0)._analysis.length *1.2f) + " OutputSize: " + 
-				trainingSet.get(0).rForm.length +" | " + trainingSet.get(0).rForm[2].length);
-		neuralnet.respond(trainingSet.get(0));
+				System.out.println("InputSize: " + trainingSet.get(0)._analysis.length + " | "
+						+ trainingSet.get(0)._analysis[2].length + " HiddenSize: "
+						+ p.floor(trainingSet.get(0)._analysis.length * 1.2f) + " | "
+						+ p.floor(trainingSet.get(0)._analysis.length * 1.2f) + " OutputSize: "
+						+ trainingSet.get(0).rForm.length + " | " + trainingSet.get(0).rForm[2].length);
+				neuralnet.respond(trainingSet.get(0));
+			} else
+				System.out.println("Neural Net already created.");
+		}
+		else
+			System.out.println("Please Load Data");
 	}
 
 	public void trainNN() {
@@ -216,8 +227,8 @@ public class NeuralNetworkManagment {
 			if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
 				neuralnet.respond(trainingSet.get(row));
 				neuralnet.train(trainingSet.get(row).rForm);
-			}
-			else p.println("Card was NULL");
+			} else
+				p.println("Card was NULL");
 		}
 	}
 
