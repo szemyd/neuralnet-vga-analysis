@@ -38,8 +38,10 @@ public class Environment {
 	PeasyCam cam;
 
 	PShape s;
-	
-	public Group g1,g2;
+
+	public Group g1, g2, g3;
+	Bang b1,b2,b3;
+	RadioButton modeSwitch;
 
 	//Textarea myTextarea;
 	//Println console;
@@ -48,26 +50,7 @@ public class Environment {
 		p = _p;
 	}
 
-	//	private void keyPressed() {
-	//		switch (p.key) {
-	//		case ('1'):
-	//			console.pause();
-	//			break;
-	//		case ('2'):
-	//			console.play();
-	//			break;
-	//		case ('3'):
-	//			console.setMax(8);
-	//			break;
-	//		case ('4'):
-	//			console.setMax(-1);
-	//			break;
-	//		case ('5'):
-	//			console.clear();
-	//			break;
-	//		}
-	//	}
-
+	
 	public void setupGui(boolean DimensionalityReduction) {
 
 		cp5 = new ControlP5(p);
@@ -75,20 +58,34 @@ public class Environment {
 		// cam.setMinimumDistance(50);
 		// cam.setMaximumDistance(500);
 		cp5.enableShortcuts();
-
+		
+		cp5.begin(100,20);
+		
+		//cp5.loadProperties(("controlP5.json"));
+		
+		
 		g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
 		g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		//Group g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
-		cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		b1= cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		b2=cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		b3=cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		cp5.addSlider("numberOfThreads").setPosition(10, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
-				.moveTo(g2);
-		cp5.addToggle("DimensionalityReduction").setValue(false).setPosition(80, 20).setSize(100, 19).moveTo(g2);
+		modeSwitch= cp5.addRadioButton("radio").setPosition(10, 20).setItemWidth(20).setItemHeight(20).setItemsPerRow(3)
+				.addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
+				.setColorLabel(p.color(255)).activate(0).moveTo(g2);
 
+		modeSwitch.plugTo(Glv.programMode);
+		
+		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5).plugTo(Glv.numOfThreads)
+				.moveTo(g3);
+		cp5.addSlider("numberOfSolutions").setPosition(50, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions)
+		.moveTo(g3);
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(90, 20).setSize(100, 19).moveTo(g3).plugTo(Glv.shouldDimReduction);
+		
+		cp5.addButton("plug",2);
 		//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
 		//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
 		//		;
@@ -98,9 +95,14 @@ public class Environment {
 		//accordion.close(1);
 
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(440).addItem(g1);
-		accordion = cp5.addAccordion("what").setPosition(480, 40).setWidth(300).addItem(g2);
+		accordion.open(0, 1, 2);
+		accordion = cp5.addAccordion("what").setPosition(490, 40).setWidth(300).addItem(g2);
 
-		accordion.open(0, 1);
+		accordion.open(0, 1, 2);
+		accordion = cp5.addAccordion("yes").setPosition(800, 40).setWidth(300).addItem(g3);
+
+		accordion.open(0, 1, 2);
+		accordion.setCollapseMode(Accordion.MULTI);
 
 		/*
 				accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
@@ -157,10 +159,15 @@ public class Environment {
 
 				p.translate(0, 0, -.01f);
 
+			
+				s.setFill(p.color(p.random(255)));
 				s.disableStyle();
-				p.fill(250);
+			//	s.enableStyle();
+				p.fill(360,0,360);
+				
 				p.shape(s, 0, 0);
 				s.enableStyle();
+				//s.disableStyle();
 
 			}
 			p.popStyle();
@@ -259,6 +266,23 @@ public class Environment {
 
 	public void numberOfThreads(float theValue) {
 		Glv.numOfThreads = (int) theValue;
+	}
+	
+	private void DimensionalityReduction()
+	{
+		p.println("Dimensionality reduction pressed");
+	}
+	
+	public void numberOfThreads(int theValue)
+	{
+		Glv.numOfThreads=theValue;
+		p.println("I have registered nubmerOfThreads");
+	}
+	
+	private void plug(int theValue)
+	{
+		Glv.programMode =	theValue;
+		p.println("I have registered the radio.");
 	}
 
 	public void controlEvent(ControlEvent theEvent) {

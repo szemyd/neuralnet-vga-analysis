@@ -246,6 +246,18 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
+	/*
+	 * FOR CONTROLLER
+	 */
+	public void numberOfThreads(int theValue) {
+		Glv.numOfThreads = theValue;
+	}
+
+	public void dimensionalityReduction(boolean theValue) {
+		Glv.shouldDimReduction = theValue;
+		println(Glv.shouldDimReduction);
+	}
+
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });
 	}
