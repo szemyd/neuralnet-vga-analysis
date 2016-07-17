@@ -17,29 +17,29 @@ public class Glv {
 	public static boolean shP = true; // Should it print to the console?
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
-	
-	
+
 	//---> Solution settings and optimal calculation
 	public static int numOfThreads = 1; // How many parallel threads should there be
-	public static int numOfSolutions =1; // How many solutions do I want to generate
+	public static int numOfSolutions = 1; // How many solutions do I want to generate
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
 	public static float spaceCubeSize = 5f; // How big is the one grid rectangle.
 
 	public static float roomSizeX = 129.4f; // How big is the park
-	public static float roomSizeY = 160.42f; 
+	public static float roomSizeY = 160.42f;
 
 	public static float spaceRoomSizeX = 129.4f * 1.5f; // How big is the SpaceSyntax analysis.
 	public static float spaceRoomSizeY = 160.42f * 1.5f;
 
 	//---> NEURAL NETWORK
-	public static float LEARNING_RATE= 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
+	public static float LEARNING_RATE = 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
-	
+	public static ArrayList<ArrayList<Integer>> whichInputs = new ArrayList<ArrayList<Integer>>();
+
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?
-	
+
 	/* 
 	 * OTHER GLOBAL VARIABLES
 	 */
@@ -60,10 +60,10 @@ public class Glv {
 	public static PVector highLow = new PVector(0f, 1000f);
 	//public static ArrayList<String> toNN = new ArrayList<String>();
 	public static PVector highLowForNN = new PVector(0f, 1000f);
-	
+
 	public static ArrayList<MyThread> threads = new ArrayList<MyThread>();
 	public static MyThreadNeuralNet threadNN;
-	public static boolean threadSuspended=false;
+	public static boolean threadSuspended = false;
 
-	public static int neuronSize=16;
+	public static int neuronSize = 16;
 }

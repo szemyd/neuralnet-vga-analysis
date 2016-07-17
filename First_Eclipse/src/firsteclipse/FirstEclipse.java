@@ -108,7 +108,7 @@ public class FirstEclipse extends PApplet {
 			break;
 
 		case 3:
-			drawFormLoaded();
+			drawEditor();
 			break;
 		}
 
@@ -151,8 +151,18 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
-	public void drawFormLoaded() {
-
+	public void drawEditor() {
+		if (Glv.threadNN != null) {
+			if (Glv.threadNN.net.dataLoaded) {
+				env.cam.beginHUD();
+				{
+					//translate(width/4,);
+					noLights();
+					env.drawEditor();
+				}
+				env.cam.endHUD();
+			}
+		}
 	}
 
 	public void drawAnalysis() {
@@ -216,6 +226,38 @@ public class FirstEclipse extends PApplet {
 		Glv.programMode = constrain(Glv.programMode, 0, 3);
 	}
 
+	public void mousePressed() {
+		println("mouse pressed");
+
+		if (Glv.programMode == 3) {
+			if (env.editorLayer != null)
+				for (int i = 0; i < env.editorLayer.length; i++) {
+					for (int j = 0; j < env.editorLayer[i].length; j++) {
+
+						if (mouseX > env.editorLayer[i][j].position.x - Glv.neuronSize
+								&& mouseX < env.editorLayer[i][j].position.x + Glv.neuronSize
+								&& mouseY > env.editorLayer[i][j].position.y - Glv.neuronSize
+								&& mouseY < env.editorLayer[i][j].position.y + Glv.neuronSize) {
+
+							env.editorLayer[i][j].m_error = -1;
+
+							if (Glv.whichInputs != null) {
+								if (Glv.whichInputs.get(i) == null) {
+									Glv.whichInputs.add(new ArrayList<Integer>());
+									Glv.whichInputs.get(i).add(1);
+								} else if (Glv.whichInputs.get(i).get(j) == null) { // If the element j is null then add a one.
+									Glv.whichInputs.get(i).add(1);
+								} else
+									Glv.whichInputs.get(i).remove(j); // If it is clicked again but is already in the list then remove it.
+							} else
+								env.editorLayer[i][j].m_error = 1;
+						}
+					}
+				}
+		}
+
+	}
+
 	/*
 	 * OUTPUT
 	 */
@@ -256,6 +298,13 @@ public class FirstEclipse extends PApplet {
 	public void dimensionalityReduction(boolean theValue) {
 		Glv.shouldDimReduction = theValue;
 		println(Glv.shouldDimReduction);
+	}
+
+	public void startEditor() {
+		println("I have entered this");
+		if (Glv.threadNN != null)
+			if (Glv.threadNN.net.dataLoaded)
+				env.myEditor();
 	}
 
 	public static void main(String _args[]) {
