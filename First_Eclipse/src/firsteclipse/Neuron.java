@@ -23,6 +23,7 @@ public class Neuron {
 	PVector position = new PVector();
 
 	Random r = new Random();
+	public boolean iAmChosen =false;
 
 	public Neuron(PApplet _p, PVector _position) { // For INPUT neurons
 		p = _p;

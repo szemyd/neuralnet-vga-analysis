@@ -193,48 +193,14 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void mousePressed() {
-		//println("mouse pressed");
-
 		if (Glv.programMode == 3) {
-			if (env.editorLayer != null) {
-				for (int i = 0; i < env.editorLayer.length; i++) {
-					for (int j = 0; j < env.editorLayer[i].length; j++) {
+			env.reactEditor();
+		}
+	}
 
-						if (mouseX > env.editorLayer[i][j].position.x - Glv.neuronSize * 0.5f
-								&& mouseX < env.editorLayer[i][j].position.x + Glv.neuronSize * 0.5f
-								&& mouseY > env.editorLayer[i][j].position.y - Glv.neuronSize * 0.5f
-								&& mouseY < env.editorLayer[i][j].position.y + Glv.neuronSize * 0.5f) {
-
-							env.editorLayer[i][j].colour = 360;
-
-							if (Glv.whichInputs == null) { // If the object does't exist initialise it.
-								Glv.whichInputs = new ArrayList<ArrayList<Integer>>();
-								System.out.println("Glv.whichInputs was null.");
-								
-								Glv.whichInputs.add(new ArrayList<Integer>());
-								Glv.whichInputs.get(i).add(1);
-							} else {
-								if (Glv.whichInputs.size() > 0) {
-									System.out.println("I'm going to add a point.");
-									//System.out.println("Glv.whichInputs.get(i): " + Glv.whichInputs.get(i));
-									if (Glv.whichInputs.size() < i) {
-										Glv.whichInputs.add(new ArrayList<Integer>());
-										Glv.whichInputs.get(i).add(1);
-									} else if (Glv.whichInputs.get(i).size() < j) { // If the element j is null then add a one.
-										Glv.whichInputs.get(i).add(1);
-									} else {
-										Glv.whichInputs.get(i).remove(j); // If it is clicked again but is already in the list then remove it.
-										env.editorLayer[i][j].colour = 0;
-										System.out.println("I'm going to remove element");
-									}
-								} else {
-									env.editorLayer[i][j].colour = 360;
-								}
-							}
-						}
-					}
-				}
-			}
+	public void mouseDragged() {
+		if (Glv.programMode == 3) {
+			env.reactEditor();
 		}
 	}
 
@@ -328,3 +294,32 @@ public class FirstEclipse extends PApplet {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });
 	}
 }
+
+//if (Glv.whichInputs == null) { // If the object does't exist initialise it.
+//	Glv.whichInputs = new ArrayList<ArrayList<Integer>>();
+//	System.out.println("Glv.whichInputs was null.");
+//
+//	Glv.whichInputs.add(new ArrayList<Integer>());
+//	Glv.whichInputs.get(i).add(1);
+//} else {
+//	if (Glv.whichInputs.size() > 0) {
+//		System.out.println("I'm going to add a point.");
+//		//System.out.println("Glv.whichInputs.get(i): " + Glv.whichInputs.get(i));
+//		if (Glv.whichInputs.size() < i) {
+//			Glv.whichInputs.add(new ArrayList<Integer>());
+//			Glv.whichInputs.get(i).add(1);
+//		} else if (Glv.whichInputs.size() > i) { // If the element j is null then add a one.
+//			if (Glv.whichInputs.get(i).size() < j) {
+//				Glv.whichInputs.get(i).add(1);
+//			}
+//		} else {
+//			Glv.whichInputs.get(i).remove(j); // If it is clicked again but is already in the list then remove it.
+//			if (Glv.whichInputs.size() == 0)
+//				Glv.whichInputs = null;
+//			env.editorLayer[i][j].colour = 0;
+//			System.out.println("I'm going to remove element");
+//		}
+//	} else {
+//		env.editorLayer[i][j].colour = 360;
+//	}
+//}

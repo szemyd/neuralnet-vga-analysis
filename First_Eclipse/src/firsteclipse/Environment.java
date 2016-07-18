@@ -269,7 +269,7 @@ public class Environment {
 	public void myEditor() {
 		p.println("I have reached this.");
 
-		MyData card = Glv.threadNN.net.testingSet.get(382); //Glv.cardContainingHighest);
+		MyData card = Glv.threadNN.net.testingSet.get(Glv.cardContainingHighest); //Glv.cardContainingHighest);
 		
 		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
 				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
@@ -287,6 +287,28 @@ public class Environment {
 		}
 	}
 
+	public void reactEditor()
+	{
+		if (editorLayer != null) {
+			for (int i = 0; i < editorLayer.length; i++) {
+				for (int j = 0; j < editorLayer[i].length; j++) {
+
+					if (p.mouseX > editorLayer[i][j].position.x - Glv.neuronSize * 0.5f
+							&& p.mouseX < editorLayer[i][j].position.x + Glv.neuronSize * 0.5f
+							&& p.mouseY > editorLayer[i][j].position.y - Glv.neuronSize * 0.5f
+							&& p.mouseY < editorLayer[i][j].position.y + Glv.neuronSize * 0.5f) {
+
+						editorLayer[i][j].iAmChosen = !editorLayer[i][j].iAmChosen;
+						if (editorLayer[i][j].iAmChosen) {
+							editorLayer[i][j].colour = 360;
+						}
+						else editorLayer[i][j].colour = 0;
+					}
+				}
+			}
+		}
+	}
+	
 	public void controlEvent(ControlEvent theEvent) {
 		p.println(theEvent.getController().getName());
 
