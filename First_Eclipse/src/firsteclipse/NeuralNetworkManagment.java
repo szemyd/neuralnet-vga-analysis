@@ -170,7 +170,11 @@ public class NeuralNetworkManagment {
 				for (int i = 0; i < strings.length; i++) {
 					int num = Integer.valueOf(strings[i]);
 					if (num > Glv.highLowForNN.x)
+					{
 						Glv.highLowForNN.x = num;
+						Glv.cardContainingHighest=testingSet.indexOf(data);
+						p.println("Card containing lowest: " + Glv.cardContainingHighest);
+					}
 					if (num < Glv.highLowForNN.y && num > 6)
 						Glv.highLowForNN.y = num;
 				}

@@ -35,7 +35,7 @@ public class Glv {
 	//---> NEURAL NETWORK
 	public static float LEARNING_RATE = 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
-	public static ArrayList<ArrayList<Integer>> whichInputs = new ArrayList<ArrayList<Integer>>();
+	public static ArrayList<ArrayList<Integer>> whichInputs;// = new ArrayList<ArrayList<Integer>>();
 
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?
@@ -57,9 +57,13 @@ public class Glv {
 	public static int isDone = 0;
 	public static boolean isDoneBool = false;
 
+	/*
+	 * For SpaceSytntax
+	 */
 	public static PVector highLow = new PVector(0f, 1000f);
 	//public static ArrayList<String> toNN = new ArrayList<String>();
 	public static PVector highLowForNN = new PVector(0f, 1000f);
+	public static int cardContainingHighest=0;
 
 	public static ArrayList<MyThread> threads = new ArrayList<MyThread>();
 	public static MyThreadNeuralNet threadNN;

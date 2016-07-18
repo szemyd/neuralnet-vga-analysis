@@ -23,6 +23,7 @@ import peasy.*;
 import controlP5.*;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PShape;
 import processing.core.PVector;
 import sun.net.www.content.text.plain;
@@ -39,7 +40,7 @@ public class Environment {
 
 	PShape s;
 
-	public  Neuron[][] editorLayer;;
+	public Neuron[][] editorLayer;;
 
 	public Group g1, g2, g3;
 	Bang b1, b2, b3, b4;
@@ -62,6 +63,9 @@ public class Environment {
 
 		cp5.begin(100, 20);
 
+		PFont pfont = p.createFont("Arial", 20, true); // use true/false for smooth/no-smooth
+		ControlFont font = new ControlFont(pfont, 241);
+
 		//cp5.loadProperties(("controlP5.json"));
 
 		g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
@@ -70,9 +74,9 @@ public class Environment {
 
 		b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		b3 = cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this,
+		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,
 				"shuffle");
-		b4 = cp5.addBang("startEditor").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
 		modeSwitch = cp5.addRadioButton("radio").setPosition(10, 20).setItemWidth(20).setItemHeight(20)
@@ -82,13 +86,14 @@ public class Environment {
 		modeSwitch.plugTo(Glv.programMode);
 
 		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
-				.plugTo(Glv.numOfThreads).moveTo(g3);
+				.plugTo(p, "numOfThreads").moveTo(g3);
+
 		cp5.addSlider("numberOfSolutions").setPosition(50, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g3);
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(90, 20).setSize(100, 19).moveTo(g3)
 				.plugTo(Glv.shouldDimReduction);
 
-		cp5.addButton("plug", 2);
+		//cp5.addButton("plug", 2);
 		//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
 		//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
 		//		;
@@ -263,9 +268,12 @@ public class Environment {
 
 	public void myEditor() {
 		p.println("I have reached this.");
+
+		MyData card = Glv.threadNN.net.testingSet.get(382); //Glv.cardContainingHighest);
 		
-		editorLayer = new Neuron[Glv.threadNN.net.trainingSet.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
-		
+		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
+				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
+
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
 				PVector position = new PVector(
@@ -274,11 +282,11 @@ public class Environment {
 						(Glv.neuronSize * 1.2f * j)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
 				editorLayer[i][j] = new Neuron(p, position);
+				editorLayer[i][j].m_output = card._analysis[i][j];
 			}
 		}
 	}
 
-	
 	public void controlEvent(ControlEvent theEvent) {
 		p.println(theEvent.getController().getName());
 

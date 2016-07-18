@@ -18,6 +18,7 @@ public class Neuron {
 	float[][] m_weights;
 
 	float m_error;
+	int colour=0;
 
 	PVector position = new PVector();
 
@@ -57,7 +58,7 @@ public class Neuron {
 		p.pushMatrix();
 		{
 			p.translate(position.x, position.y);
-			p.fill(180 * (1 - m_output));
+			p.fill(360,colour,180 * (1 - m_output));
 			p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 		}
 		p.popMatrix();

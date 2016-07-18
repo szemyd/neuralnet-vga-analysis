@@ -51,42 +51,6 @@ public class FirstEclipse extends PApplet {
 		//dataAnalysis.setup();
 	}
 
-	public void loadDataSetup() {
-		if (Glv.threadNN == null) {
-			Glv.threadNN = new MyThreadNeuralNet(this, 999);
-			Glv.threadNN.start();
-			env.cp5.remove("setupNeuralNetwork");
-			env.cp5.addBang("setupNeuralNetwork").setPosition(230, 20).setSize(100, 100).moveTo(env.g1)
-					.plugTo(Glv.threadNN.net);
-		} else {
-			println("Data already loaded");
-		}
-	}
-
-	public void analysisSetup() {
-		Glv.threads = new ArrayList<MyThread>();
-		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
-
-		for (int i = 0; i < Glv.numOfThreads; i++) {
-			Glv.threads.add(new MyThread(this, Glv.howManyUntilNow + i));
-		}
-
-		for (MyThread thread : Glv.threads) {
-			if (!thread.VGADone) // If it is a new thread then start it!
-				thread.start();
-		}
-	}
-
-	public void stopAnalysis() {
-		Glv.threadSuspended = !Glv.threadSuspended;
-
-		if (!Glv.threadSuspended) {
-			for (MyThread thread : Glv.threads) {
-				thread.notify();
-			}
-		}
-	}
-
 	/*
 	 * DRAW FUNCTIONS
 	 */
@@ -154,13 +118,15 @@ public class FirstEclipse extends PApplet {
 	public void drawEditor() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
-				env.cam.beginHUD();
-				{
-					//translate(width/4,);
-					noLights();
-					env.drawEditor();
+				if (env.editorLayer != null) {
+					env.cam.beginHUD();
+					{
+						//translate(width/4,);
+						noLights();
+						env.drawEditor();
+					}
+					env.cam.endHUD();
 				}
-				env.cam.endHUD();
 			}
 		}
 	}
@@ -227,35 +193,49 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void mousePressed() {
-		println("mouse pressed");
+		//println("mouse pressed");
 
 		if (Glv.programMode == 3) {
-			if (env.editorLayer != null)
+			if (env.editorLayer != null) {
 				for (int i = 0; i < env.editorLayer.length; i++) {
 					for (int j = 0; j < env.editorLayer[i].length; j++) {
 
-						if (mouseX > env.editorLayer[i][j].position.x - Glv.neuronSize
-								&& mouseX < env.editorLayer[i][j].position.x + Glv.neuronSize
-								&& mouseY > env.editorLayer[i][j].position.y - Glv.neuronSize
-								&& mouseY < env.editorLayer[i][j].position.y + Glv.neuronSize) {
+						if (mouseX > env.editorLayer[i][j].position.x - Glv.neuronSize * 0.5f
+								&& mouseX < env.editorLayer[i][j].position.x + Glv.neuronSize * 0.5f
+								&& mouseY > env.editorLayer[i][j].position.y - Glv.neuronSize * 0.5f
+								&& mouseY < env.editorLayer[i][j].position.y + Glv.neuronSize * 0.5f) {
 
-							env.editorLayer[i][j].m_error = -1;
+							env.editorLayer[i][j].colour = 360;
 
-							if (Glv.whichInputs != null) {
-								if (Glv.whichInputs.get(i) == null) {
-									Glv.whichInputs.add(new ArrayList<Integer>());
-									Glv.whichInputs.get(i).add(1);
-								} else if (Glv.whichInputs.get(i).get(j) == null) { // If the element j is null then add a one.
-									Glv.whichInputs.get(i).add(1);
-								} else
-									Glv.whichInputs.get(i).remove(j); // If it is clicked again but is already in the list then remove it.
-							} else
-								env.editorLayer[i][j].m_error = 1;
+							if (Glv.whichInputs == null) { // If the object does't exist initialise it.
+								Glv.whichInputs = new ArrayList<ArrayList<Integer>>();
+								System.out.println("Glv.whichInputs was null.");
+								
+								Glv.whichInputs.add(new ArrayList<Integer>());
+								Glv.whichInputs.get(i).add(1);
+							} else {
+								if (Glv.whichInputs.size() > 0) {
+									System.out.println("I'm going to add a point.");
+									//System.out.println("Glv.whichInputs.get(i): " + Glv.whichInputs.get(i));
+									if (Glv.whichInputs.size() < i) {
+										Glv.whichInputs.add(new ArrayList<Integer>());
+										Glv.whichInputs.get(i).add(1);
+									} else if (Glv.whichInputs.get(i).size() < j) { // If the element j is null then add a one.
+										Glv.whichInputs.get(i).add(1);
+									} else {
+										Glv.whichInputs.get(i).remove(j); // If it is clicked again but is already in the list then remove it.
+										env.editorLayer[i][j].colour = 0;
+										System.out.println("I'm going to remove element");
+									}
+								} else {
+									env.editorLayer[i][j].colour = 360;
+								}
+							}
 						}
 					}
 				}
+			}
 		}
-
 	}
 
 	/*
@@ -291,6 +271,43 @@ public class FirstEclipse extends PApplet {
 	/*
 	 * FOR CONTROLLER
 	 */
+
+	public void loadDataSetup() {
+		if (Glv.threadNN == null) {
+			Glv.threadNN = new MyThreadNeuralNet(this, 999);
+			Glv.threadNN.start();
+			env.cp5.remove("setupNeuralNetwork");
+			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(env.g1)
+					.plugTo(Glv.threadNN.net);
+		} else {
+			println("Data already loaded");
+		}
+	}
+
+	public void analysisSetup() {
+		Glv.threads = new ArrayList<MyThread>();
+		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
+
+		for (int i = 0; i < Glv.numOfThreads; i++) {
+			Glv.threads.add(new MyThread(this, Glv.howManyUntilNow + i));
+		}
+
+		for (MyThread thread : Glv.threads) {
+			if (!thread.VGADone) // If it is a new thread then start it!
+				thread.start();
+		}
+	}
+
+	public void stopAnalysis() {
+		Glv.threadSuspended = !Glv.threadSuspended;
+
+		if (!Glv.threadSuspended) {
+			for (MyThread thread : Glv.threads) {
+				thread.notify();
+			}
+		}
+	}
+
 	public void numberOfThreads(int theValue) {
 		Glv.numOfThreads = theValue;
 	}
