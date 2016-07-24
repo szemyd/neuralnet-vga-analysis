@@ -196,12 +196,12 @@ public class FirstEclipse extends PApplet {
 					println("Load Cards first.");
 			} else if (Glv.programMode == 3) {
 				//if (!Glv.neuronsStored) {
-					println("I'm going to store the neurons now.");
-					if (Glv.threadNN.net.setInputNeurons(env) > 3) // Creates the network according to the selected neurons.
-					{
-						Glv.neuronsStored = true;
-					} else
-						println("Not enough input neurons specified.");
+				println("I'm going to store the neurons now.");
+				if (Glv.threadNN.net.setInputNeurons(env) > 3) // Creates the network according to the selected neurons.
+				{
+					Glv.neuronsStored = true;
+				} else
+					println("Not enough input neurons specified.");
 				//}
 			}
 		}
@@ -301,6 +301,12 @@ public class FirstEclipse extends PApplet {
 		println(Glv.shouldDimReduction);
 	}
 
+	public void numOfLearning(int theValue) {
+		Glv.numOfLearning = theValue;
+		println("numOfLearning: " + Glv.numOfLearning);
+	}
+
+	
 	public void startEditor() {
 		println("I have entered this");
 		if (Glv.threadNN != null)

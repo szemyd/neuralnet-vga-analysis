@@ -120,9 +120,8 @@ public class NeuralNetworkManagment {
 			}
 
 			if (Glv.shP)
-				p.println("Training set size: " + trainingSet.size());
-			if (Glv.shP)
-				p.println("Testing set size: " + testingSet.size());
+				p.println(
+						"Training set size: " + trainingSet.size() + " | " + "Testing set size: " + testingSet.size());
 
 			cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
 			setHighLow(); // Calculates the range of visibility in the data.
@@ -219,7 +218,7 @@ public class NeuralNetworkManagment {
 		for (MyData data : testingSet) {
 			data.extractValuableAnalysis(env, num);
 		}
-		
+
 		return num;
 	}
 	//<---
@@ -276,14 +275,18 @@ public class NeuralNetworkManagment {
 				if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
 					neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
 					neuralnet.train(trainingSet.get(row).rForm);
-				} else
+				} else {
 					p.println("Card was NULL");
+					trainingSet.remove(trainingSet.get(row));
+				}
 			} else {
 				if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
 					neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
 					neuralnet.train(trainingSet.get(row).rForm);
-				} else
+				} else {
 					p.println("Card was NULL");
+					trainingSet.remove(trainingSet.get(row));
+				}
 			}
 		}
 	}

@@ -73,31 +73,36 @@ public class Environment {
 		g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
-		
-//		  cp5.addButton("buttonA")
-//		     .setPosition(175,575)
-//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
-//		     .updateSize();
-		
-		b1 = cp5.addBang("analysisSetup").setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIcon.png"),p.loadImage("playIconRoll.png"),p.loadImage("playIconPress.png")).updateSize().moveTo(g1).plugTo(this, "shuffle");
-	 
+		//		  cp5.addButton("buttonA")
+		//		     .setPosition(175,575)
+		//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
+		//		     .updateSize();
+
+		b1 = cp5.addBang("analysisSetup")
+				.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIcon.png"),
+						p.loadImage("playIconRoll.png"), p.loadImage("playIconPress.png"))
+				.updateSize().moveTo(g1).plugTo(this, "shuffle");
+
 		//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
 		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,"shuffle");
+		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,
+				"shuffle");
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
 		modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(3).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2).addItem("Editor", 3)
-				.setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
-
+				.setItemsPerRow(3).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
+				.addItem("Editor", 3).setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20)
+				.setSpacingColumn(10);
 
 		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
 				.plugTo(Glv.numOfThreads).moveTo(g3);
 		cp5.addSlider("numberOfSolutions").setPosition(50, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g3);
 		
-		
+		cp5.addSlider("numOfLearning").setPosition(80, 20).setSize(20, 100).setRange(0, 1000)
+		.setNumberOfTickMarks(11).plugTo(Glv.numOfLearning).moveTo(g3);
+
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(90, 20).setSize(100, 19).moveTo(g3)
 				.plugTo(Glv.shouldDimReduction);
 
@@ -277,8 +282,9 @@ public class Environment {
 	public void myEditor() {
 		p.println("I have reached this.");
 
-		MyData card = Glv.threadNN.net.testingSet.get(Glv.cardContainingHighest); //Glv.cardContainingHighest);
-		
+		//MyData card = Glv.threadNN.net.testingSet.get(Glv.cardContainingHighest); //Glv.cardContainingHighest);
+		MyData card = Glv.threadNN.net.testingSet.get(0); //Glv.cardContainingHighest);
+
 		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
 				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
 
@@ -289,14 +295,17 @@ public class Environment {
 								+ (p.width / 2 - (Glv.neuronSize * 1.2f * editorLayer.length) * 0.5f),
 						(Glv.neuronSize * 1.2f * j)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
+
 				editorLayer[i][j] = new Neuron(p, position);
-				editorLayer[i][j].m_output = card._analysis[i][j];
+				if (card._analysis[i][j] != null) {
+					editorLayer[i][j].m_output = card._analysis[i][j];
+				}
+				else editorLayer[i][j].m_output =0f;
 			}
 		}
 	}
 
-	public void reactEditor()
-	{
+	public void reactEditor() {
 		if (editorLayer != null) {
 			for (int i = 0; i < editorLayer.length; i++) {
 				for (int j = 0; j < editorLayer[i].length; j++) {
@@ -309,16 +318,14 @@ public class Environment {
 						editorLayer[i][j].iAmChosen = !editorLayer[i][j].iAmChosen;
 						if (editorLayer[i][j].iAmChosen) {
 							editorLayer[i][j].colour = 360;
-						}
-						else editorLayer[i][j].colour = 0;
+						} else
+							editorLayer[i][j].colour = 0;
 					}
 				}
 			}
 		}
 	}
 
-	
-	
 	public void controlEvent(ControlEvent theEvent) {
 		p.println(theEvent.getController().getName());
 

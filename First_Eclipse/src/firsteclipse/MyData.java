@@ -42,9 +42,8 @@ public class MyData {
 							p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 
-					
 					p.fill(360, 0, 180 * (1 - _form[i][j]));
-//					
+					//					
 					p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 				}
 				p.popMatrix();
@@ -63,12 +62,11 @@ public class MyData {
 
 						if (rForm[i][j] != null) {
 							p.fill(360, 0, 180 * (1 - rForm[i][j]));
-							
-							
-//							if (rForm[i][j] > 0.1f)
-//								p.fill(360);
-//							else
-//								p.fill(0);
+
+							//							if (rForm[i][j] > 0.1f)
+							//								p.fill(360);
+							//							else
+							//								p.fill(0);
 
 							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 						}
@@ -78,26 +76,26 @@ public class MyData {
 			}
 		}
 
-//		if (Glv.neuronsStored) {
-//			if (rAnalysis != null) {
-//				for (int i = 0; i < rAnalysis.length; i++) {
-//					for (int j = 0; j < rAnalysis[i].length; j++) {
-//						p.translate(
-//								(Glv.neuronSize * 1.2f * i) + (p.width / 4
-//										- (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length)
-//												* 0.5f),
-//								(Glv.neuronSize * 1.2f * j)
-//										+ (p.height / 2 - (Glv.neuronSize * 1.2f
-//												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
-//										+ p.height * 0.25f);
-//
-//						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
-//
-//						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
-//					}
-//				}
-//			}
-//		}
+		//		if (Glv.neuronsStored) {
+		//			if (rAnalysis != null) {
+		//				for (int i = 0; i < rAnalysis.length; i++) {
+		//					for (int j = 0; j < rAnalysis[i].length; j++) {
+		//						p.translate(
+		//								(Glv.neuronSize * 1.2f * i) + (p.width / 4
+		//										- (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length)
+		//												* 0.5f),
+		//								(Glv.neuronSize * 1.2f * j)
+		//										+ (p.height / 2 - (Glv.neuronSize * 1.2f
+		//												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
+		//										+ p.height * 0.25f);
+		//
+		//						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+		//
+		//						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+		//					}
+		//				}
+		//			}
+		//		}
 
 	}
 
@@ -182,17 +180,17 @@ public class MyData {
 	public void extractValuableAnalysis(Environment env, int length) {
 		if (rAnalysis == null && _analysis != null) {
 
-			rAnalysis = new Float[1][length];
-			//Float [][] temp;
-			int counter = 0;
-			for (int i = 0; i < _analysis.length; i++) {
-				for (int j = 0; j < _analysis[i].length; j++) {
-					if (env.editorLayer[i][j].iAmChosen)
-						rAnalysis[0][counter++] = _analysis[i][j];
+			if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
+				rAnalysis = new Float[1][length];
+				//Float [][] temp;
+				int counter = 0;
+				for (int i = 0; i < _analysis.length; i++) {
+					for (int j = 0; j < _analysis[i].length; j++) {
+						if (env.editorLayer[i][j].iAmChosen)
+							rAnalysis[0][counter++] = _analysis[i][j];
+					}
 				}
 			}
-
-			p.println(rAnalysis);
 		}
 	}
 }
