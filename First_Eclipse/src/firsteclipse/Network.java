@@ -10,9 +10,9 @@ import processing.core.PVector;
 public class Network {
 	private static PApplet p;
 
-	private static Neuron[][] m_input_layer;
-	private static Neuron[][] m_hidden_layer;
-	private static Neuron[][] m_output_layer;
+	public static Neuron[][] m_input_layer;
+	public static Neuron[][] m_hidden_layer;
+	public static Neuron[][] m_output_layer;
 
 	MyData lastCard;
 
@@ -105,19 +105,13 @@ public class Network {
 	}
 
 	//---> Neuron interaction
-	public void respond(MyData card) {
+	public void respond(MyData card, Float [][] analysis) {
 
 		lastCard = card;
 		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
-			for (int j = 0; j < m_input_layer[i].length; j++) {
-				//p.print(card._analysis[i][j] + ",");
-				//p.print(	m_input_layer[i][j].m_output );
-
-				//	if (i < card._analysis.length && j < card._analysis[0].length && card._analysis[i][j] != null) {
-
-				m_input_layer[i][j].m_output = card._analysis[i][j];
-				//}
+			for (int j = 0; j < m_input_layer[i].length; j++) {		
+				m_input_layer[i][j].m_output = analysis[i][j];
 			}
 		}
 

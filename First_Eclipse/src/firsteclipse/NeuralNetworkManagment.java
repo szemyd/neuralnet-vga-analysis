@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 
+import javax.lang.model.util.ElementKindVisitor6;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
+import com.sun.media.jfxmedia.events.NewFrameEvent;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.sun.webkit.ThemeClient;
 import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
@@ -125,7 +127,7 @@ public class NeuralNetworkManagment {
 			cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
 			setHighLow(); // Calculates the range of visibility in the data.
 			convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
-			extractValuableData(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
+			extractValuableForm(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
 			//setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
 
 			dataLoaded = true;
@@ -169,10 +171,9 @@ public class NeuralNetworkManagment {
 			for (String[] strings : data.analysis) {
 				for (int i = 0; i < strings.length; i++) {
 					int num = Integer.valueOf(strings[i]);
-					if (num > Glv.highLowForNN.x)
-					{
+					if (num > Glv.highLowForNN.x) {
 						Glv.highLowForNN.x = num;
-						Glv.cardContainingHighest=testingSet.indexOf(data);
+						Glv.cardContainingHighest = testingSet.indexOf(data);
 						//p.println("Card containing lowest: " + Glv.cardContainingHighest);
 					}
 					if (num < Glv.highLowForNN.y && num > 6)
@@ -191,60 +192,120 @@ public class NeuralNetworkManagment {
 		p.println("Max visibility: " + Glv.highLowForNN.x + " | Min visibility: " + Glv.highLowForNN.y);
 	}
 
-	public void extractValuableData() {
+	public void extractValuableForm() {
 		for (MyData data : testingSet) {
-			data.extractValuableData();
+			data.extractValuableForm();
 		}
 
 		for (MyData data : trainingSet) {
-			data.extractValuableData();
+			data.extractValuableForm();
 		}
+	}
+
+	public int setInputNeurons(Environment env) {
+
+		int num = 0;
+		for (int i = 0; i < env.editorLayer.length; i++) {
+			for (int j = 0; j < env.editorLayer[i].length; j++) {
+				if (env.editorLayer[i][j].iAmChosen)
+					num++;
+			}
+		}
+
+		for (MyData data : trainingSet) {
+			data.extractValuableAnalysis(env, num);
+		}
+
+		for (MyData data : testingSet) {
+			data.extractValuableAnalysis(env, num);
+		}
+		
+		return num;
 	}
 	//<---
 
 	//---> NEURAL NETWORK
 	public void setupNeuralNetwork() {
-		if (dataLoaded) {
-			if (neuralnet == null) {
-				neuralnet = new Network(p, trainingSet.get(0)._analysis.length, trainingSet.get(0)._analysis[2].length,
-						p.floor(trainingSet.get(0)._analysis.length * 1.2f),
-						p.floor(trainingSet.get(0)._analysis.length * 1.2f), trainingSet.get(0).rForm.length,
-						trainingSet.get(0).rForm[2].length);
+		if (Glv.neuronsStored) {
+			Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
+			Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
 
-				System.out.println("InputSize: " + trainingSet.get(0)._analysis.length + " | "
-						+ trainingSet.get(0)._analysis[2].length + " HiddenSize: "
-						+ p.floor(trainingSet.get(0)._analysis.length * 1.2f) + " | "
-						+ p.floor(trainingSet.get(0)._analysis.length * 1.2f) + " OutputSize: "
-						+ trainingSet.get(0).rForm.length + " | " + trainingSet.get(0).rForm[2].length);
-				neuralnet.respond(trainingSet.get(0));
+			Glv.netSize[4] = trainingSet.get(0).rForm.length;
+			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+
+			if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+				Glv.netSize[2] = p.floor(Glv.netSize[0] * 1.2f);
+				Glv.netSize[3] = p.floor(Glv.netSize[1] * 1.2f);
+			} else {
+				Glv.netSize[2] = p.floor(Glv.netSize[4] * 1.2f);
+				Glv.netSize[3] = p.floor(Glv.netSize[5] * 2.5f);
+			}
+		} else {
+			Glv.netSize[0] = trainingSet.get(0)._analysis.length;
+			Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
+			Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * 1.2f);
+			Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * 1.2f);
+			Glv.netSize[4] = trainingSet.get(0).rForm.length;
+			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+		}
+
+		if (dataLoaded) {
+			if (neuralnet == null || Glv.neuronsStored) {
+				neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3],
+						Glv.netSize[4], Glv.netSize[5]);
+
+				System.out.println(
+						"InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
+								+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
+				if (Glv.neuronsStored)
+					neuralnet.respond(trainingSet.get(0), trainingSet.get(0).rAnalysis);
+				else
+					neuralnet.respond(trainingSet.get(0), trainingSet.get(0)._analysis);
 			} else
 				System.out.println("Neural Net already created.");
-		}
-		else
+		} else
 			System.out.println("Please Load Data");
 	}
 
 	public void trainNN() {
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < Glv.numOfLearning; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
 			//int row=i;
-			if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
-				neuralnet.respond(trainingSet.get(row));
-				neuralnet.train(trainingSet.get(row).rForm);
-			} else
-				p.println("Card was NULL");
+
+			if (Glv.neuronsStored) { // If I have given which neurons to input.
+				if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
+					neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
+					neuralnet.train(trainingSet.get(row).rForm);
+				} else
+					p.println("Card was NULL");
+			} else {
+				if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
+					neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
+					neuralnet.train(trainingSet.get(row).rForm);
+				} else
+					p.println("Card was NULL");
+			}
 		}
 	}
 
 	public void testNN() {
 		int row = (int) p.floor(p.random(0, testingSet.size()));
-		if (testingSet.get(row)._analysis != null && testingSet.get(row)._form != null) {
-			neuralnet.respond(testingSet.get(row));
+		if (Glv.neuronsStored) {
+			if (testingSet.get(row).rAnalysis != null && testingSet.get(row)._form != null) {
+				neuralnet.respond(testingSet.get(row), testingSet.get(row).rAnalysis);
+			} else
+				p.println("Card was NULL");
+		} else {
+			if (testingSet.get(row)._analysis != null && testingSet.get(row)._form != null) {
+				neuralnet.respond(testingSet.get(row), testingSet.get(row)._analysis);
+			} else
+				p.println("Card was NULL");
 		}
 	}
 	//<---
 
 	//---> Calculating sigmoid
+
 	private void setupSigmoid() { // Calculates the sigmoid function.
 		for (int i = 0; i < 200; i++) {
 			float x = (i / 20.0f) - 5.0f;

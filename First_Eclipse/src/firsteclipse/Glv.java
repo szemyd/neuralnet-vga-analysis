@@ -36,6 +36,9 @@ public class Glv {
 	public static float LEARNING_RATE = 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	public static ArrayList<ArrayList<Integer>> whichInputs;// = new ArrayList<ArrayList<Integer>>();
+	public static boolean neuronsStored = false;
+	public static Integer [] netSize  = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
+	public static int numOfLearning =500;
 
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?

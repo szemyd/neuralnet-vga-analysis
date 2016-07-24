@@ -60,18 +60,23 @@ public class FirstEclipse extends PApplet {
 
 		switch (Glv.programMode) {
 		case 0:
+			env.cam.setActive(true); // Enable rotation of camera
 			drawGenerating();
 			break;
 
 		case 1:
+			env.cam.setActive(false); // Disable rotation of camera
 			drawTeaching();
+
 			break;
 
 		case 2:
+			env.cam.setActive(false); // Disable rotation of camera
 			drawAnalysis();
 			break;
 
 		case 3:
+			env.cam.setActive(false); // Disable rotation of camera
 			drawEditor();
 			break;
 		}
@@ -87,14 +92,16 @@ public class FirstEclipse extends PApplet {
 			rotate(HALF_PI); // Rotate the whole scene.
 
 			if (Glv.threads != null) {
-				if (Glv.threads.size() > 0 && Glv.threads.get(Glv.whichToDisplay) != null) {
-					if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
-							&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null
-							&& Glv.threads.get(Glv.whichToDisplay).manBox != null) {
-						Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+				if (Glv.threads.size() > 0) {
+					if (Glv.threads.get(Glv.whichToDisplay) != null) {
+						if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
+								&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null
+								&& Glv.threads.get(Glv.whichToDisplay).manBox != null) {
+							Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+						}
+						if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+							Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 					}
-					if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
-						Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 				}
 				env.draw(); // Draws the environment.
 			}
@@ -179,13 +186,24 @@ public class FirstEclipse extends PApplet {
 		}
 
 		if (keyCode == ENTER) {
-			if (Glv.threadNN != null) {
-				if (Glv.threadNN.net.dataLoaded) {
-					Glv.threadNN.net.testNN();
+			if (Glv.programMode == 1) {
+				if (Glv.threadNN != null) {
+					if (Glv.threadNN.net.dataLoaded) {
+						Glv.threadNN.net.testNN();
+					} else
+						println("Load Cards first.");
 				} else
 					println("Load Cards first.");
-			} else
-				println("Load Cards first.");
+			} else if (Glv.programMode == 3) {
+				//if (!Glv.neuronsStored) {
+					println("I'm going to store the neurons now.");
+					if (Glv.threadNN.net.setInputNeurons(env) > 3) // Creates the network according to the selected neurons.
+					{
+						Glv.neuronsStored = true;
+					} else
+						println("Not enough input neurons specified.");
+				//}
+			}
 		}
 
 		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
@@ -288,6 +306,11 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN != null)
 			if (Glv.threadNN.net.dataLoaded)
 				env.myEditor();
+	}
+
+	public void programMode(int theValue) {
+		println("I'm in programmode");
+		Glv.programMode = theValue;
 	}
 
 	public static void main(String _args[]) {

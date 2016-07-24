@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Dictionary;
 
 import com.jogamp.opengl.util.packrect.Rect;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
@@ -72,24 +73,31 @@ public class Environment {
 		g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 		g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
-		b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+		
+//		  cp5.addButton("buttonA")
+//		     .setPosition(175,575)
+//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
+//		     .updateSize();
+		
+		b1 = cp5.addBang("analysisSetup").setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIcon.png"),p.loadImage("playIconRoll.png"),p.loadImage("playIconPress.png")).updateSize().moveTo(g1).plugTo(this, "shuffle");
+	 
+		//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
 		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,
-				"shuffle");
+		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,"shuffle");
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		modeSwitch = cp5.addRadioButton("radio").setPosition(10, 20).setItemWidth(20).setItemHeight(20)
-				.setItemsPerRow(3).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
-				.setColorLabel(p.color(255)).activate(0).moveTo(g2);
+		modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
+				.setItemsPerRow(3).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2).addItem("Editor", 3)
+				.setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
-		modeSwitch.plugTo(Glv.programMode);
 
 		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
-				.plugTo(p, "numOfThreads").moveTo(g3);
-
+				.plugTo(Glv.numOfThreads).moveTo(g3);
 		cp5.addSlider("numberOfSolutions").setPosition(50, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g3);
+		
+		
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(90, 20).setSize(100, 19).moveTo(g3)
 				.plugTo(Glv.shouldDimReduction);
 
@@ -308,6 +316,8 @@ public class Environment {
 			}
 		}
 	}
+
+	
 	
 	public void controlEvent(ControlEvent theEvent) {
 		p.println(theEvent.getController().getName());

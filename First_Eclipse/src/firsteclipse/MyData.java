@@ -10,7 +10,9 @@ import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 import controlP5.Println;
+import javafx.scene.transform.Translate;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class MyData {
 
@@ -40,11 +42,9 @@ public class MyData {
 							p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 
-					if (_form[i][j] > 0.1f)
-						p.fill(360);
-					else
-						p.fill(0);
-
+					
+					p.fill(360, 0, 180 * (1 - _form[i][j]));
+//					
 					p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 				}
 				p.popMatrix();
@@ -62,10 +62,13 @@ public class MyData {
 						p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 
 						if (rForm[i][j] != null) {
-							if (rForm[i][j] > 0.1f)
-								p.fill(360);
-							else
-								p.fill(0);
+							p.fill(360, 0, 180 * (1 - rForm[i][j]));
+							
+							
+//							if (rForm[i][j] > 0.1f)
+//								p.fill(360);
+//							else
+//								p.fill(0);
 
 							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 						}
@@ -74,6 +77,28 @@ public class MyData {
 				}
 			}
 		}
+
+//		if (Glv.neuronsStored) {
+//			if (rAnalysis != null) {
+//				for (int i = 0; i < rAnalysis.length; i++) {
+//					for (int j = 0; j < rAnalysis[i].length; j++) {
+//						p.translate(
+//								(Glv.neuronSize * 1.2f * i) + (p.width / 4
+//										- (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length)
+//												* 0.5f),
+//								(Glv.neuronSize * 1.2f * j)
+//										+ (p.height / 2 - (Glv.neuronSize * 1.2f
+//												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
+//										+ p.height * 0.25f);
+//
+//						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+//
+//						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+//					}
+//				}
+//			}
+//		}
+
 	}
 
 	public void convert() {
@@ -136,7 +161,7 @@ public class MyData {
 		return false;
 	}
 
-	public void extractValuableData() {
+	public void extractValuableForm() {
 		if (_form != null) {
 
 			int numToAdd = (int) (Glv.cubeSizeReduced / Glv.cubeSize);
@@ -153,10 +178,65 @@ public class MyData {
 			}
 		}
 	}
+
+	public void extractValuableAnalysis(Environment env, int length) {
+		if (rAnalysis == null && _analysis != null) {
+
+			rAnalysis = new Float[1][length];
+			//Float [][] temp;
+			int counter = 0;
+			for (int i = 0; i < _analysis.length; i++) {
+				for (int j = 0; j < _analysis[i].length; j++) {
+					if (env.editorLayer[i][j].iAmChosen)
+						rAnalysis[0][counter++] = _analysis[i][j];
+				}
+			}
+
+			p.println(rAnalysis);
+		}
+	}
 }
+//
+//			ArrayList<ArrayList<Float>> rows = new ArrayList<ArrayList<Float>>();
+//
+//			for (int i = 0; i < _analysis.length; i++) {
+//				rows.add(new ArrayList<Float>());
+//				for (int j = 0; j < _analysis[i].length; j++) {
+//					if (env.editorLayer[i][j].iAmChosen)
+//						rows.get(i).add(_analysis[i][j]);
+//					else
+//						rows.get(i).add(null);
+//				}
+//			}
 
-
-
+//			for (int i = 0; i < rows.size(); i++) {
+//				for (int j = 0; j < rows.get(i).size(); j++) {
+//
+//					ArrayList<Float> localArrayList = rows.get((i + 1) % rows.size());
+//
+//					if (rows.size() > 0) {
+//						Float myFloat = rows.get(i).get((j + 1) % rows.get(i).size());
+//
+//						//p.println("myFloat: " + myFloat);
+//						if (myFloat == null) { // If data is uneven (if there is one line that is smaller larger than the other.
+//							//p.println("I'm removing: " + data.analysisID);
+//							rows.get(i).remove(myFloat);
+//							//p.println("I am removing myFloat");
+//						}
+//						if (localArrayList.size() <= 0)
+//							rows.remove(localArrayList);
+//					}
+//				}
+//			}
+//
+//			rAnalysis = new Float[rows.size()][rows.get(0).size()];
+//
+//			for (int i = 0; i < rAnalysis.length; i++) {
+//				for (int j = 0; j < rAnalysis[0].length; j++) {
+//					rAnalysis[i][j] = rows.get(i).get(j);
+//					p.println(rAnalysis[i][j]);
+//				}
+//			}
 
 /* MARKKAL!
  * 
