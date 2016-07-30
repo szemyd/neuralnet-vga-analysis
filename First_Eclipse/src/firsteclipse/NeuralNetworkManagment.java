@@ -16,7 +16,9 @@ import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.sun.webkit.ThemeClient;
 import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 
+import controlP5.Println;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class NeuralNetworkManagment {
 
@@ -233,17 +235,19 @@ public class NeuralNetworkManagment {
 			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 
 			if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-				Glv.netSize[2] = p.floor(Glv.netSize[0] * 1.2f);
-				Glv.netSize[3] = p.floor(Glv.netSize[1] * 1.2f);
+				Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+				Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 			} else {
-				Glv.netSize[2] = p.floor(Glv.netSize[4] * 1.2f);
-				Glv.netSize[3] = p.floor(Glv.netSize[5] * 2.5f);
+				Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+				Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
 			}
 		} else {
 			Glv.netSize[0] = trainingSet.get(0)._analysis.length;
 			Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
-			Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * 1.2f);
-			Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * 1.2f);
+			
+			Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
+			
 			Glv.netSize[4] = trainingSet.get(0).rForm.length;
 			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 		}
@@ -266,7 +270,8 @@ public class NeuralNetworkManagment {
 			System.out.println("Please Load Data");
 	}
 
-	public void trainNN() {
+	public void trainNN(DataAnalysis graphs) {
+		float counter = 0f;
 		for (int i = 0; i < Glv.numOfLearning; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
 			//int row=i;
@@ -288,7 +293,23 @@ public class NeuralNetworkManagment {
 					trainingSet.remove(trainingSet.get(row));
 				}
 			}
+
+			
+			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+					counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error);
+				}
+			}
+			
 		}
+		Glv.errorCounter.add(new PVector(Glv.howManyCycles,counter/Glv.numOfLearning));
+		//p.println(counter);
+		graphs.lineChart.setData(Glv.errorCounter);
+		
+		System.out.println("Last sum of error: " + counter/Glv.numOfLearning);
+		
+	
+		Glv.howManyCycles++;
 	}
 
 	public void testNN() {

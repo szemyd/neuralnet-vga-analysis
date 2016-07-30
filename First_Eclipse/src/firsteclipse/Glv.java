@@ -36,9 +36,12 @@ public class Glv {
 	public static float LEARNING_RATE = 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	public static ArrayList<ArrayList<Integer>> whichInputs;// = new ArrayList<ArrayList<Integer>>();
-	public static boolean neuronsStored = false;
+	public static boolean neuronsStored = false; // Have I received the specified neurons?
 	public static Integer [] netSize  = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
-	public static int numOfLearning =500;
+	public static int numOfLearning =500; // How many cards should I show with one click?
+	public static ArrayList<PVector> errorCounter=new ArrayList<PVector>();
+	public static float howManyCycles =0; // How often have I pressed "train NN". Shown a predefined number of cards.
+	public static float howMuchBiggerHidden = 2.5f;
 
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?

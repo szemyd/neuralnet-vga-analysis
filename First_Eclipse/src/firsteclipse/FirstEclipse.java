@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
+import com.sun.corba.se.impl.orb.ParserTable.TestAcceptor1;
 import com.sun.corba.se.spi.ior.IORFactories;
 import com.sun.glass.ui.TouchInputSupport;
 import com.sun.jmx.snmp.tasks.ThreadService;
@@ -23,6 +24,7 @@ import controlP5.*;
 public class FirstEclipse extends PApplet {
 
 	Environment env = new Environment(this);
+	public DataAnalysis graphs = new DataAnalysis(this);
 	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
@@ -43,6 +45,8 @@ public class FirstEclipse extends PApplet {
 
 		//noStroke();
 		rectMode(PConstants.CENTER);
+
+		graphs.setup();
 
 		if (Glv.programMode == 1)
 			loadDataSetup();
@@ -67,7 +71,6 @@ public class FirstEclipse extends PApplet {
 		case 1:
 			env.cam.setActive(false); // Disable rotation of camera
 			drawTeaching();
-
 			break;
 
 		case 2:
@@ -86,7 +89,7 @@ public class FirstEclipse extends PApplet {
 		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
 	}
 
-	public void drawGenerating() {
+	public void drawGenerating() { // ProgramMode == 0
 		pushMatrix();
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
@@ -109,20 +112,49 @@ public class FirstEclipse extends PApplet {
 		popMatrix();
 	}
 
-	public void drawTeaching() {
-		if (Glv.threadNN != null) {
-			if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
-				env.cam.beginHUD();
-				{
-					noLights();
+	public void drawTeaching() { // ProgramMode == 1
+
+		env.cam.beginHUD();
+		{
+			noLights();
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
+
 					Glv.threadNN.net.neuralnet.draw();
+				} else {
+					textAlign(CENTER);
+					text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
 				}
-				env.cam.endHUD();
 			}
+			env.cam.endHUD();
 		}
 	}
 
-	public void drawEditor() {
+	public void drawAnalysis() { // ProgramMode == 2
+		env.cam.beginHUD();
+		{
+			noLights();
+
+			if (graphs.lineChart.getXData().length > 0) {
+				graphs.draw();
+			}
+
+			else {
+				textAlign(CENTER);
+				text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
+			}
+			env.cam.endHUD();
+		}
+
+		env.cam.beginHUD();
+		{
+			noLights();
+
+		}
+		env.cam.endHUD();
+	}
+
+	public void drawEditor() { // ProgramMode == 3
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
 				if (env.editorLayer != null) {
@@ -136,10 +168,6 @@ public class FirstEclipse extends PApplet {
 				}
 			}
 		}
-	}
-
-	public void drawAnalysis() {
-		//dataAnalysis.draw();
 	}
 
 	/*
@@ -174,7 +202,7 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded) {
 					int ellapsedTime = second() + minute() * 60 + hour() * 360;
-					Glv.threadNN.net.trainNN();
+					Glv.threadNN.net.trainNN(graphs);
 
 					if (Glv.shP)
 						println("< Training NN. Ellapsed time: "
@@ -302,10 +330,18 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void numOfLearning(int theValue) {
-		Glv.numOfLearning = theValue;
-		println("numOfLearning: " + Glv.numOfLearning);
+		//println("numOfLearning: " + Glv.numOfLearning);
+		Glv.numOfLearning=theValue;
 	}
 
+	public void learningRate(float theValue) {
+		Glv.LEARNING_RATE = theValue;
+	}
+
+	public void hiddenLayerSize(float theValue)
+	{
+		Glv.howMuchBiggerHidden=theValue;
+	}
 	
 	public void startEditor() {
 		println("I have entered this");

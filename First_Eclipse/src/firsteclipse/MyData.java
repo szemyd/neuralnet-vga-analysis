@@ -113,7 +113,7 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (i < _analysis.length && j < _analysis[i].length)
 								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, Glv.highLowForNN.x, -1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[i][j] = p.map(num, Glv.highLowForNN.y,Glv.highLowForNN.x, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}
@@ -178,7 +178,9 @@ public class MyData {
 	}
 
 	public void extractValuableAnalysis(Environment env, int length) {
-		if (rAnalysis == null && _analysis != null) {
+		
+		
+		if (_analysis != null) {
 
 			if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
 				rAnalysis = new Float[1][length];

@@ -43,7 +43,7 @@ public class Environment {
 
 	public Neuron[][] editorLayer;;
 
-	public Group g1, g2, g3;
+	public Group g1, g2, g3, g4;
 	Bang b1, b2, b3, b4;
 	RadioButton modeSwitch;
 
@@ -69,9 +69,10 @@ public class Environment {
 
 		//cp5.loadProperties(("controlP5.json"));
 
-		g1 = cp5.addGroup("myGroup1").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
-		g2 = cp5.addGroup("myGroup2").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		g3 = cp5.addGroup("myGroup3").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g1 = cp5.addGroup("Setup").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
+		g2 = cp5.addGroup("Modes").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g3 = cp5.addGroup("NeuralNetwork").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
@@ -91,19 +92,27 @@ public class Environment {
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
 		modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(3).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
+				.setItemsPerRow(5).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
 				.addItem("Editor", 3).setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20)
 				.setSpacingColumn(10);
 
-		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
-				.plugTo(Glv.numOfThreads).moveTo(g3);
-		cp5.addSlider("numberOfSolutions").setPosition(50, 20).setSize(20, 100).setRange(0, 5000)
-				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g3);
 		
-		cp5.addSlider("numOfLearning").setPosition(80, 20).setSize(20, 100).setRange(0, 1000)
-		.setNumberOfTickMarks(11).plugTo(Glv.numOfLearning).moveTo(g3);
+		//---> Sliders for NN
+		cp5.addSlider("numOfLearning").setPosition(20, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
+				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
+		cp5.addSlider("learningRate").setPosition(80, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
+		.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
+		cp5.addSlider("hiddenLayerSize").setPosition(180, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
+		.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
 
-		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(90, 20).setSize(100, 19).moveTo(g3)
+		
+		//---> Sliders for Generating Data.
+		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
+				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
+		cp5.addSlider("numberOfSolutions").setPosition(80, 20).setSize(20, 100).setRange(0, 5000)
+				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(500).setLabel("Solutions");
+
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(120, 20).setSize(100, 19).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
 
 		//cp5.addButton("plug", 2);
@@ -116,13 +125,15 @@ public class Environment {
 		//accordion.close(1);
 
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1);
-		accordion.open(0, 1, 2);
+		accordion.open(0, 1, 2,3,4);
 		accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2);
 
-		accordion.open(0, 1, 2);
+		accordion.open(0, 1, 2,3,4);
 		accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3);
+		accordion.open(0, 1, 2, 3,4);
+		accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4);
 
-		accordion.open(0, 1, 2);
+		accordion.open(0, 1, 2, 3,4);
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		/*
@@ -146,6 +157,7 @@ public class Environment {
 		cp5.setAutoDraw(false);
 	}
 
+	//---> DRAWING THINGS
 	public void draw() {
 		//		p.pushStyle();
 		//		{
@@ -202,7 +214,9 @@ public class Environment {
 			}
 		}
 	}
+	//<---
 
+	//---> Data Loading for envionrment.
 	public void loadData() {
 
 		String filePath = new File("").getAbsolutePath();
@@ -278,7 +292,9 @@ public class Environment {
 		if (Glv.shP)
 			System.out.println("Biggest already available number (seed): " + Glv.seed);
 	}
+	//<---
 
+	//---> For Editormode.
 	public void myEditor() {
 		p.println("I have reached this.");
 
@@ -299,8 +315,8 @@ public class Environment {
 				editorLayer[i][j] = new Neuron(p, position);
 				if (card._analysis[i][j] != null) {
 					editorLayer[i][j].m_output = card._analysis[i][j];
-				}
-				else editorLayer[i][j].m_output =0f;
+				} else
+					editorLayer[i][j].m_output = 0f;
 			}
 		}
 	}
@@ -325,9 +341,10 @@ public class Environment {
 			}
 		}
 	}
+	//<---
 
 	public void controlEvent(ControlEvent theEvent) {
-		p.println(theEvent.getController().getName());
+		//p.println(theEvent.getController().getName());
 
 		//
 		//		if (theEvent.isController()) {
@@ -339,14 +356,7 @@ public class Environment {
 		//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
 		//			}
 		//		}
-		if (theEvent.getName() == "Number_Of_Threads") {
-			Glv.numOfThreads = (int) theEvent.getController().getValue();
-		}
 
-		if (theEvent.getName() == "setupNeuralNetwork") {
-			System.out.println("Please load data first");
-		}
-
-		p.println("Number of threads: " + Glv.numOfThreads);
+		//p.println("Number of threads: " + Glv.numOfThreads);
 	}
 }
