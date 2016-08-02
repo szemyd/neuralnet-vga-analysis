@@ -331,18 +331,22 @@ public class FirstEclipse extends PApplet {
 
 	public void numOfLearning(int theValue) {
 		//println("numOfLearning: " + Glv.numOfLearning);
-		Glv.numOfLearning=theValue;
+		Glv.numOfLearning = theValue;
 	}
 
 	public void learningRate(float theValue) {
 		Glv.LEARNING_RATE = theValue;
 	}
 
-	public void hiddenLayerSize(float theValue)
-	{
-		Glv.howMuchBiggerHidden=theValue;
+	public void hiddenLayerSize(float theValue) {
+		Glv.howMuchBiggerHidden = theValue;
 	}
-	
+
+	public void genOrA(int theValue)
+	{
+		
+	}
+
 	public void startEditor() {
 		println("I have entered this");
 		if (Glv.threadNN != null)

@@ -67,6 +67,7 @@ public class Neuron {
 
 	void setError(float desired) {
 		m_error = desired - m_output;
+		//p.println("m_Error: " + m_error);
 	}
 
 	void train() {

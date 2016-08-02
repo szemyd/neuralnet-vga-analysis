@@ -293,20 +293,30 @@ public class NeuralNetworkManagment {
 					p.println("Card was NULL");
 					trainingSet.remove(trainingSet.get(row));
 				}
-			}
-
-			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-					counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error);
-				}
-			}
-
+			}	
 		}
-		Glv.errorCounter.add(new PVector(Glv.howManyCycles, counter / Glv.numOfLearning));
+		
+		for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+			for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+				counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error);
+			}
+		}
+		
+		float precentage= counter;
+
+		p.println(precentage);
+		precentage/= (Glv.threadNN.net.neuralnet.m_output_layer.length *Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+		precentage*=100f;
+		p.println(precentage);
+		
+
+		Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+		
+		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
 
-		System.out.println("Last sum of error: " + counter / Glv.numOfLearning);
+		System.out.println("Last sum of error: " + precentage + "%");
 
 		Glv.howManyCycles++;
 	}

@@ -42,6 +42,8 @@ public class Glv {
 	public static ArrayList<PVector> errorCounter=new ArrayList<PVector>();
 	public static float howManyCycles =0; // How often have I pressed "train NN". Shown a predefined number of cards.
 	public static float howMuchBiggerHidden = 2.5f;
+	
+	public static int genOrA = 0; // Am I feeding in to create the public space or to get a certain analysis? 
 
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?

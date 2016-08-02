@@ -53,7 +53,9 @@ public class DataAnalysis {
 		lineChart.setMinY(0);
 
 		lineChart.setAxisColour(p.color(360, 50, 360, 360));
-		
+		lineChart.setDecorations(true);
+		lineChart.setMaxY(100f);
+
 		//lineChart.setYFormat("$###,###"); // Monetary value in $US
 		//lineChart.setXFormat("0000"); // Year
 

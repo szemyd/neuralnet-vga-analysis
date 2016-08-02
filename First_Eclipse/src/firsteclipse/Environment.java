@@ -45,7 +45,7 @@ public class Environment {
 
 	public Group g1, g2, g3, g4;
 	Bang b1, b2, b3, b4;
-	RadioButton modeSwitch;
+	RadioButton modeSwitch, genOrASwitch;
 
 	//Textarea myTextarea;
 	//Println console;
@@ -89,6 +89,7 @@ public class Environment {
 		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,
 				"shuffle");
+
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
 		modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
@@ -96,16 +97,18 @@ public class Environment {
 				.addItem("Editor", 3).setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20)
 				.setSpacingColumn(10);
 
-		
+		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(10, 80).setItemWidth(20).setItemHeight(50)
+				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360))
+				.activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
+
 		//---> Sliders for NN
 		cp5.addSlider("numOfLearning").setPosition(20, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
 		cp5.addSlider("learningRate").setPosition(80, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
-		.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
+				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
 		cp5.addSlider("hiddenLayerSize").setPosition(180, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
-		.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
+				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
 
-		
 		//---> Sliders for Generating Data.
 		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
@@ -125,15 +128,16 @@ public class Environment {
 		//accordion.close(1);
 
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1);
-		accordion.open(0, 1, 2,3,4);
+				//.setColorBackground(p.color(360, 100, 360));
+		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2);
 
-		accordion.open(0, 1, 2,3,4);
+		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3);
-		accordion.open(0, 1, 2, 3,4);
+		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4);
 
-		accordion.open(0, 1, 2, 3,4);
+		accordion.open(0, 1, 2, 3, 4);
 		accordion.setCollapseMode(Accordion.MULTI);
 
 		/*
