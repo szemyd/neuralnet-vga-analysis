@@ -12,6 +12,7 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 import controlP5.Println;
 import javafx.scene.transform.Translate;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 public class MyData {
@@ -33,6 +34,10 @@ public class MyData {
 	}
 
 	public void draw() {
+		
+		
+		
+		/*
 		for (int i = 0; i < _form.length; i++) {
 			for (int j = 0; j < _form[i].length; j++) {
 				p.pushMatrix();
@@ -49,13 +54,17 @@ public class MyData {
 				p.popMatrix();
 			}
 		}
+		*/
 
+		drawBoundary(new PVector(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
+				(p.height / 4)+ p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)), rForm.length,rForm[0].length);
+		
 		if (rForm != null) {
 			for (int i = 0; i < rForm.length; i++) {
 				for (int j = 0; j < rForm[i].length; j++) {
 					p.pushMatrix();
 					{
-						p.translate(-p.width / 8, p.height / 4);
+						p.translate(0, p.height / 4);
 						p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
 								p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f));
 						p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
@@ -99,6 +108,26 @@ public class MyData {
 
 	}
 
+	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+		p.pushStyle();
+		{
+			p.noFill();
+			//p.fill(360);
+			p.stroke(360);
+			p.pushMatrix();
+			{
+				p.rectMode(PConstants.CORNER);
+				p.rect(position.x - 10f - Glv.neuronSize, position.y - 10f - Glv.neuronSize,
+						(sizeX * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize,
+						(sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize, 20f);
+			}
+			p.popMatrix();
+		}
+		p.popStyle();
+
+	}
+
+	//---> Data cleaning
 	public void convert() {
 		if (analysis.size() > 0 && form.size() > 0) {
 			_analysis = new Float[analysis.size()][analysis.get(0).length];
@@ -113,7 +142,7 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (i < _analysis.length && j < _analysis[i].length)
 								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y,Glv.highLowForNN.x, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, Glv.highLowForNN.x, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}
@@ -178,8 +207,7 @@ public class MyData {
 	}
 
 	public void extractValuableAnalysis(Environment env, int length) {
-		
-		
+
 		if (_analysis != null) {
 
 			if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
@@ -195,6 +223,8 @@ public class MyData {
 			}
 		}
 	}
+	//<--- Data Cleaning.
+
 }
 //
 //			ArrayList<ArrayList<Float>> rows = new ArrayList<ArrayList<Float>>();

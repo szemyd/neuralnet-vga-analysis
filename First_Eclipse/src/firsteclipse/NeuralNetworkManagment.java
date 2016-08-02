@@ -241,16 +241,17 @@ public class NeuralNetworkManagment {
 				Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
 				Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
 			}
-		} else {
+		} else if (dataLoaded) {
 			Glv.netSize[0] = trainingSet.get(0)._analysis.length;
 			Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
-			
+
 			Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
-			
+
 			Glv.netSize[4] = trainingSet.get(0).rForm.length;
 			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 		}
+		
 
 		if (dataLoaded) {
 			if (neuralnet == null || Glv.neuronsStored) {
@@ -294,21 +295,19 @@ public class NeuralNetworkManagment {
 				}
 			}
 
-			
 			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
 				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
 					counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error);
 				}
 			}
-			
+
 		}
-		Glv.errorCounter.add(new PVector(Glv.howManyCycles,counter/Glv.numOfLearning));
+		Glv.errorCounter.add(new PVector(Glv.howManyCycles, counter / Glv.numOfLearning));
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
-		
-		System.out.println("Last sum of error: " + counter/Glv.numOfLearning);
-		
-	
+
+		System.out.println("Last sum of error: " + counter / Glv.numOfLearning);
+
 		Glv.howManyCycles++;
 	}
 

@@ -5,6 +5,7 @@ import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import controlP5.Println;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 public class Network {
@@ -59,6 +60,9 @@ public class Network {
 	}
 
 	public void draw() {
+
+		drawBoundary(m_input_layer[0][0].position, m_input_layer.length, m_input_layer[0].length);
+
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				p.pushMatrix();
@@ -87,6 +91,8 @@ public class Network {
 		//			}
 		//		}
 
+		drawBoundary(m_output_layer[0][0].position, m_output_layer.length, m_output_layer[0].length);
+		
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				p.pushMatrix();
@@ -104,13 +110,30 @@ public class Network {
 			lastCard.draw();
 	}
 
+	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+		p.pushStyle();
+		{
+			p.noFill();
+			//p.fill(360);
+			p.stroke(360);
+			p.pushMatrix();
+			{
+				p.rectMode(PConstants.CORNER);
+				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
+			}
+			p.popMatrix();
+		}
+		p.popStyle();
+
+	}
+
 	//---> Neuron interaction
-	public void respond(MyData card, Float [][] analysis) {
+	public void respond(MyData card, Float[][] analysis) {
 
 		lastCard = card;
 		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
-			for (int j = 0; j < m_input_layer[i].length; j++) {		
+			for (int j = 0; j < m_input_layer[i].length; j++) {
 				m_input_layer[i][j].m_output = analysis[i][j];
 			}
 		}
