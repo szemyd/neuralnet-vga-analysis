@@ -13,6 +13,7 @@ import java.util.Dictionary;
 import com.jogamp.opengl.util.packrect.Rect;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import controlP5.Accordion;
@@ -54,7 +55,7 @@ public class Environment {
 		p = _p;
 	}
 
-	public void setupGui(boolean DimensionalityReduction) {
+	public void setupGui() {
 
 		cp5 = new ControlP5(p);
 		cam = new PeasyCam(p, 180);
@@ -85,18 +86,17 @@ public class Environment {
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
-		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).setImages(p.loadImage("loadRoll.PNG"),
-				p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
-		.updateSize().moveTo(g1).plugTo(this, "shuffle");
-		
-		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).setImages(p.loadImage("editorRoll.PNG"),
-				p.loadImage("editor.PNG"), p.loadImage("editorPress.PNG"))
-		.updateSize().moveTo(g1).plugTo(this, "shuffle");
-		
-		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).setImages(p.loadImage("networkRoll.PNG"),
-				p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
-		.updateSize().moveTo(g1).plugTo(this,
-				"shuffle");
+		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100)
+				.setImages(p.loadImage("loadRoll.PNG"), p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
+				.updateSize().moveTo(g1).plugTo(this, "shuffle");
+
+		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100)
+				.setImages(p.loadImage("editorRoll.PNG"), p.loadImage("editor.PNG"), p.loadImage("editorPress.PNG"))
+				.updateSize().moveTo(g1).plugTo(this, "shuffle");
+
+		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
+				.setImages(p.loadImage("networkRoll.PNG"), p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
+				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
@@ -106,8 +106,8 @@ public class Environment {
 				.setSpacingColumn(10);
 
 		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(10, 80).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360))
-				.activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
+				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360)).activate(0)
+				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		//---> Sliders for NN
 		cp5.addSlider("numOfLearning").setPosition(20, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
@@ -135,15 +135,15 @@ public class Environment {
 
 		//accordion.close(1);
 
-		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1);
-				//.setColorBackground(p.color(360, 100, 360));
+		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1).hideBar().setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
+		//.setColorBackground(p.color(360, 100, 360));
 		accordion.open(0, 1, 2, 3, 4);
-		accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2);
+		accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2).setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
 
 		accordion.open(0, 1, 2, 3, 4);
-		accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3);
+		accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3).setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
 		accordion.open(0, 1, 2, 3, 4);
-		accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4);
+		accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4).setColorBackground(p.color(360,360,360,60)).setColorForeground(p.color(360,360,360,100));
 
 		accordion.open(0, 1, 2, 3, 4);
 		accordion.setCollapseMode(Accordion.MULTI);
@@ -213,6 +213,14 @@ public class Environment {
 		cam.beginHUD();
 		{
 			p.noLights();
+			p.pushStyle();
+			{
+				p.rectMode(PConstants.CORNER);
+				p.noStroke();
+				p.fill(360,0,160,110);
+				p.rect(40, 40, p.width - 80, 150, 15);
+			}
+			p.popStyle();
 			cp5.draw();
 		}
 		cam.endHUD();
@@ -372,3 +380,100 @@ public class Environment {
 		//p.println("Number of threads: " + Glv.numOfThreads);
 	}
 }
+
+/*
+
+public void setupGui(boolean DimensionalityReduction) {
+
+	cp5 = new ControlP5(p);
+	cam = new PeasyCam(p, 180);
+	// cam.setMinimumDistance(50);
+	// cam.setMaximumDistance(500);
+	cp5.enableShortcuts();
+
+	cp5.begin(100, 20);
+
+	PFont pfont = p.createFont("Arial", 20, true); // use true/false for smooth/no-smooth
+	ControlFont font = new ControlFont(pfont, 241);
+
+	//cp5.loadProperties(("controlP5.json"));
+
+	g1 = cp5.addGroup("Setup").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
+	g2 = cp5.addGroup("Modes").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+	g3 = cp5.addGroup("NeuralNetwork").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+	g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+
+	//		  cp5.addButton("buttonA")
+	//		     .setPosition(175,575)
+	//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
+	//		     .updateSize();
+
+	b1 = cp5.addBang("analysisSetup")
+			.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIconRoll.PNG"),
+					p.loadImage("playIcon.PNG"), p.loadImage("playIconPress.PNG"))
+			.updateSize().moveTo(g1).plugTo(this, "shuffle");
+
+	//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
+	b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).setImages(p.loadImage("loadRoll.PNG"),
+			p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
+	.updateSize().moveTo(g1).plugTo(this, "shuffle");
+	
+	b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).setImages(p.loadImage("editorRoll.PNG"),
+			p.loadImage("editor.PNG"), p.loadImage("editorPress.PNG"))
+	.updateSize().moveTo(g1).plugTo(this, "shuffle");
+	
+	b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).setImages(p.loadImage("networkRoll.PNG"),
+			p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
+	.updateSize().moveTo(g1).plugTo(this,
+			"shuffle");
+
+	//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
+
+	modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
+			.setItemsPerRow(5).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
+			.addItem("Editor", 3).setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20)
+			.setSpacingColumn(10);
+
+	genOrASwitch = cp5.addRadioButton("genOrA").setPosition(10, 80).setItemWidth(20).setItemHeight(50)
+			.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360))
+			.activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
+
+	//---> Sliders for NN
+	cp5.addSlider("numOfLearning").setPosition(20, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
+			.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
+	cp5.addSlider("learningRate").setPosition(80, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
+			.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
+	cp5.addSlider("hiddenLayerSize").setPosition(180, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
+			.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
+
+	//---> Sliders for Generating Data.
+	cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
+			.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
+	cp5.addSlider("numberOfSolutions").setPosition(80, 20).setSize(20, 100).setRange(0, 5000)
+			.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(500).setLabel("Solutions");
+
+	cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(120, 20).setSize(100, 19).moveTo(g4)
+			.plugTo(Glv.shouldDimReduction);
+
+	//cp5.addButton("plug", 2);
+	//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
+	//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
+	//		;
+
+	//.plugTo(this,	"shuffle");
+
+	//accordion.close(1);
+
+	accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1);
+			//.setColorBackground(p.color(360, 100, 360));
+	accordion.open(0, 1, 2, 3, 4);
+	accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2);
+
+	accordion.open(0, 1, 2, 3, 4);
+	accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3);
+	accordion.open(0, 1, 2, 3, 4);
+	accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4);
+
+	accordion.open(0, 1, 2, 3, 4);
+	accordion.setCollapseMode(Accordion.MULTI);
+	*/

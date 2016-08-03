@@ -36,7 +36,7 @@ public class FirstEclipse extends PApplet {
 	 */
 	public void setup() {
 
-		env.setupGui(Glv.shouldDimReduction); // Sets up the user interface
+		env.setupGui(); // Sets up the user interface
 		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
 		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
 
@@ -289,8 +289,9 @@ public class FirstEclipse extends PApplet {
 			Glv.threadNN = new MyThreadNeuralNet(this, 999);
 			Glv.threadNN.start();
 			env.cp5.remove("setupNeuralNetwork");
-			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(env.g1)
-					.plugTo(Glv.threadNN.net);
+			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
+					.setImages(loadImage("networkRoll.PNG"), loadImage("network.PNG"), loadImage("networkPress.PNG"))
+					.updateSize().moveTo(env.g1).plugTo(Glv.threadNN.net);
 		} else {
 			println("Data already loaded");
 		}
@@ -342,9 +343,8 @@ public class FirstEclipse extends PApplet {
 		Glv.howMuchBiggerHidden = theValue;
 	}
 
-	public void genOrA(int theValue)
-	{
-		
+	public void genOrA(int theValue) {
+
 	}
 
 	public void startEditor() {
