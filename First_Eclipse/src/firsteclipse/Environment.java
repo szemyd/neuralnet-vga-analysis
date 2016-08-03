@@ -80,14 +80,22 @@ public class Environment {
 		//		     .updateSize();
 
 		b1 = cp5.addBang("analysisSetup")
-				.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIcon.png"),
-						p.loadImage("playIconRoll.png"), p.loadImage("playIconPress.png"))
+				.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIconRoll.PNG"),
+						p.loadImage("playIcon.PNG"), p.loadImage("playIconPress.PNG"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
-		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
-		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this,
+		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100).setImages(p.loadImage("loadRoll.PNG"),
+				p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
+		.updateSize().moveTo(g1).plugTo(this, "shuffle");
+		
+		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100).setImages(p.loadImage("editorRoll.PNG"),
+				p.loadImage("editor.PNG"), p.loadImage("editorPress.PNG"))
+		.updateSize().moveTo(g1).plugTo(this, "shuffle");
+		
+		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).setImages(p.loadImage("networkRoll.PNG"),
+				p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
+		.updateSize().moveTo(g1).plugTo(this,
 				"shuffle");
 
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
