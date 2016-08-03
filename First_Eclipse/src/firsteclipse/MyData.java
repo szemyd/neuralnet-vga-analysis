@@ -34,9 +34,7 @@ public class MyData {
 	}
 
 	public void draw() {
-		
-		
-		
+
 		/*
 		for (int i = 0; i < _form.length; i++) {
 			for (int j = 0; j < _form[i].length; j++) {
@@ -46,7 +44,7 @@ public class MyData {
 					p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * _form.length) * 0.5f,
 							p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
-
+		
 					p.fill(360, 0, 180 * (1 - _form[i][j]));
 					//					
 					p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
@@ -56,9 +54,11 @@ public class MyData {
 		}
 		*/
 
-		drawBoundary(new PVector(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
-				(p.height / 4)+ p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)), rForm.length,rForm[0].length);
-		
+		drawBoundary(
+				new PVector(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
+						(p.height / 4) + p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)),
+				rForm.length, rForm[0].length);
+
 		if (rForm != null) {
 			for (int i = 0; i < rForm.length; i++) {
 				for (int j = 0; j < rForm[i].length; j++) {
@@ -85,26 +85,35 @@ public class MyData {
 			}
 		}
 
-		//		if (Glv.neuronsStored) {
-		//			if (rAnalysis != null) {
-		//				for (int i = 0; i < rAnalysis.length; i++) {
-		//					for (int j = 0; j < rAnalysis[i].length; j++) {
-		//						p.translate(
-		//								(Glv.neuronSize * 1.2f * i) + (p.width / 4
-		//										- (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length)
-		//												* 0.5f),
-		//								(Glv.neuronSize * 1.2f * j)
-		//										+ (p.height / 2 - (Glv.neuronSize * 1.2f
-		//												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
-		//										+ p.height * 0.25f);
-		//
-		//						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
-		//
-		//						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
-		//					}
-		//				}
-		//			}
-		//		}
+		/*
+		drawBoundary(new PVector(
+				+(p.width / 4 - (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length) * 0.5f),
+
+				+(p.height / 2 - (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
+						+ p.height * 0.25f),
+				rAnalysis.length, rAnalysis[0].length);
+
+		if (Glv.neuronsStored) {
+			if (rAnalysis != null) {
+				for (int i = 0; i < rAnalysis.length; i++) {
+					for (int j = 0; j < rAnalysis[i].length; j++) {
+						p.translate(
+								(Glv.neuronSize * 1.2f * i) + (p.width / 4
+										- (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length)
+												* 0.5f),
+								(Glv.neuronSize * 1.2f * j)
+										+ (p.height / 2 - (Glv.neuronSize * 1.2f
+												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
+										+ p.height * 0.25f);
+
+						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+
+						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+					}
+				}
+			}
+		}
+		*/
 
 	}
 
@@ -142,7 +151,7 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (i < _analysis.length && j < _analysis[i].length)
 								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, Glv.highLowForNN.x, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, 1500f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}

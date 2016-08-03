@@ -50,14 +50,18 @@ public class DataAnalysis {
 		// Axis formatting and labels.
 		lineChart.showXAxis(true);
 		lineChart.showYAxis(true);
-		lineChart.setMinY(0);
+	
 
 		lineChart.setAxisColour(p.color(360, 50, 360, 360));
 		lineChart.setDecorations(true);
+		
+		
+		
 		lineChart.setMaxY(100f);
+		lineChart.setMinY(0);
 
-		//lineChart.setYFormat("$###,###"); // Monetary value in $US
-		//lineChart.setXFormat("0000"); // Year
+		lineChart.setYFormat("0.0"); // Monetary value in $US
+		lineChart.setXFormat("000"); // Year
 
 		// Symbol colours
 		lineChart.setPointColour(p.color(180, 50, 360, 360));
@@ -68,6 +72,7 @@ public class DataAnalysis {
 	public void draw() {
 		//myBarChart.draw(10, 10, p.width - 20, p.height - 20);
 		//myBarChart.draw
+	p.fill(360);
 		lineChart.draw(15,15,p.width-30,p.height-30);
 		//p.line(x1, y1, x2, y2);
 	}

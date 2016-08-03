@@ -227,31 +227,63 @@ public class NeuralNetworkManagment {
 
 	//---> NEURAL NETWORK
 	public void setupNeuralNetwork() {
-		if (Glv.neuronsStored) {
-			Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
-			Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
 
-			Glv.netSize[4] = trainingSet.get(0).rForm.length;
-			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
-
-			if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-				Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
-				Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
-			} else {
-				Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
-				Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
-			}
-		} else if (dataLoaded) {
-			Glv.netSize[0] = trainingSet.get(0)._analysis.length;
-			Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
-
-			Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
-			Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
-
-			Glv.netSize[4] = trainingSet.get(0).rForm.length;
-			Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
-		}
+		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
+		/*
+		if (dataLoaded) {
+			switch (Glv.genOrA) {
+			case 0:
+				setupLoadedNeurons();
+				break;
 		
+			case 1:
+				break;
+			
+			case 2:
+				break;
+
+			}
+		}
+		*/
+
+		if (dataLoaded) {
+			if (Glv.neuronsStored) {
+				Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
+				Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
+
+				Glv.netSize[4] = trainingSet.get(0).rForm.length;
+				Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+
+				if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+					Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+					Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
+				} else {
+					Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+					Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+				}
+			} else if (Glv.genOrA == 0) {
+				Glv.netSize[0] = trainingSet.get(0)._analysis.length;
+				Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
+
+				Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
+				Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
+
+				Glv.netSize[4] = trainingSet.get(0).rForm.length;
+				Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+			}
+
+			else if (Glv.genOrA == 1) {
+
+				Glv.netSize[0] = trainingSet.get(0).rForm.length;
+				Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
+
+				Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
+				Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
+
+				Glv.netSize[4] = trainingSet.get(0)._analysis.length;
+				Glv.netSize[5] = trainingSet.get(0)._analysis[2].length;
+			}
+		}
 
 		if (dataLoaded) {
 			if (neuralnet == null || Glv.neuronsStored) {
@@ -293,25 +325,25 @@ public class NeuralNetworkManagment {
 					p.println("Card was NULL");
 					trainingSet.remove(trainingSet.get(row));
 				}
-			}	
-		}
-		
-		for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-			for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-				counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error);
 			}
 		}
-		
-		float precentage= counter;
 
-		p.println(precentage);
-		precentage/= (Glv.threadNN.net.neuralnet.m_output_layer.length *Glv.threadNN.net.neuralnet.m_output_layer[0].length);
-		precentage*=100f;
-		p.println(precentage);
-		
+		for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+			for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+				counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+			}
+		}
+
+		float precentage = counter;
+
+		//p.println(precentage);
+		precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+				* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+		precentage *= 100f;
+		//p.println(precentage);
 
 		Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-		
+
 		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
