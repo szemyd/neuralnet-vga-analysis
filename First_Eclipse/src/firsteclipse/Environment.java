@@ -130,7 +130,7 @@ public class Environment {
 		//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
 		//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
 		//		;
-
+		
 		//.plugTo(this,	"shuffle");
 
 		//accordion.close(1);

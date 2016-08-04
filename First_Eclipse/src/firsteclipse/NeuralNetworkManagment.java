@@ -227,7 +227,6 @@ public class NeuralNetworkManagment {
 
 	//---> NEURAL NETWORK
 	public void setupNeuralNetwork() {
-
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
 		/*
 		if (dataLoaded) {
@@ -241,11 +240,12 @@ public class NeuralNetworkManagment {
 			
 			case 2:
 				break;
-
+		
 			}
 		}
 		*/
 
+		
 		if (dataLoaded) {
 			if (Glv.neuronsStored) {
 				Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
@@ -304,53 +304,56 @@ public class NeuralNetworkManagment {
 	}
 
 	public void trainNN(DataAnalysis graphs) {
-		float counter = 0f;
-		for (int i = 0; i < Glv.numOfLearning; i++) {
-			int row = (int) p.floor(p.random(0, trainingSet.size()));
-			//int row=i;
+		for (int Z = 0; Z < 100; Z++) {
+			float counter = 0f;
+			for (int i = 0; i < Glv.numOfLearning; i++) {
+				int row = (int) p.floor(p.random(0, trainingSet.size()));
+				//int row=i;
 
-			if (Glv.neuronsStored) { // If I have given which neurons to input.
-				if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
-					neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
-					neuralnet.train(trainingSet.get(row).rForm);
+				if (Glv.neuronsStored) { // If I have given which neurons to input.
+					if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
+						neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
+						neuralnet.train(trainingSet.get(row).rForm);
+					} else {
+						p.println("Card was NULL");
+						trainingSet.remove(trainingSet.get(row));
+					}
 				} else {
-					p.println("Card was NULL");
-					trainingSet.remove(trainingSet.get(row));
+					if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
+						neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
+						neuralnet.train(trainingSet.get(row).rForm);
+					} else {
+						p.println("Card was NULL");
+						trainingSet.remove(trainingSet.get(row));
+					}
 				}
-			} else {
-				if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
-					neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
-					neuralnet.train(trainingSet.get(row).rForm);
-				} else {
-					p.println("Card was NULL");
-					trainingSet.remove(trainingSet.get(row));
+
+				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+						counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+					}
 				}
 			}
+			counter /= Glv.numOfLearning;
+
+			float precentage = counter;
+
+			//p.println(precentage);
+			precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+					* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+			precentage *= 100f;
+			//p.println(precentage);
+
+			Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+
+			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+			//p.println(counter);
+			graphs.lineChart.setData(Glv.errorCounter);
+
+			System.out.println("Last sum of error: " + precentage + "%");
+
+			Glv.howManyCycles++;
 		}
-
-		for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-			for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-				counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-			}
-		}
-
-		float precentage = counter;
-
-		//p.println(precentage);
-		precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-				* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
-		precentage *= 100f;
-		//p.println(precentage);
-
-		Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-
-		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-		//p.println(counter);
-		graphs.lineChart.setData(Glv.errorCounter);
-
-		System.out.println("Last sum of error: " + precentage + "%");
-
-		Glv.howManyCycles++;
 	}
 
 	public void testNN() {

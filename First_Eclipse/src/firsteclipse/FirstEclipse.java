@@ -9,6 +9,7 @@ import processing.core.PVector;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.gicentre.utils.stat.XYChart;
 import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
@@ -17,6 +18,7 @@ import com.sun.corba.se.spi.ior.IORFactories;
 import com.sun.glass.ui.TouchInputSupport;
 import com.sun.jmx.snmp.tasks.ThreadService;
 
+import javafx.scene.chart.LineChart;
 import javafx.scene.shape.Box;
 import peasy.*;
 import controlP5.*;
@@ -288,10 +290,10 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN == null) {
 			Glv.threadNN = new MyThreadNeuralNet(this, 999);
 			Glv.threadNN.start();
-			env.cp5.remove("setupNeuralNetwork");
-			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
-					.setImages(loadImage("networkRoll.PNG"), loadImage("network.PNG"), loadImage("networkPress.PNG"))
-					.updateSize().moveTo(env.g1).plugTo(Glv.threadNN.net);
+			//			env.cp5.remove("setupNeuralNetwork");
+			//			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
+			//					.setImages(loadImage("networkRoll.PNG"), loadImage("network.PNG"), loadImage("networkPress.PNG"))
+			//					.updateSize().moveTo(env.g1).plugTo(Glv.threadNN.net);
 		} else {
 			println("Data already loaded");
 		}
@@ -317,6 +319,15 @@ public class FirstEclipse extends PApplet {
 		if (!Glv.threadSuspended) {
 			for (MyThread thread : Glv.threads) {
 				thread.notify();
+			}
+		}
+	}
+
+	public void setupNeuralNetwork() {
+		if (Glv.threadNN != null) {
+			if (Glv.threadNN.net != null) {
+				Glv.threadNN.net.setupNeuralNetwork();
+				graphs.setup();
 			}
 		}
 	}
