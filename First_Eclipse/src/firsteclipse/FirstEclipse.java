@@ -364,7 +364,7 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN.net.dataLoaded)
 				env.myEditor();
 	}
-
+	
 	public void programMode(int theValue) {
 		println("I'm in programmode");
 		Glv.programMode = theValue;

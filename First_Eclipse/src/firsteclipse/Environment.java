@@ -45,8 +45,10 @@ public class Environment {
 	public Neuron[][] editorLayer;;
 
 	public Group g1, g2, g3, g4;
-	Bang b1, b2, b3, b4;
+	Bang b1, b2, b3, b4, b5;
 	RadioButton modeSwitch, genOrASwitch;
+
+	private boolean closed = false;
 
 	//Textarea myTextarea;
 	//Println console;
@@ -70,10 +72,14 @@ public class Environment {
 
 		//cp5.loadProperties(("controlP5.json"));
 
-		g1 = cp5.addGroup("Setup").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);//BackgroundHeight(150);
-		g2 = cp5.addGroup("Modes").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		g3 = cp5.addGroup("NeuralNetwork").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
-		g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(150);
+		g1 = cp5.addGroup("Setup").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(40, 40)
+				.hideBar();//BackgroundHeight(150);
+		g2 = cp5.addGroup("Modes").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(510, 40)
+				.hideBar();
+		g3 = cp5.addGroup("NeuralNetwork").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
+				.setPosition(820, 40).hideBar();
+		g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
+				.setPosition(1130, 40).hideBar();
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
@@ -98,55 +104,66 @@ public class Environment {
 				.setImages(p.loadImage("networkRoll.PNG"), p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
+		b5 = cp5.addBang("closeIt").setPosition(p.width - 15, 20).setSize(10, 10);
+		
+		p.println(b5.getName());
+
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
-		modeSwitch = cp5.addRadioButton("programMode").setPosition(10, 20).setItemWidth(20).setItemHeight(50)
+		modeSwitch = cp5.addRadioButton("programMode").setPosition(20, 20).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("Generating", 0).addItem("Neural Network", 1).addItem("Analysis", 2)
 				.addItem("Editor", 3).setColorLabel(p.color(255)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20)
 				.setSpacingColumn(10);
 
-		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(10, 80).setItemWidth(20).setItemHeight(50)
+		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(20, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360)).activate(0)
 				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		//---> Sliders for NN
-		cp5.addSlider("numOfLearning").setPosition(20, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
+		cp5.addSlider("numOfLearning").setPosition(25, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
-		cp5.addSlider("learningRate").setPosition(80, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
+		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
 				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
 		cp5.addSlider("hiddenLayerSize").setPosition(180, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
 
 		//---> Sliders for Generating Data.
-		cp5.addSlider("numberOfThreads").setPosition(20, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
+		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
-		cp5.addSlider("numberOfSolutions").setPosition(80, 20).setSize(20, 100).setRange(0, 5000)
+		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(500).setLabel("Solutions");
 
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(120, 20).setSize(100, 19).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
 
+		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
+		g2.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
+		g3.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
+		g4.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
+
 		//cp5.addButton("plug", 2);
 		//		ButtonBar b = cp5.addButtonBar("bar").setPosition(0, 0).setSize(p.width, 40)
 		//				.addItems(p.split("a b c d e f g h i j", " ")).setColorBackground(170);
 		//		;
-		
+
 		//.plugTo(this,	"shuffle");
 
 		//accordion.close(1);
 
+		/*
 		accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(460).addItem(g1).hideBar().setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
 		//.setColorBackground(p.color(360, 100, 360));
 		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("what").setPosition(510, 40).setWidth(300).addItem(g2).setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
-
+		
 		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("yes").setPosition(820, 40).setWidth(300).addItem(g3).setColorBackground(p.color(360,360,360,100)).setColorForeground(p.color(360,360,360,100));
 		accordion.open(0, 1, 2, 3, 4);
 		accordion = cp5.addAccordion("hmm").setPosition(1130, 40).setWidth(300).addItem(g4).setColorBackground(p.color(360,360,360,60)).setColorForeground(p.color(360,360,360,100));
-
+		
 		accordion.open(0, 1, 2, 3, 4);
 		accordion.setCollapseMode(Accordion.MULTI);
+		*/
 
 		/*
 				accordion = cp5.addAccordion("acc").setPosition(40, 40).setWidth(300).addItem(g1).addItem(g2).addItem(g3);
@@ -213,14 +230,24 @@ public class Environment {
 		cam.beginHUD();
 		{
 			p.noLights();
-			p.pushStyle();
-			{
-				p.rectMode(PConstants.CORNER);
-				p.noStroke();
-				p.fill(360,0,160,110);
-				p.rect(40, 40, p.width - 80, 150, 15);
+
+			if (!closed) {
+				p.pushStyle();
+				{
+
+					p.rectMode(PConstants.CORNER);
+					p.noStroke();
+					p.stroke(360, 0, 160, 280);
+					p.fill(360, 0, 0, 200);
+					p.rect(30, 40, 470, 150, 30);
+					p.rect(510, 40, 300, 150, 30);
+					p.rect(820, 40, 300, 150, 30);
+					p.rect(1130, 40, 300, 150, 30);
+					//	p.rect(40, 40, p.width - 80, 150, 15);
+					//p.rect(40, 40, p.width - 80, 150, 15);
+				}
+				p.popStyle();
 			}
-			p.popStyle();
 			cp5.draw();
 		}
 		cam.endHUD();
@@ -363,7 +390,27 @@ public class Environment {
 	}
 	//<---
 
+	public void closeIt() {
+		g1.close();
+		g2.close();
+		g3.close();
+		g4.close();
+
+		closed = !closed;
+	}
+
 	public void controlEvent(ControlEvent theEvent) {
+		if (theEvent.getName() == "closeIt") {
+			g1.close();
+			g2.close();
+			g3.close();
+			g4.close();
+
+			closed = !closed;
+		}
+
+		//				Glv.shouldDimReduction = !Glv.shouldDimReduction;
+		//			}
 		//p.println(theEvent.getController().getName());
 
 		//
