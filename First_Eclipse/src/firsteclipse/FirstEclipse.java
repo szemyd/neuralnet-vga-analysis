@@ -184,6 +184,13 @@ public class FirstEclipse extends PApplet {
 						env.cam.beginHUD();
 						{
 							//rotate(HALF_PI); // Rotate the whole scene.
+//							translate(-((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),-((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
+//							rotate(HALF_PI); // Rotate the whole scene.
+//							translate(((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
+//							
+							translate(-env.editorLayer[0][0].position.x, -env.editorLayer[0][0].position.y);
+							rotate(HALF_PI); // Rotate the whole scene.
+							translate(env.editorLayer[0][0].position.x, env.editorLayer[0][0].position.y);			
 							//translate(width/4,);
 							noLights();
 							env.drawEditor();

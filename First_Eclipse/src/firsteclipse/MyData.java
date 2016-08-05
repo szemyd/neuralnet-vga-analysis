@@ -186,7 +186,7 @@ public class MyData {
 			*/
 			
 			//p.println("2) Analysis length: " + _analysis.length + " | analysis[i].length: " + _analysis[0].length);
-			p.println("form length: " + form.size() + " | form[i].length: " + form.get(0).length);
+			//p.println("form length: " + form.size() + " | form[i].length: " + form.get(0).length);
 			i = 0;
 			for (String[] strings : form) {
 				for (int j = 0; j < strings.length; j++) {
@@ -204,7 +204,7 @@ public class MyData {
 				}
 				i++;
 			}
-			p.println("_form length: " + _form.length + " | _form[i].length: " + _form[0].length);
+			//p.println("_form length: " + _form.length + " | _form[i].length: " + _form[0].length);
 		}
 	}
 
