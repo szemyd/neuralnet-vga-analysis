@@ -271,11 +271,29 @@ public class Environment {
 	}
 
 	public void drawEditor() {
+		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length);
+		
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
 				editorLayer[i][j].draw();
 			}
 		}
+	}
+	
+	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+		p.pushStyle();
+		{
+			p.noFill();
+			//p.fill(360);
+			p.stroke(360);
+			p.pushMatrix();
+			{
+				p.rectMode(PConstants.CORNER);
+				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
+			}
+			p.popMatrix();
+		}
+		p.popStyle();
 	}
 	//<---
 

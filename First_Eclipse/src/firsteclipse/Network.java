@@ -4,6 +4,7 @@ import com.sun.corba.se.spi.orbutil.fsm.Input;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import controlP5.Println;
+import javafx.scene.transform.Rotate;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
@@ -124,7 +125,6 @@ public class Network {
 			p.popMatrix();
 		}
 		p.popStyle();
-
 	}
 
 	//---> Neuron interaction
