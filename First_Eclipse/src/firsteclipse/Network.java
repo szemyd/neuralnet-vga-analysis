@@ -15,7 +15,7 @@ public class Network {
 	public static Neuron[][] m_hidden_layer;
 	public static Neuron[][] m_output_layer;
 
-	MyData lastCard;
+	public MyData lastCard;
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) {
 		p = _p;

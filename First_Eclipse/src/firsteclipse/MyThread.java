@@ -67,7 +67,8 @@ class MyThread extends Thread {
 		Glv.seed++;
 
 		manBox.setup(); // 01. Creates the boxes in a random form.
-		manBox.createHeights(); // 02. Iterates through the CA.
+		if (threadID != 1000) manBox.createHeights(); // 02. Iterates through the CA.
+		else manBox.setHeightToMyWill();
 
 		spaceSyntax.setup(manBox.boxes); // 03. Creates starting grid of rectangles for the spacesyntax VGA, sets the rectangles according to cubes
 		spaceSyntax(); // 04. Does VGA Analysis

@@ -215,26 +215,34 @@ public class ManageBoxes {
 				if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < boxes.length && (j + l) < boxes[i].length) {
 					boxes[i + k][j + l].height = num;
 
-//					if (k == 0 || k == (Glv.cubeSizeReduced / Glv.cubeSize) - 1 || l == 0
-//							|| l == (Glv.cubeSizeReduced / Glv.cubeSize) - 1) {
-//						boxes[i + k][j + l].amIEdge = true;
-//					}
-//					else
-//						boxes[i + k][j + l].amIEdge = false; // Switch amIEdge off if you are not on the edge of the box.
-				
-				
+					//					if (k == 0 || k == (Glv.cubeSizeReduced / Glv.cubeSize) - 1 || l == 0
+					//							|| l == (Glv.cubeSizeReduced / Glv.cubeSize) - 1) {
+					//						boxes[i + k][j + l].amIEdge = true;
+					//					}
+					//					else
+					//						boxes[i + k][j + l].amIEdge = false; // Switch amIEdge off if you are not on the edge of the box.
+
 					if (k == 0 && l == 0) {
 						boxes[i + k][j + l].amIEdge = true;
-					}
-					else
+					} else
 						boxes[i + k][j + l].amIEdge = false; // Switch amIEdge off if you are not on the edge of the box.
-				
+
 				}
 
 			}
 		}
 	}
 
+	public void setHeightToMyWill() {
+		for (int i = 0; i < Glv.threadNN.net.neuralnet.lastCard._form.length; i++) {
+			for (int j = 0; j < Glv.threadNN.net.neuralnet.lastCard._form[i].length; j++) {
+				if (j < boxes.length && i < boxes[j].length) {
+					if (boxes[j][i] != null && Glv.threadNN.net.neuralnet.lastCard._form[i][j] != null)
+						boxes[j][i].height = Glv.threadNN.net.neuralnet.lastCard._form[i][j];
+				}
+			}
+		}
+	}
 	/*
 	public float walls2(int i, int j) {
 		int counter = 0;

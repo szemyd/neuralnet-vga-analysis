@@ -31,6 +31,8 @@ public class NeuralNetworkManagment {
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
+	MyThread thread;
+
 	public NeuralNetworkManagment(PApplet _p) {
 		p = _p;
 
@@ -171,14 +173,16 @@ public class NeuralNetworkManagment {
 		for (MyData data : testingSet) {
 			for (String[] strings : data.analysis) {
 				for (int i = 0; i < strings.length; i++) {
-					int num = Integer.valueOf(strings[i]);
-					if (num > Glv.highLowForNN.x) {
-						Glv.highLowForNN.x = num;
-						Glv.cardContainingHighest = testingSet.indexOf(data);
-						//p.println("Card containing lowest: " + Glv.cardContainingHighest);
+					if (strings[i] != "\n" && strings[i] != "" && strings[i] != null) {
+						int num = Integer.valueOf(strings[i]);
+						if (num > Glv.highLowForNN.x) {
+							Glv.highLowForNN.x = num;
+							Glv.cardContainingHighest = testingSet.indexOf(data);
+							//p.println("Card containing lowest: " + Glv.cardContainingHighest);
+						}
+						if (num < Glv.highLowForNN.y && num > 6)
+							Glv.highLowForNN.y = num;
 					}
-					if (num < Glv.highLowForNN.y && num > 6)
-						Glv.highLowForNN.y = num;
 				}
 			}
 			//			for (int i = 0; i < data._analysis.length; i++) {
@@ -245,7 +249,6 @@ public class NeuralNetworkManagment {
 		}
 		*/
 
-		
 		if (dataLoaded) {
 			if (Glv.neuronsStored) {
 				Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
@@ -304,7 +307,7 @@ public class NeuralNetworkManagment {
 	}
 
 	public void trainNN(DataAnalysis graphs) {
-		for (int Z = 0; Z < 100; Z++) {
+		for (int Z = 0; Z < 10; Z++) {
 			float counter = 0f;
 			for (int i = 0; i < Glv.numOfLearning; i++) {
 				int row = (int) p.floor(p.random(0, trainingSet.size()));
@@ -354,6 +357,7 @@ public class NeuralNetworkManagment {
 
 			Glv.howManyCycles++;
 		}
+		backTo3D();
 	}
 
 	public void testNN() {
@@ -372,8 +376,16 @@ public class NeuralNetworkManagment {
 	}
 	//<---
 
-	//---> Calculating sigmoid
+	//---> For getting data back into Analysis & 3D
+	public void backTo3D() {
 
+		thread = new MyThread(p, 1000);
+
+		if (!thread.VGADone) // If it is a new thread then start it!
+			thread.start();
+	}
+
+	//---> Calculating sigmoid
 	private void setupSigmoid() { // Calculates the sigmoid function.
 		for (int i = 0; i < 200; i++) {
 			float x = (i / 20.0f) - 5.0f;

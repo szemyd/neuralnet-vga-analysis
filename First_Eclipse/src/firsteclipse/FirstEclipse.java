@@ -96,20 +96,39 @@ public class FirstEclipse extends PApplet {
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
 
-			if (Glv.threads != null) {
-				if (Glv.threads.size() > 0) {
-					if (Glv.threads.get(Glv.whichToDisplay) != null) {
-						if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
-								&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null
-								&& Glv.threads.get(Glv.whichToDisplay).manBox != null) {
-							Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+			if (Glv.newOrNet) {
+				if (Glv.threads != null) {
+					if (Glv.threads.size() > 0) {
+						if (Glv.whichToDisplay >= 0) {
+							if (Glv.threads.get(Glv.whichToDisplay) != null) {
+								if (Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0] != null
+										&& Glv.threads.get(Glv.whichToDisplay).manBox.boxes[0][0].height != null
+										&& Glv.threads.get(Glv.whichToDisplay).manBox != null) {
+									Glv.threads.get(Glv.whichToDisplay).manBox.draw();
+								}
+								if (Glv.shouldSpaceSyntax
+										&& Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
+									Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
+							}
 						}
-						if (Glv.shouldSpaceSyntax && Glv.threads.get(Glv.whichToDisplay).spaceSyntax.highLow != null)
-							Glv.threads.get(Glv.whichToDisplay).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 					}
 				}
-				env.draw(); // Draws the environment.
+			} else {
+				if (Glv.threadNN != null) {
+					if (Glv.threadNN.net != null) {
+						if (Glv.threadNN.net.thread != null) {
+							if (Glv.threadNN.net.thread.manBox.boxes[0][0] != null
+									&& Glv.threadNN.net.thread.manBox.boxes[0][0].height != null
+									&& Glv.threadNN.net.thread.manBox != null) {
+								Glv.threadNN.net.thread.manBox.draw();
+							}
+							if (Glv.shouldSpaceSyntax && Glv.threadNN.net.thread.spaceSyntax.highLow != null)
+								Glv.threadNN.net.thread.spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
+						}
+					}
+				}
 			}
+			env.draw(); // Draws the environment.
 		}
 		popMatrix();
 	}
@@ -121,7 +140,6 @@ public class FirstEclipse extends PApplet {
 			noLights();
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
-
 					Glv.threadNN.net.neuralnet.draw();
 				} else {
 					textAlign(CENTER);
@@ -236,7 +254,11 @@ public class FirstEclipse extends PApplet {
 			}
 		}
 
-		Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
+		if (Glv.threads.size() > 0) {
+			Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
+		} else
+			Glv.whichToDisplay = 0;
+		
 		Glv.programMode = constrain(Glv.programMode, 0, 3);
 	}
 
@@ -364,10 +386,17 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN.net.dataLoaded)
 				env.myEditor();
 	}
-	
+
 	public void programMode(int theValue) {
 		println("I'm in programmode");
 		Glv.programMode = theValue;
+	}
+
+	public void newOrNet(int theValue) {
+		if (theValue == 0)
+			Glv.newOrNet = true;
+		else
+			Glv.newOrNet = false;
 	}
 
 	public static void main(String _args[]) {
