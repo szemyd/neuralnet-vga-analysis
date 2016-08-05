@@ -2,6 +2,7 @@ package firsteclipse;
 
 import javax.security.auth.PrivateCredentialPermission;
 
+import controlP5.Println;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -234,6 +235,9 @@ public class ManageBoxes {
 	}
 
 	public void setHeightToMyWill() {
+		
+		p.println("_form.length: " + Glv.threadNN.net.neuralnet.lastCard._form.length + " | _form[0].length: " + Glv.threadNN.net.neuralnet.lastCard._form[0].length);
+		
 		for (int i = 0; i < Glv.threadNN.net.neuralnet.lastCard._form.length; i++) {
 			for (int j = 0; j < Glv.threadNN.net.neuralnet.lastCard._form[i].length; j++) {
 				if (j < boxes.length && i < boxes[j].length) {

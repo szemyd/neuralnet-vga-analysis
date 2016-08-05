@@ -98,6 +98,10 @@ public class NeuralNetworkManagment {
 										isItID = false;
 										break;
 									} else {
+//										for (int k = 0; k < thisRow.length; k++) {
+//											p.println("thisRow: " + thisRow[k]);	
+//										}
+//										p.println("_______________");	
 										data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
 										isItID = false;
 										break;
@@ -333,7 +337,8 @@ public class NeuralNetworkManagment {
 
 				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
 					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-						counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+						//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+						counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2) / 2f; // Counts all the error of the last learning phase.
 					}
 				}
 			}

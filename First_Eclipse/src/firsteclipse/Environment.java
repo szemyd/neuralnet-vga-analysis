@@ -42,11 +42,11 @@ public class Environment {
 
 	PShape s;
 
-	public Neuron[][] editorLayer;;
+	public Neuron[][] editorLayer;
 
-	public Group g1, g2, g3, g4, g5;
-	Bang b1, b2, b3, b4, b5;
-	RadioButton modeSwitch, genOrASwitch, newOrNet;
+	public Group g1, g2, g3, g4, g5, g6;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8;
+	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
 
@@ -80,19 +80,22 @@ public class Environment {
 				.setPosition(820, 40).hideBar();
 		g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
 				.setPosition(1130, 40).hideBar();
-	
+		g5 = cp5.addGroup("ManageEditor").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
+				.setPosition(1440, 40).hideBar();
+		g6 = cp5.addGroup("CameraNav").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(1750, 40)
+				.hideBar();
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
 		//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
 		//		     .updateSize();
 
+		//---> For ProgramModes
 		b1 = cp5.addBang("analysisSetup")
 				.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIconRoll.PNG"),
 						p.loadImage("playIcon.PNG"), p.loadImage("playIconPress.PNG"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
-		//b1 = cp5.addBang("analysisSetup").setPosition(10, 20).setImage(p.loadImage("playIcon.png")).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle").updateSize();
 		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100)
 				.setImages(p.loadImage("loadRoll.PNG"), p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
@@ -104,10 +107,16 @@ public class Environment {
 		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
 				.setImages(p.loadImage("networkRoll.PNG"), p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
+		//<---
 
 		b5 = cp5.addBang("closeIt").setPosition(p.width - 15, 20).setSize(10, 10);
-		
-		p.println(b5.getName());
+
+		b6 = cp5.addBang("resetEditor").setPosition(20, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+
+		b7 = cp5.addBang("ninetyD").setPosition(20, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("+90°");
+		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("-90°");
+
+		//p.println(b5.getName());
 
 		//cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100).moveTo(g1).plugTo(this, "shuffle");
 
@@ -119,7 +128,7 @@ public class Environment {
 		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(20, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360)).activate(0)
 				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
-				
+
 		newOrNet = cp5.addRadioButton("newOrNet").setPosition(160, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(0)
 				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
@@ -248,6 +257,8 @@ public class Environment {
 					p.rect(510, 40, 300, 150, 30);
 					p.rect(820, 40, 300, 150, 30);
 					p.rect(1130, 40, 300, 150, 30);
+					p.rect(1440, 40, 300, 150, 30);
+					p.rect(1750, 40, 300, 150, 30);
 					//	p.rect(40, 40, p.width - 80, 150, 15);
 					//p.rect(40, 40, p.width - 80, 150, 15);
 				}

@@ -175,19 +175,25 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void drawEditor() { // ProgramMode == 3
-		if (Glv.threadNN != null) {
-			if (Glv.threadNN.net.dataLoaded) {
-				if (env.editorLayer != null) {
-					env.cam.beginHUD();
-					{
-						//translate(width/4,);
-						noLights();
-						env.drawEditor();
+		pushMatrix();
+		{
+
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded) {
+					if (env.editorLayer != null) {
+						env.cam.beginHUD();
+						{
+							//rotate(HALF_PI); // Rotate the whole scene.
+							//translate(width/4,);
+							noLights();
+							env.drawEditor();
+						}
+						env.cam.endHUD();
 					}
-					env.cam.endHUD();
 				}
 			}
 		}
+		popMatrix();
 	}
 
 	/*
@@ -258,8 +264,9 @@ public class FirstEclipse extends PApplet {
 			Glv.whichToDisplay = constrain(Glv.whichToDisplay, 0, Glv.threads.size() - 1);
 		} else
 			Glv.whichToDisplay = 0;
-		
+
 		Glv.programMode = constrain(Glv.programMode, 0, 3);
+		env.modeSwitch.activate(Glv.programMode);
 	}
 
 	public void mousePressed() {
@@ -397,6 +404,25 @@ public class FirstEclipse extends PApplet {
 			Glv.newOrNet = true;
 		else
 			Glv.newOrNet = false;
+	}
+
+	public void resetEditor() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					env.editorLayer[i][j].iAmChosen = false;
+				}
+			}
+		}
+	}
+
+	public void ninetyD() {
+		env.cam.rotateZ(HALF_PI);
+	}
+
+	public void mNinetyD() {
+		env.cam.rotateZ(-HALF_PI);
+
 	}
 
 	public static void main(String _args[]) {

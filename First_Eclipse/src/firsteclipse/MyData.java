@@ -138,7 +138,32 @@ public class MyData {
 
 	//---> Data cleaning
 	public void convert() {
+		
+		
+		
 		if (analysis.size() > 0 && form.size() > 0) {
+		//	p.println("1) Analysis length: " + analysis.size() + " | analysis.get(0).length: " + analysis.get(0).length);
+			_analysis = new Float[analysis.get(0).length][analysis.size()];
+			_form = new Float[form.get(0).length][form.size()];
+
+			int i = 0;
+			for (String[] strings : analysis) {
+				for (int j = 0; j < strings.length; j++) {
+					if (j >= 0 && j < strings.length) {
+						//if (strings[j].length() > 0 && strings[j].length()<6) {
+						if (Character.isDigit(strings[j].charAt(0))) {
+							float num = (float) Integer.valueOf(strings[j]);
+							if (j < _analysis.length && i < _analysis[j].length)
+								//_analysis[i][j] = num; // Without mapping.
+								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1500f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+							//}
+						}
+					}
+				}
+				i++;
+			}
+			
+			/*
 			_analysis = new Float[analysis.size()][analysis.get(0).length];
 			_form = new Float[form.size()][form.get(0).length];
 
@@ -158,24 +183,28 @@ public class MyData {
 				}
 				i++;
 			}
-
+			*/
+			
+			//p.println("2) Analysis length: " + _analysis.length + " | analysis[i].length: " + _analysis[0].length);
+			p.println("form length: " + form.size() + " | form[i].length: " + form.get(0).length);
 			i = 0;
 			for (String[] strings : form) {
-				for (int j = 0; j < _form[i].length; j++) {
+				for (int j = 0; j < strings.length; j++) {
 					if (strings[j].length() > 0 && strings[j] != null) {
 						if (Character.isDigit(strings[j].charAt(0))) {
 							float num = (float) Integer.valueOf(strings[j]);
-							if (i < _form.length && j < _form[i].length) {
+							if (j < _form.length && i < _form[j].length) {
 								if (num == 0)
-									_form[i][j] = -1f;
+									_form[j][i] = -1f;
 								else
-									_form[i][j] = num;
+									_form[j][i] = num;
 							}
 						}
 					}
 				}
 				i++;
 			}
+			p.println("_form length: " + _form.length + " | _form[i].length: " + _form[0].length);
 		}
 	}
 
