@@ -44,9 +44,9 @@ public class Environment {
 
 	public Neuron[][] editorLayer;;
 
-	public Group g1, g2, g3, g4;
+	public Group g1, g2, g3, g4, g5;
 	Bang b1, b2, b3, b4, b5;
-	RadioButton modeSwitch, genOrASwitch;
+	RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
 
@@ -80,6 +80,7 @@ public class Environment {
 				.setPosition(820, 40).hideBar();
 		g4 = cp5.addGroup("FormGeneration").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
 				.setPosition(1130, 40).hideBar();
+	
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
@@ -118,6 +119,10 @@ public class Environment {
 		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(20, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360)).activate(0)
 				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
+				
+		newOrNet = cp5.addRadioButton("newOrNet").setPosition(160, 80).setItemWidth(20).setItemHeight(50)
+				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(0)
+				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		//---> Sliders for NN
 		cp5.addSlider("numOfLearning").setPosition(25, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
@@ -133,7 +138,7 @@ public class Environment {
 		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(500).setLabel("Solutions");
 
-		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(120, 20).setSize(100, 19).moveTo(g4)
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(160, 20).setSize(60, 19).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
 
 		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));

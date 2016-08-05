@@ -47,6 +47,7 @@ public class Glv {
 
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?
+	public static boolean newOrNet = true; // Should I display in 3D the data generating or the current network?
 
 	/* 
 	 * OTHER GLOBAL VARIABLES
