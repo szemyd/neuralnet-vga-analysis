@@ -2,6 +2,7 @@ package firsteclipse;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
@@ -27,6 +28,7 @@ public class FirstEclipse extends PApplet {
 
 	Environment env = new Environment(this);
 	public DataAnalysis graphs = new DataAnalysis(this);
+	PFont titleFont, smallFont;
 	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
@@ -45,6 +47,10 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
+		
+		titleFont = createFont("Museo300-Regular.otf", 22);
+		smallFont = createFont("Museo300-Regular.otf", 12);
+		textFont(smallFont);
 		//noStroke();
 		rectMode(PConstants.CENTER);
 
@@ -425,16 +431,24 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void resetEditor() {
+		//println("I am definitely here.");
 		if (env.editorLayer != null) {
 			for (int i = 0; i < env.editorLayer.length; i++) {
 				for (int j = 0; j < env.editorLayer[i].length; j++) {
 					env.editorLayer[i][j].iAmChosen = false;
+					env.editorLayer[i][j].colour = 0;
 				}
 			}
 		}
 	}
 
 	public void compareValues() {
+		
+		if (Glv.threadNN.net.thread == null)
+		{
+			Glv.threadNN.net.backTo3D();
+		}
+		
 		if (Glv.threadNN.net.thread != null) {
 			if (graphs != null) {
 				graphs.compare(env);

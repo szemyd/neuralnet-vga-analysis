@@ -40,6 +40,7 @@ public class Glv {
 	public static Integer [] netSize  = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
 	public static int numOfLearning =500; // How many cards should I show with one click?
 	public static ArrayList<PVector> errorCounter=new ArrayList<PVector>();
+	public static ArrayList<PVector> errorCounter2=new ArrayList<PVector>();
 	public static float howManyCycles =0f; // How often have I pressed "train NN". Shown a predefined number of cards.
 	public static float howMuchBiggerHidden = 2.5f;
 	

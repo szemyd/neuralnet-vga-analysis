@@ -96,7 +96,7 @@ public class MyData {
 				_analysis.length, _analysis[0].length);
 
 		
-		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS!
+		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
 		if (Glv.neuronsStored) {
 			if (_analysis != null) {
 				for (int i = 0; i < _analysis.length; i++) {

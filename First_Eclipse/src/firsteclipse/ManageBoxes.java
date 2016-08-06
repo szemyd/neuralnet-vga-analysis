@@ -235,18 +235,66 @@ public class ManageBoxes {
 	}
 
 	public void setHeightToMyWill() {
-		
-		p.println("_form.length: " + Glv.threadNN.net.neuralnet.lastCard._form.length + " | _form[0].length: " + Glv.threadNN.net.neuralnet.lastCard._form[0].length);
-		
-		for (int i = 0; i < Glv.threadNN.net.neuralnet.lastCard._form.length; i++) {
-			for (int j = 0; j < Glv.threadNN.net.neuralnet.lastCard._form[i].length; j++) {
-				if (i < boxes.length && j < boxes[i].length) {
-					if (boxes[i][j] != null && Glv.threadNN.net.neuralnet.lastCard._form[i][j] != null)
-						boxes[i][j].height = Glv.threadNN.net.neuralnet.lastCard._form[i][j];
+
+		//p.println("_form.length: " + Glv.threadNN.net.neuralnet.lastCard._form.length + " | _form[0].length: " + Glv.threadNN.net.neuralnet.lastCard._form[0].length);
+
+		//---> This is if I wanted to set it to the last card
+		/*
+			for (int i = 0; i < Glv.threadNN.net.neuralnet.lastCard._form.length; i++) {
+				for (int j = 0; j < Glv.threadNN.net.neuralnet.lastCard._form[i].length; j++) {
+					if (i < boxes.length && j < boxes[i].length) {
+						if (boxes[i][j] != null && Glv.threadNN.net.neuralnet.lastCard._form[i][j] != null)
+							boxes[i][j].height = Glv.threadNN.net.neuralnet.lastCard._form[i][j];
+					}
 				}
 			}
+			*/
+		//<---
+		int k = 0;
+		for (int i = 0; i < boxes.length; i += Glv.cubeSizeReduced / Glv.cubeSize) {
+			int l = 0;
+			for (int j = 0; j < boxes[i].length; j += Glv.cubeSizeReduced / Glv.cubeSize) {
+				if (k < Glv.threadNN.net.neuralnet.m_output_layer.length
+						&& l < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
+					if (Glv.threadNN.net.neuralnet.m_output_layer[k][l].m_output < -0.5f) // If it's not really black then take it as down (0).
+					{
+						for (int m = 0; m < Glv.cubeSizeReduced / Glv.cubeSize; m++) {
+							for (int n = 0; n < Glv.cubeSizeReduced / Glv.cubeSize; n++) {
+								if ((i + m) >= 0 && (j + n) >= 0 && (i + m) < boxes.length
+										&& (j + n) < boxes[i].length) {
+									boxes[i + m][j + n].height = 0.0f;
+								}
+							}
+						}
+					} else {
+						for (int m = 0; m < Glv.cubeSizeReduced / Glv.cubeSize; m++) {
+							for (int n = 0; n < Glv.cubeSizeReduced / Glv.cubeSize; n++) {
+								if ((i + m) >= 0 && (j + n) >= 0 && (i + m) < boxes.length
+										&& (j + n) < boxes[i].length) {
+									boxes[i + m][j + n].height = 1.0f;
+								}
+							}
+						}
+					}
+				}
+				l++;
+			}
+			k++;
 		}
-		
+		/*
+				for (int i = 0; i < Glv.threadNN.net.neuralnet.m_output_layer.length; i++) {
+					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer[i].length; j++) {
+						if (i < boxes.length && j < boxes[i].length) {
+							if (boxes[i][j] != null && Glv.threadNN.net.neuralnet.m_output_layer[i][j] != null)
+								if (Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_output < -0.5f) // If it's not really black then take it as down (0).
+									boxes[i][j].height = 0.0f;
+								else
+									boxes[i][j].height = 1.0f;
+						}
+					}
+				}
+				*/
+
 		dimReduction();
 	}
 	/*

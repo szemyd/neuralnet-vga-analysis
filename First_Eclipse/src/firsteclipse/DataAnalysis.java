@@ -16,10 +16,13 @@ public class DataAnalysis {
 	private PApplet p;
 
 	BarChart myBarChart;
-	PFont titleFont, smallFont;
+	
 
-	XYChart lineChart;
+	XYChart lineChart, lineChart2;
 	Float[][] compareAnalysis;// = new ArrayList<Float[]>();
+
+	float difference = -1f;
+	float precentage;
 
 	public DataAnalysis(PApplet _p) {
 		p = _p;
@@ -29,24 +32,15 @@ public class DataAnalysis {
 	}
 
 	public void setup() {
-		//		titleFont = p.loadFont("Helvetica-22.vlw");
-		//		smallFont = p.loadFont("Helvetica-12.vlw");
-		//		p.textFont(smallFont);
-		//
-		//		myBarChart.setData(new float[] { 2462, 2801, 3280, 3983, 4490, 4894, 5642, 6322, 6489, 6401, 7657, 9649, 9767,
-		//				12167, 15154, 18200, 23124, 28645 });
-		//
-		//		myBarChart.setBarLabels(new String[] { "1830", "1840", "1850", "1860", "1870", "1880", "1890", "1900", "1910",
-		//				"1920", "1930", "1940", "1950", "1960", "1970", "1980", "1990", "2000" });
-		//		myBarChart.setBarColour(p.color(200, 80, 80, 100));
-		//		myBarChart.setBarGap(2);
-		//		myBarChart.setValueFormat("$###,###");
-		//		myBarChart.showValueAxis(true);
-		//		myBarChart.showCategoryAxis(true);
+		
+		//p.textFont(which, size);
 
 		lineChart = new XYChart(p);
+		lineChart2 = new XYChart(p);
 
 		Glv.errorCounter = new ArrayList<PVector>();
+		Glv.errorCounter2 = new ArrayList<PVector>();
+
 		Glv.howManyCycles = 0f;
 
 		//		lineChart.setData(new float[] { 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000 },
@@ -77,6 +71,29 @@ public class DataAnalysis {
 		lineChart.setPointSize(5);
 		lineChart.setLineWidth(2);
 
+		//---> Chart 2.
+		lineChart2.setData(Glv.errorCounter2);
+
+		// Axis formatting and labels.
+		lineChart2.showXAxis(true);
+		lineChart2.showYAxis(true);
+
+		lineChart2.setAxisValuesColour(p.color(360));
+
+		lineChart2.setMinY(0f);
+		lineChart2.setMaxY(10f);
+
+		lineChart2.setAxisColour(p.color(360, 50, 360, 360));
+		//lineChart.setDecorations(true);
+
+		//		lineChart.setYFormat("0"); // Monetary value in $US
+		//	lineChart.setXFormat("0"); // Year
+
+		// Symbol colours
+		lineChart2.setPointColour(p.color(180, 50, 360, 360));
+		lineChart2.setPointSize(5);
+		lineChart2.setLineWidth(2);
+
 	}
 
 	public void draw() {
@@ -86,6 +103,7 @@ public class DataAnalysis {
 		//p.fill(p.color(180, 50, 360, 360));
 		//p.stroke(360, 360, 360);
 		lineChart.draw(15f, 15f, p.width - 30f, p.height * 2f * 0.33f - 30f);
+		lineChart2.draw(15f, p.height * 2f * 0.33f - 30f + 25f, p.width - 30f, p.height * 0.33f - 30f);
 		//p.line(x1, y1, x2, y2);
 
 	}
@@ -106,7 +124,6 @@ public class DataAnalysis {
 						{
 							//p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
 							p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
-							
 
 							p.translate(6f * p.width / 10f, p.height / 2f);
 							p.translate(
@@ -145,14 +162,18 @@ public class DataAnalysis {
 								{
 									if (env.editorLayer[i][j].iAmChosen) {
 										p.strokeWeight(1.2f);
-										p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 360);
-										p.fill(360, 80, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
+										p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+												360);
+										p.fill(360, 80, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+												180);
 									} else {
 										p.strokeWeight(1.0f);
-										p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),180);
-										p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),180);
+										p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+												180);
+										p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+												180);
 									}
-									
+
 									p.translate(8f * p.width / 10f, p.height / 2f);
 									p.translate(
 											(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f
@@ -167,6 +188,28 @@ public class DataAnalysis {
 					}
 				}
 			}
+		}
+		//<---
+
+		//---> DISPLAYS DIFFERENCE IN THE MIDDLE!!
+		if (difference >= 0f) {
+			p.pushMatrix();
+			{
+				p.pushStyle();
+				{
+					p.strokeWeight(5f);
+					p.stroke(360, 220);
+					p.fill(360, 180);
+					p.ellipse(p.width * 0.5f, p.height * 0.5f, 120f, 120f);
+					p.textAlign(PConstants.CENTER, PConstants.CENTER);
+					p.textSize(24f);
+					p.fill(360);
+					p.stroke(360);
+					p.text(precentage + "%", p.width * 0.5f, p.height * 0.5f);
+				}
+				p.popStyle();
+			}
+			p.popMatrix();
 		}
 		//<---
 	}
@@ -201,6 +244,7 @@ public class DataAnalysis {
 			}
 		}
 		extractValuableAnalysis(env, num);
+		calcDifference(); // Calculate difference between the selected points of the original loaded VGA and the newly generated one!
 	}
 
 	public void extractValuableAnalysis(Environment env, int length) {
@@ -229,4 +273,31 @@ public class DataAnalysis {
 		}
 	}
 
+	public void calcDifference() {
+		if (compareAnalysis != null) {
+			difference = 0;
+
+			for (int i = 0; i < compareAnalysis.length; i++) {
+				for (int j = 0; j < compareAnalysis[i].length; j++) {
+					difference += (Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
+							2)) / 2f;
+				}
+			}
+		}
+		
+		precentage=0;
+		precentage = difference;
+
+		//p.println(precentage);
+		precentage /= (Glv.threadNN.net.neuralnet.m_input_layer.length
+				* Glv.threadNN.net.neuralnet.m_input_layer[0].length);
+		precentage *= 100f;
+		
+		Glv.errorCounter2.add(new PVector(Glv.howManyCycles, precentage));
+
+		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+		//p.println(counter);
+		lineChart2.setData(Glv.errorCounter2);
+		System.out.println("Last sum of VGA difference: " + precentage + "%");
+	}
 }
