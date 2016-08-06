@@ -29,7 +29,7 @@ public class Network {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
 				PVector position = new PVector(
 						(Glv.neuronSize * 1.2f * i)
-								+ (p.width / 4 - (Glv.neuronSize * 1.2f * m_input_layer.length) * 0.5f),
+								+ (4f *(p.width /10f) - (Glv.neuronSize * 1.2f * m_input_layer.length) * 0.5f),
 						(Glv.neuronSize * 1.2f * j)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_input_layer[0].length) * 0.5f));
 				m_input_layer[i][j] = new Neuron(p, position);
@@ -60,7 +60,7 @@ public class Network {
 		}
 	}
 
-	public void draw() {
+	public void draw(Environment env) {
 
 		drawBoundary(m_input_layer[0][0].position, m_input_layer.length, m_input_layer[0].length);
 
@@ -108,7 +108,7 @@ public class Network {
 			}
 		}
 		if (lastCard != null)
-			lastCard.draw();
+			lastCard.draw(env);
 	}
 
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {

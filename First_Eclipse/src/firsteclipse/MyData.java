@@ -33,7 +33,7 @@ public class MyData {
 		p = _p;
 	}
 
-	public void draw() {
+	public void draw(Environment env) {
 
 		/*
 		for (int i = 0; i < _form.length; i++) {
@@ -45,7 +45,9 @@ public class MyData {
 							p.height / 2 - (Glv.neuronSize * 1.2f * _form[0].length * 0.5f));
 					p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 		
-					p.fill(360, 0, 180 * (1 - _form[i][j]));
+					//if(env.editorLayer[i][j].iAmChosen) p.fill(360, 360, 180 * (1 - _form[i][j]));
+					//else 
+						p.fill(360, 0, 180 * (1 - _form[i][j]));
 					//					
 					p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 				}
@@ -85,14 +87,63 @@ public class MyData {
 			}
 		}
 
+		drawBoundary(
+				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
+				_analysis.length, _analysis[0].length);
+
+		if (Glv.neuronsStored) {
+			if (_analysis != null) {
+				for (int i = 0; i < _analysis.length; i++) {
+					for (int j = 0; j < _analysis[i].length; j++) {
+						p.pushMatrix();
+						{
+							p.pushStyle();
+							{
+								
+								p.translate(p.width / 5, p.height * 0.5f);
+								p.translate(
+										(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+										(Glv.neuronSize * 1.2f * j)
+												- (Glv.neuronSize * 1.2f * _analysis[i].length) * 0.5f);
+
+								p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								if (env.editorLayer[i][j].iAmChosen)
+								{
+									p.strokeWeight(1.2f);
+									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
+								}
+								else
+								{
+									p.strokeWeight(1.0f);
+									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								}
+
+								//							if (env.editorLayer[i][j].iAmChosen)
+								//								p.fill(360, 360, 180 * (1 - _analysis[i][j]), 180);
+								//
+								//							else
+								//								p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								//p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+
+								p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+							}
+							p.popStyle();
+						}
+						p.popMatrix();
+					}
+				}
+			}
+		}
+
 		/*
 		drawBoundary(new PVector(
 				+(p.width / 4 - (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer.length) * 0.5f),
-
+		
 				+(p.height / 2 - (Glv.neuronSize * 1.2f * Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
 						+ p.height * 0.25f),
 				rAnalysis.length, rAnalysis[0].length);
-
+		
 		if (Glv.neuronsStored) {
 			if (rAnalysis != null) {
 				for (int i = 0; i < rAnalysis.length; i++) {
@@ -105,16 +156,17 @@ public class MyData {
 										+ (p.height / 2 - (Glv.neuronSize * 1.2f
 												* Glv.threadNN.net.neuralnet.m_input_layer[0].length) * 0.5f)
 										+ p.height * 0.25f);
-
-						p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
-
+		
+						if(env.editorLayer[i][j].iAmChosen) p.fill(360, 360, 180 * (1 - rAnalysis[i][j]));
+						else p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+						//p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+		
 						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 					}
 				}
 			}
 		}
 		*/
-
 	}
 
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {
@@ -138,11 +190,9 @@ public class MyData {
 
 	//---> Data cleaning
 	public void convert() {
-		
-		
-		
+
 		if (analysis.size() > 0 && form.size() > 0) {
-		//	p.println("1) Analysis length: " + analysis.size() + " | analysis.get(0).length: " + analysis.get(0).length);
+			//	p.println("1) Analysis length: " + analysis.size() + " | analysis.get(0).length: " + analysis.get(0).length);
 			_analysis = new Float[analysis.get(0).length][analysis.size()];
 			_form = new Float[form.get(0).length][form.size()];
 
@@ -162,11 +212,11 @@ public class MyData {
 				}
 				i++;
 			}
-			
+
 			/*
 			_analysis = new Float[analysis.size()][analysis.get(0).length];
 			_form = new Float[form.size()][form.get(0).length];
-
+			
 			int i = 0;
 			for (String[] strings : analysis) {
 				for (int j = 0; j < _analysis[i].length; j++) {
@@ -184,7 +234,7 @@ public class MyData {
 				i++;
 			}
 			*/
-			
+
 			//p.println("2) Analysis length: " + _analysis.length + " | analysis[i].length: " + _analysis[0].length);
 			//p.println("form length: " + form.size() + " | form[i].length: " + form.get(0).length);
 			i = 0;

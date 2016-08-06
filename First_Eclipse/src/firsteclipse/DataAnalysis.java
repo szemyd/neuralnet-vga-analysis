@@ -90,6 +90,33 @@ public class DataAnalysis {
 
 	}
 
+	public void drawNeuron() {
+		if (compareAnalysis != null) {
+			drawBoundary(
+					new PVector((6f* p.width/10f) -(Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
+							(p.height / 2f) - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f),
+					compareAnalysis.length, compareAnalysis[0].length);
+
+			for (int i = 0; i < compareAnalysis.length; i++) {
+				for (int j = 0; j < compareAnalysis[i].length; j++) {
+
+					p.pushMatrix();
+					{
+						p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
+						p.translate(6f* p.width/10f, p.height / 2f);
+						p.translate(
+								(Glv.neuronSize * 1.2f * i)
+										-(Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
+								(Glv.neuronSize * 1.2f * j)
+										- (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f);
+						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+					}
+					p.popMatrix();
+				}
+			}
+		}
+	}
+
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {
 		p.pushStyle();
 		{
@@ -106,33 +133,6 @@ public class DataAnalysis {
 			p.popMatrix();
 		}
 		p.popStyle();
-	}
-
-	public void drawNeuron() {
-		if (compareAnalysis != null) {
-			drawBoundary(
-					new PVector(+(p.width / 4 - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f)+100f,
-							+(p.height / 2 - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f)),
-					compareAnalysis.length, compareAnalysis[0].length);
-
-			for (int i = 0; i < compareAnalysis.length; i++) {
-				for (int j = 0; j < compareAnalysis[i].length; j++) {
-
-					p.pushMatrix();
-					{
-						p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
-						p.translate(100f, 0f);
-						p.translate(
-								(Glv.neuronSize * 1.2f * i)
-										+ (p.width / 4 - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f),
-								(Glv.neuronSize * 1.2f * j)
-										+ (p.height / 2 - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f));
-						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
-					}
-					p.popMatrix();
-				}
-			}
-		}
 	}
 
 	public void compare(Environment env) {
@@ -160,7 +160,8 @@ public class DataAnalysis {
 			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
 				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
 					if (env.editorLayer[i][j].iAmChosen)
-						compareAnalysis[0][counter++] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j], Glv.highLowForNN.y, 1500f, -1f, 1f);
+						compareAnalysis[0][counter++] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j],
+								Glv.highLowForNN.y, 1500f, -1f, 1f);
 				}
 			}
 			//}

@@ -30,7 +30,7 @@ public class FirstEclipse extends PApplet {
 	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
-		size(2400, 1200, P3D);
+		size(2800, 1400, P3D);
 	}
 
 	/*
@@ -140,7 +140,7 @@ public class FirstEclipse extends PApplet {
 			noLights();
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
-					Glv.threadNN.net.neuralnet.draw();
+					Glv.threadNN.net.neuralnet.draw(env);
 
 					if (Glv.threadNN.net.thread != null) {
 						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
@@ -241,12 +241,16 @@ public class FirstEclipse extends PApplet {
 		if (key == ' ') {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded) {
-					int ellapsedTime = second() + minute() * 60 + hour() * 360;
-					Glv.threadNN.net.trainNN(graphs);
+					if (Glv.threadNN.net.neuralnet != null) {
+						int ellapsedTime = second() + minute() * 60 + hour() * 360;
+						Glv.threadNN.net.trainNN(graphs);
 
-					if (Glv.shP)
-						println("< Training NN. Ellapsed time: "
-								+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+						if (Glv.shP)
+							println("< Training NN. Ellapsed time: "
+									+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+					}
+					else
+						println("Setup NN first.");
 				} else
 					println("Load Cards first.");
 			} else
@@ -447,6 +451,11 @@ public class FirstEclipse extends PApplet {
 
 	}
 
+	public void closeIt()
+	{
+		
+	}
+	
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });
 	}

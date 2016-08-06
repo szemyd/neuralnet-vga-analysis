@@ -111,7 +111,7 @@ public class Environment {
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 		//<---
 
-		b5 = cp5.addBang("closeIt").setPosition(p.width - 15, 20).setSize(10, 10);
+		b5 = cp5.addBang("closeIt").setPosition(p.width - 40f, 40f).setSize(10, 10);
 
 		b6 = cp5.addBang("resetEditor").setPosition(20, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 

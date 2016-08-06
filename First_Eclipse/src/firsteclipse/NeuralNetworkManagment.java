@@ -361,7 +361,7 @@ public class NeuralNetworkManagment {
 
 			Glv.howManyCycles++;
 		}
-		backTo3D();
+		backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 	}
 
 	public void testNN() {
