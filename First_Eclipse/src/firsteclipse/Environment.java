@@ -44,8 +44,8 @@ public class Environment {
 
 	public Neuron[][] editorLayer;
 
-	public Group g1, g2, g3, g4, g5, g6;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8;
+	public Group g1, g2, g3, g4, g5, g6, g7;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -84,6 +84,8 @@ public class Environment {
 				.setPosition(1440, 40).hideBar();
 		g6 = cp5.addGroup("CameraNav").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(1750, 40)
 				.hideBar();
+		g7 = cp5.addGroup("DataAnalysis").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(2060, 40)
+				.hideBar();
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
@@ -115,6 +117,8 @@ public class Environment {
 
 		b7 = cp5.addBang("ninetyD").setPosition(20, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("+90°");
 		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("-90°");
+		
+		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(40, 20).moveTo(g7).plugTo(this, "shuffle").setLabel("COMPARE");
 
 		//p.println(b5.getName());
 
@@ -259,6 +263,8 @@ public class Environment {
 					p.rect(1130, 40, 300, 150, 30);
 					p.rect(1440, 40, 300, 150, 30);
 					p.rect(1750, 40, 300, 150, 30);
+					p.rect(2060, 40, 300, 150, 30);
+				
 					//	p.rect(40, 40, p.width - 80, 150, 15);
 					//p.rect(40, 40, p.width - 80, 150, 15);
 				}

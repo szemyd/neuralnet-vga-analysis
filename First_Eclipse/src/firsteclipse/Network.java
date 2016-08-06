@@ -52,7 +52,7 @@ public class Network {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				PVector position = new PVector(
 						(Glv.neuronSize * 1.2f * i)
-								+ (3f * p.width / 4 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f),
+								+ (p.width / 2 - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f),
 						(Glv.neuronSize * 1.2f * j) - (p.height / 4)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f));
 				m_output_layer[i][j] = new Neuron(p, position, m_hidden_layer);

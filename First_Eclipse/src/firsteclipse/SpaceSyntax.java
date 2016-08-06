@@ -15,6 +15,7 @@ public class SpaceSyntax {
 	public PVector highLow = new PVector();
 	
 	public  ArrayList<String> toNN= new ArrayList<String>();
+	public  float [][] values;
 
 	int threadID;
 
@@ -326,6 +327,14 @@ public class SpaceSyntax {
 
 	public void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
 
+		values= new float[rectangles.length][rectangles[0].length];
+		
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				values[i][j]=rectangles[i][j].neighbourhood.size();
+			}
+		}
+		
 		toNN.add(Integer.toString(threadID + Glv.initialSeed));
 		toNN.add("\n");
 

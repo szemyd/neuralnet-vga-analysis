@@ -141,10 +141,17 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
 					Glv.threadNN.net.neuralnet.draw();
-				} else {
-					textAlign(CENTER);
-					text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
+
+					if (Glv.threadNN.net.thread != null) {
+						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+							graphs.drawNeuron(); // Draw the comparing neurons.
+						}
+					}
 				}
+
+			} else {
+				textAlign(CENTER);
+				text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
 			}
 			env.cam.endHUD();
 		}
@@ -184,13 +191,13 @@ public class FirstEclipse extends PApplet {
 						env.cam.beginHUD();
 						{
 							//rotate(HALF_PI); // Rotate the whole scene.
-//							translate(-((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),-((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
-//							rotate(HALF_PI); // Rotate the whole scene.
-//							translate(((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
-//							
-//							translate(-env.editorLayer[0][0].position.x, -env.editorLayer[0][0].position.y);
-//							rotate(HALF_PI); // Rotate the whole scene.
-//							translate(env.editorLayer[0][0].position.x, env.editorLayer[0][0].position.y);			
+							//							translate(-((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),-((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
+							//							rotate(HALF_PI); // Rotate the whole scene.
+							//							translate(((env.editorLayer[0][0].position.x)+0.5f*(env.editorLayer[0][0].position.x + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.x)),((env.editorLayer[0][0].position.y)+0.5f*(env.editorLayer[0][0].position.y + env.editorLayer[env.editorLayer.length-1][env.editorLayer[0].length-1].position.y)));
+							//							
+							//							translate(-env.editorLayer[0][0].position.x, -env.editorLayer[0][0].position.y);
+							//							rotate(HALF_PI); // Rotate the whole scene.
+							//							translate(env.editorLayer[0][0].position.x, env.editorLayer[0][0].position.y);			
 							//translate(width/4,);
 							noLights();
 							env.drawEditor();
@@ -419,6 +426,14 @@ public class FirstEclipse extends PApplet {
 				for (int j = 0; j < env.editorLayer[i].length; j++) {
 					env.editorLayer[i][j].iAmChosen = false;
 				}
+			}
+		}
+	}
+
+	public void compareValues() {
+		if (Glv.threadNN.net.thread != null) {
+			if (graphs != null) {
+				graphs.compare(env);
 			}
 		}
 	}

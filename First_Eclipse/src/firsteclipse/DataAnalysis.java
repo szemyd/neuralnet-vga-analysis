@@ -8,6 +8,7 @@ import com.sun.swing.internal.plaf.basic.resources.basic;
 
 import controlP5.Background;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PVector;
 
@@ -18,6 +19,7 @@ public class DataAnalysis {
 	PFont titleFont, smallFont;
 
 	XYChart lineChart;
+	Float[][] compareAnalysis;// = new ArrayList<Float[]>();
 
 	public DataAnalysis(PApplet _p) {
 		p = _p;
@@ -85,12 +87,84 @@ public class DataAnalysis {
 		//p.stroke(360, 360, 360);
 		lineChart.draw(15f, 15f, p.width - 30f, p.height * 2f * 0.33f - 30f);
 		//p.line(x1, y1, x2, y2);
+
 	}
 
-	public void compare() {
-		
-//Glv.threadNN.net.thread.spaceSyntax.toNN
+	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+		p.pushStyle();
+		{
+			p.noFill();
+			//p.fill(360);
+			p.stroke(360);
+			p.pushMatrix();
+			{
+				p.rectMode(PConstants.CORNER);
+				p.rect(position.x - 10f - Glv.neuronSize, position.y - 10f - Glv.neuronSize,
+						(sizeX * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize,
+						(sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize, 20f);
+			}
+			p.popMatrix();
+		}
+		p.popStyle();
+	}
 
+	public void drawNeuron() {
+		if (compareAnalysis != null) {
+			drawBoundary(
+					new PVector(+(p.width / 4 - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f)+100f,
+							+(p.height / 2 - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f)),
+					compareAnalysis.length, compareAnalysis[0].length);
+
+			for (int i = 0; i < compareAnalysis.length; i++) {
+				for (int j = 0; j < compareAnalysis[i].length; j++) {
+
+					p.pushMatrix();
+					{
+						p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
+						p.translate(100f, 0f);
+						p.translate(
+								(Glv.neuronSize * 1.2f * i)
+										+ (p.width / 4 - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f),
+								(Glv.neuronSize * 1.2f * j)
+										+ (p.height / 2 - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f));
+						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+					}
+					p.popMatrix();
+				}
+			}
+		}
+	}
+
+	public void compare(Environment env) {
+
+		//Glv.threadNN.net.thread.spaceSyntax.values;
+
+		int num = 0;
+		for (int i = 0; i < env.editorLayer.length; i++) {
+			for (int j = 0; j < env.editorLayer[i].length; j++) {
+				if (env.editorLayer[i][j].iAmChosen)
+					num++;
+			}
+		}
+		extractValuableAnalysis(env, num);
+	}
+
+	public void extractValuableAnalysis(Environment env, int length) {
+
+		if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+
+			//if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
+			compareAnalysis = new Float[1][length];
+			//Float [][] temp;
+			int counter = 0;
+			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
+				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
+					if (env.editorLayer[i][j].iAmChosen)
+						compareAnalysis[0][counter++] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j], Glv.highLowForNN.y, 1500f, -1f, 1f);
+				}
+			}
+			//}
+		}
 	}
 
 }

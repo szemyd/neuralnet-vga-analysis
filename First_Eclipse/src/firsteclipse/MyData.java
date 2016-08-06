@@ -55,7 +55,7 @@ public class MyData {
 		*/
 
 		drawBoundary(
-				new PVector(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
+				new PVector(p.width / 2 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
 						(p.height / 4) + p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)),
 				rForm.length, rForm[0].length);
 
@@ -65,7 +65,7 @@ public class MyData {
 					p.pushMatrix();
 					{
 						p.translate(0, p.height / 4);
-						p.translate(3f * p.width / 4 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
+						p.translate(p.width / 2 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
 								p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f));
 						p.translate(Glv.neuronSize * 1.2f * i, Glv.neuronSize * 1.2f * j);
 

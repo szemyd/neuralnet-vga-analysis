@@ -377,6 +377,7 @@ public class NeuralNetworkManagment {
 			} else
 				p.println("Card was NULL");
 		}
+		backTo3D();
 	}
 	//<---
 
