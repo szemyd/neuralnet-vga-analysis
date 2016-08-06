@@ -140,8 +140,11 @@ public class MyData {
 						p.popMatrix();
 					}
 				}
+				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length)-(40f),
+										(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
 			}
 		}
+		
 
 		/*
 		drawBoundary(new PVector(
