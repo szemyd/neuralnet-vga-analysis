@@ -1,9 +1,11 @@
 package firsteclipse;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.gicentre.utils.stat.*;
 
+import com.sun.org.apache.bcel.internal.generic.POP;
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
 import controlP5.Background;
@@ -16,7 +18,6 @@ public class DataAnalysis {
 	private PApplet p;
 
 	BarChart myBarChart;
-	
 
 	XYChart lineChart, lineChart2;
 	Float[][] compareAnalysis;// = new ArrayList<Float[]>();
@@ -26,13 +27,10 @@ public class DataAnalysis {
 
 	public DataAnalysis(PApplet _p) {
 		p = _p;
-
-		//myBarChart = new BarChart(p);
-
 	}
 
 	public void setup() {
-		
+
 		//p.textFont(which, size);
 
 		lineChart = new XYChart(p);
@@ -81,7 +79,7 @@ public class DataAnalysis {
 		lineChart2.setAxisValuesColour(p.color(360));
 
 		lineChart2.setMinY(0f);
-		lineChart2.setMaxY(10f);
+		lineChart2.setMaxY(15f);
 
 		lineChart2.setAxisColour(p.color(360, 50, 360, 360));
 		//lineChart.setDecorations(true);
@@ -102,8 +100,17 @@ public class DataAnalysis {
 		//p.background(360);
 		//p.fill(p.color(180, 50, 360, 360));
 		//p.stroke(360, 360, 360);
-		lineChart.draw(15f, 15f, p.width - 30f, p.height * 2f * 0.33f - 30f);
-		lineChart2.draw(15f, p.height * 2f * 0.33f - 30f + 25f, p.width - 30f, p.height * 0.33f - 30f);
+		p.pushStyle();
+		{
+			p.rectMode(PConstants.CORNER);
+			p.fill(360, 0, 70, 180);
+			p.rect(60f, 50f, p.width - 110f, p.height * 2f * 0.33f - 50f);
+			p.rect(60f, p.height * 2f * 0.33f + 50f, p.width - 110f, p.height * 0.33f - 130f);
+		}
+		p.popStyle();
+
+		lineChart.draw(40f, 40f, p.width - 80f, p.height * 2f * 0.33f - 30f);
+		lineChart2.draw(40f, p.height * 2f * 0.33f +45f, p.width - 80f, p.height * 0.33f - 110f);
 		//p.line(x1, y1, x2, y2);
 
 	}
@@ -160,27 +167,31 @@ public class DataAnalysis {
 							for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
 								p.pushMatrix();
 								{
-									if (env.editorLayer[i][j].iAmChosen) {
-										p.strokeWeight(1.2f);
-										p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
-												360);
-										p.fill(360, 80, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
-												180);
-									} else {
-										p.strokeWeight(1.0f);
-										p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
-												180);
-										p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
-												180);
-									}
+									p.pushStyle();
+									{
+										if (env.editorLayer[i][j].iAmChosen) {
+											p.strokeWeight(1.2f);
+											p.stroke(360, 360,
+													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 360);
+											p.fill(360, 80,
+													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
+										} else {
+											p.strokeWeight(1.0f);
+											p.stroke(360, 0,
+													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
+											p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+													180);
+										}
 
-									p.translate(8f * p.width / 10f, p.height / 2f);
-									p.translate(
-											(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f
-													* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
-											(Glv.neuronSize * 1.2f * j) - (Glv.neuronSize * 1.2f
-													* Glv.threadNN.net.thread.spaceSyntax.values[i].length) * 0.5f);
-									p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+										p.translate(8f * p.width / 10f, p.height / 2f);
+										p.translate(
+												(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f
+														* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
+												(Glv.neuronSize * 1.2f * j) - (Glv.neuronSize * 1.2f
+														* Glv.threadNN.net.thread.spaceSyntax.values[i].length) * 0.5f);
+										p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+									}
+									p.popStyle();
 								}
 								p.popMatrix();
 							}
@@ -190,6 +201,8 @@ public class DataAnalysis {
 			}
 		}
 		//<---
+
+		DecimalFormat df = new DecimalFormat("#.##"); // To chop of some of the decimal values!
 
 		//---> DISPLAYS DIFFERENCE IN THE MIDDLE!!
 		if (difference >= 0f) {
@@ -205,7 +218,7 @@ public class DataAnalysis {
 					p.textSize(24f);
 					p.fill(360);
 					p.stroke(360);
-					p.text(precentage + "%", p.width * 0.5f, p.height * 0.5f);
+					p.text(df.format(precentage) + "%", p.width * 0.5f, p.height * 0.5f);
 				}
 				p.popStyle();
 			}
@@ -280,24 +293,23 @@ public class DataAnalysis {
 			for (int i = 0; i < compareAnalysis.length; i++) {
 				for (int j = 0; j < compareAnalysis[i].length; j++) {
 					difference += (Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
-							2)) / 2f;
+							2));
 				}
 			}
+
+			precentage = 0;
+			precentage = difference;
+
+			//p.println(precentage);
+			precentage /= (compareAnalysis.length * compareAnalysis[0].length) * 2f;
+			precentage *= 100f;
+
+			Glv.errorCounter2.add(new PVector(Glv.howManyCycles, precentage));
+
+			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+			//p.println(counter);
+			lineChart2.setData(Glv.errorCounter2);
+			System.out.println("Last sum of VGA difference: " + precentage + "%");
 		}
-		
-		precentage=0;
-		precentage = difference;
-
-		//p.println(precentage);
-		precentage /= (Glv.threadNN.net.neuralnet.m_input_layer.length
-				* Glv.threadNN.net.neuralnet.m_input_layer[0].length);
-		precentage *= 100f;
-		
-		Glv.errorCounter2.add(new PVector(Glv.howManyCycles, precentage));
-
-		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-		//p.println(counter);
-		lineChart2.setData(Glv.errorCounter2);
-		System.out.println("Last sum of VGA difference: " + precentage + "%");
 	}
 }

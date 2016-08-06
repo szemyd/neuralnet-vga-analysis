@@ -61,7 +61,6 @@ public class MyData {
 						(p.height / 4) + p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)),
 				rForm.length, rForm[0].length);
 
-		
 		//---> THIS DRAWS WHAT THE LOADED FORM SHOULD BE IN THE MIDDLE, BUT BELOW!
 		if (rForm != null) {
 			for (int i = 0; i < rForm.length; i++) {
@@ -95,7 +94,6 @@ public class MyData {
 						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
 				_analysis.length, _analysis[0].length);
 
-		
 		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
 		if (Glv.neuronsStored) {
 			if (_analysis != null) {
@@ -105,22 +103,18 @@ public class MyData {
 						{
 							p.pushStyle();
 							{
-								
+
 								p.translate(p.width / 5, p.height * 0.5f);
 								p.translate(
 										(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 										(Glv.neuronSize * 1.2f * j)
 												- (Glv.neuronSize * 1.2f * _analysis[i].length) * 0.5f);
 
-								
-								if (env.editorLayer[i][j].iAmChosen)
-								{
+								if (env.editorLayer[i][j].iAmChosen) {
 									p.strokeWeight(1.2f);
 									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
 									p.fill(360, 80, 180 * (1 - _analysis[i][j]), 180);
-								}
-								else
-								{
+								} else {
 									p.strokeWeight(1.0f);
 									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
 									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
@@ -140,11 +134,11 @@ public class MyData {
 						p.popMatrix();
 					}
 				}
-				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length)-(40f),
-										(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
+				p.fill(360);
+				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
+						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
 			}
 		}
-		
 
 		/*
 		drawBoundary(new PVector(
@@ -305,6 +299,13 @@ public class MyData {
 	}
 
 	public void extractValuableAnalysis(Environment env, int length) {
+
+		/*int firstValue = 1;
+		if (length * Glv.neuronSize * 1.2f > p.height - 40f)
+			firstValue = 2;
+		if (length * Glv.neuronSize * 1.2f > (p.height - 40f) * 2f)
+			firstValue = 3;
+*/
 
 		if (_analysis != null) {
 

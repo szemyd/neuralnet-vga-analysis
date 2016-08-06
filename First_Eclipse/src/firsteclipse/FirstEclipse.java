@@ -47,7 +47,6 @@ public class FirstEclipse extends PApplet {
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
 
-		
 		titleFont = createFont("Museo300-Regular.otf", 22);
 		smallFont = createFont("Museo300-Regular.otf", 12);
 		textFont(smallFont);
@@ -254,8 +253,7 @@ public class FirstEclipse extends PApplet {
 						if (Glv.shP)
 							println("< Training NN. Ellapsed time: "
 									+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
-					}
-					else
+					} else
 						println("Setup NN first.");
 				} else
 					println("Load Cards first.");
@@ -430,6 +428,7 @@ public class FirstEclipse extends PApplet {
 			Glv.newOrNet = false;
 	}
 
+	//---> For controlling the editor
 	public void resetEditor() {
 		//println("I am definitely here.");
 		if (env.editorLayer != null) {
@@ -442,13 +441,76 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
+	public void everySecond() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					if (i > 2 && i < env.editorLayer.length - 5 && j > 5 && j < env.editorLayer[i].length - 3) { // Leave the side area out.
+						if (i % 2 == 0 && j % 2 == 0) {
+							env.editorLayer[i][j].iAmChosen = true;
+							env.editorLayer[i][j].colour = 360;
+						} else {
+							env.editorLayer[i][j].iAmChosen = false;
+							env.editorLayer[i][j].colour = 0;
+						}
+					} else {
+						env.editorLayer[i][j].iAmChosen = false;
+						env.editorLayer[i][j].colour = 0;
+					}
+				}
+			}
+		}
+	}
+
+	public void everyThird() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					if (i > 2 && i < env.editorLayer.length - 5 && j > 5 && j < env.editorLayer[i].length - 3) { // Leave the side area out.
+						if (i % 3 == 0 && j % 3 == 0) {
+							env.editorLayer[i][j].iAmChosen = true;
+							env.editorLayer[i][j].colour = 360;
+						} else {
+							env.editorLayer[i][j].iAmChosen = false;
+							env.editorLayer[i][j].colour = 0;
+						}
+					} else {
+						env.editorLayer[i][j].iAmChosen = false;
+						env.editorLayer[i][j].colour = 0;
+					}
+				}
+			}
+		}
+	}
+
+	public void everyFourth() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					if (i > 2 && i < env.editorLayer.length - 5 && j > 5 && j < env.editorLayer[i].length - 3) { // Leave the side area out.
+						if (i % 4 == 0 && j % 4 == 0) {
+							env.editorLayer[i][j].iAmChosen = true;
+							env.editorLayer[i][j].colour = 360;
+						} else {
+							env.editorLayer[i][j].iAmChosen = false;
+							env.editorLayer[i][j].colour = 0;
+						}
+					} else {
+						env.editorLayer[i][j].iAmChosen = false;
+						env.editorLayer[i][j].colour = 0;
+					}
+				}
+			}
+		}
+	}
+	//<---
+
 	public void compareValues() {
-		
-		if (Glv.threadNN.net.thread == null)
-		{
+
+		if (Glv.threadNN.net.thread == null) {
 			Glv.threadNN.net.backTo3D();
 		}
-		
+
 		if (Glv.threadNN.net.thread != null) {
 			if (graphs != null) {
 				graphs.compare(env);
@@ -465,32 +527,44 @@ public class FirstEclipse extends PApplet {
 
 	}
 
-	public void closeIt()
-	{
-		if(env.g1.isOpen()) env.g1.close();
-		else env.g1.open();
-		
-		if(env.g2.isOpen()) env.g2.close();
-		else env.g2.open();
-		
-		if(env.g3.isOpen()) env.g3.close();
-		else env.g3.open();
-		
-		if(env.g4.isOpen()) env.g4.close();
-		else env.g4.open();
-		
-		if(env.g5.isOpen()) env.g5.close();
-		else env.g5.open();
-		
-		if(env.g6.isOpen()) env.g6.close();
-		else env.g6.open();
-		
-		if(env.g7.isOpen()) env.g7.close();
-		else env.g7.open();
-	
-		
+	public void closeIt() {
+		if (env.g1.isOpen())
+			env.g1.close();
+		else
+			env.g1.open();
+
+		if (env.g2.isOpen())
+			env.g2.close();
+		else
+			env.g2.open();
+
+		if (env.g3.isOpen())
+			env.g3.close();
+		else
+			env.g3.open();
+
+		if (env.g4.isOpen())
+			env.g4.close();
+		else
+			env.g4.open();
+
+		if (env.g5.isOpen())
+			env.g5.close();
+		else
+			env.g5.open();
+
+		if (env.g6.isOpen())
+			env.g6.close();
+		else
+			env.g6.open();
+
+		if (env.g7.isOpen())
+			env.g7.close();
+		else
+			env.g7.open();
+
 	}
-	
+
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { firsteclipse.FirstEclipse.class.getName() });
 	}

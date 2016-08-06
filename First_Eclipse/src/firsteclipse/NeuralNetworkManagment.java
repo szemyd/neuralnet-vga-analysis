@@ -296,10 +296,13 @@ public class NeuralNetworkManagment {
 			if (neuralnet == null || Glv.neuronsStored) {
 				neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3],
 						Glv.netSize[4], Glv.netSize[5]);
-
+				
 				System.out.println(
 						"InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
 								+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
+				
+				backTo3D(); // Generate the first random form it created.
+				
 				if (Glv.neuronsStored)
 					neuralnet.respond(trainingSet.get(0), trainingSet.get(0).rAnalysis);
 				else
@@ -338,7 +341,7 @@ public class NeuralNetworkManagment {
 				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
 					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
 						//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-						counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2) / 2f; // Counts all the error of the last learning phase.
+						counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
 					}
 				}
 			}

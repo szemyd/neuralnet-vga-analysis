@@ -45,7 +45,7 @@ public class Environment {
 	public Neuron[][] editorLayer;
 
 	public Group g1, g2, g3, g4, g5, g6, g7;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -114,6 +114,9 @@ public class Environment {
 		b5 = cp5.addBang("closeIt").setPosition(p.width - 40f, 40f).setSize(20, 40);
 
 		b6 = cp5.addBang("resetEditor").setPosition(20, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+		b10 = cp5.addBang("everySecond").setPosition(20, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+		b11 = cp5.addBang("everyThird").setPosition(90, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+		b12 = cp5.addBang("everyFourth").setPosition(160, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 
 		b7 = cp5.addBang("ninetyD").setPosition(20, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("+90°");
 		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("-90°");
