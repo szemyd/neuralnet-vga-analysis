@@ -90,31 +90,85 @@ public class DataAnalysis {
 
 	}
 
-	public void drawNeuron() {
+	public void drawNeuron(Environment env) {
 		if (compareAnalysis != null) {
 			drawBoundary(
-					new PVector((6f* p.width/10f) -(Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
+					new PVector((6f * p.width / 10f) - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
 							(p.height / 2f) - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f),
 					compareAnalysis.length, compareAnalysis[0].length);
 
+			//---> THIS DRAWS THE SELECTED NEURONS OF THE SPACESYNTAX ANALYSIS OF THE OUTPUT FORM!
 			for (int i = 0; i < compareAnalysis.length; i++) {
 				for (int j = 0; j < compareAnalysis[i].length; j++) {
-
-					p.pushMatrix();
+					p.pushStyle();
 					{
-						p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
-						p.translate(6f* p.width/10f, p.height / 2f);
-						p.translate(
-								(Glv.neuronSize * 1.2f * i)
-										-(Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
-								(Glv.neuronSize * 1.2f * j)
-										- (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f);
-						p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+						p.pushMatrix();
+						{
+							//p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
+							p.fill(360, 0, 180 * (1 - compareAnalysis[i][j]));
+							
+
+							p.translate(6f * p.width / 10f, p.height / 2f);
+							p.translate(
+									(Glv.neuronSize * 1.2f * i)
+											- (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
+									(Glv.neuronSize * 1.2f * j)
+											- (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f);
+							p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+						}
+						p.popMatrix();
 					}
-					p.popMatrix();
+					p.popStyle();
+				}
+
+			}
+		}
+
+		//---> THIS DRAWS THE SPACESYNTAX ANALYSIS OF THE OUTPUT FORM AS NEURONS ON THE RIGHT OF THE SCREEN!
+		if (Glv.threadNN != null) {
+			if (Glv.threadNN.net != null) {
+				if (Glv.threadNN.net.thread != null) {
+					if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+
+						drawBoundary(
+								new PVector((8f * p.width
+										/ 10f) - (Glv.neuronSize * 1.2f
+												* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
+										(p.height / 2f) - (Glv.neuronSize * 1.2f
+												* Glv.threadNN.net.thread.spaceSyntax.values[0].length) * 0.5f),
+								Glv.threadNN.net.thread.spaceSyntax.values.length,
+								Glv.threadNN.net.thread.spaceSyntax.values[0].length);
+
+						for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
+							for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
+								p.pushMatrix();
+								{
+									if (env.editorLayer[i][j].iAmChosen) {
+										p.strokeWeight(1.2f);
+										p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 360);
+										p.fill(360, 80, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
+									} else {
+										p.strokeWeight(1.0f);
+										p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),180);
+										p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),180);
+									}
+									
+									p.translate(8f * p.width / 10f, p.height / 2f);
+									p.translate(
+											(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f
+													* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
+											(Glv.neuronSize * 1.2f * j) - (Glv.neuronSize * 1.2f
+													* Glv.threadNN.net.thread.spaceSyntax.values[i].length) * 0.5f);
+									p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+								}
+								p.popMatrix();
+							}
+						}
+					}
 				}
 			}
 		}
+		//<---
 	}
 
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {
@@ -153,6 +207,14 @@ public class DataAnalysis {
 
 		if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
 
+			//---> MAP the values!
+			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
+				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
+					Glv.threadNN.net.thread.spaceSyntax.values[i][j] = p
+							.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j], Glv.highLowForNN.y, 1500f, -1f, 1f);
+				}
+			}
+
 			//if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
 			compareAnalysis = new Float[1][length];
 			//Float [][] temp;
@@ -160,8 +222,7 @@ public class DataAnalysis {
 			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
 				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
 					if (env.editorLayer[i][j].iAmChosen)
-						compareAnalysis[0][counter++] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j],
-								Glv.highLowForNN.y, 1500f, -1f, 1f);
+						compareAnalysis[0][counter++] = Glv.threadNN.net.thread.spaceSyntax.values[i][j];
 				}
 			}
 			//}

@@ -144,7 +144,7 @@ public class FirstEclipse extends PApplet {
 
 					if (Glv.threadNN.net.thread != null) {
 						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
-							graphs.drawNeuron(); // Draw the comparing neurons.
+							graphs.drawNeuron(env); // Draw the comparing neurons.
 						}
 					}
 				}

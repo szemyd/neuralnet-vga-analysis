@@ -61,6 +61,8 @@ public class MyData {
 						(p.height / 4) + p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)),
 				rForm.length, rForm[0].length);
 
+		
+		//---> THIS DRAWS WHAT THE LOADED FORM SHOULD BE IN THE MIDDLE, BUT BELOW!
 		if (rForm != null) {
 			for (int i = 0; i < rForm.length; i++) {
 				for (int j = 0; j < rForm[i].length; j++) {
@@ -86,12 +88,15 @@ public class MyData {
 				}
 			}
 		}
+		//<---
 
 		drawBoundary(
 				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
 				_analysis.length, _analysis[0].length);
 
+		
+		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS!
 		if (Glv.neuronsStored) {
 			if (_analysis != null) {
 				for (int i = 0; i < _analysis.length; i++) {
@@ -107,16 +112,18 @@ public class MyData {
 										(Glv.neuronSize * 1.2f * j)
 												- (Glv.neuronSize * 1.2f * _analysis[i].length) * 0.5f);
 
-								p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								
 								if (env.editorLayer[i][j].iAmChosen)
 								{
 									p.strokeWeight(1.2f);
 									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
+									p.fill(360, 80, 180 * (1 - _analysis[i][j]), 180);
 								}
 								else
 								{
 									p.strokeWeight(1.0f);
 									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
 								}
 
 								//							if (env.editorLayer[i][j].iAmChosen)
