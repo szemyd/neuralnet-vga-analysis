@@ -249,7 +249,7 @@ public class Environment {
 		{
 			p.noLights();
 
-			if (!closed) {
+			if (g1.isOpen()) {
 				p.pushStyle();
 				{
 

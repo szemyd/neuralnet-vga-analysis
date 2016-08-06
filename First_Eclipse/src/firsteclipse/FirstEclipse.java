@@ -453,6 +453,27 @@ public class FirstEclipse extends PApplet {
 
 	public void closeIt()
 	{
+		if(env.g1.isOpen()) env.g1.close();
+		else env.g1.open();
+		
+		if(env.g2.isOpen()) env.g2.close();
+		else env.g2.open();
+		
+		if(env.g3.isOpen()) env.g3.close();
+		else env.g3.open();
+		
+		if(env.g4.isOpen()) env.g4.close();
+		else env.g4.open();
+		
+		if(env.g5.isOpen()) env.g5.close();
+		else env.g5.open();
+		
+		if(env.g6.isOpen()) env.g6.close();
+		else env.g6.open();
+		
+		if(env.g7.isOpen()) env.g7.close();
+		else env.g7.open();
+	
 		
 	}
 	
