@@ -240,12 +240,14 @@ public class ManageBoxes {
 		
 		for (int i = 0; i < Glv.threadNN.net.neuralnet.lastCard._form.length; i++) {
 			for (int j = 0; j < Glv.threadNN.net.neuralnet.lastCard._form[i].length; j++) {
-				if (j < boxes.length && i < boxes[j].length) {
-					if (boxes[j][i] != null && Glv.threadNN.net.neuralnet.lastCard._form[i][j] != null)
-						boxes[j][i].height = Glv.threadNN.net.neuralnet.lastCard._form[i][j];
+				if (i < boxes.length && j < boxes[i].length) {
+					if (boxes[i][j] != null && Glv.threadNN.net.neuralnet.lastCard._form[i][j] != null)
+						boxes[i][j].height = Glv.threadNN.net.neuralnet.lastCard._form[i][j];
 				}
 			}
 		}
+		
+		dimReduction();
 	}
 	/*
 	public float walls2(int i, int j) {

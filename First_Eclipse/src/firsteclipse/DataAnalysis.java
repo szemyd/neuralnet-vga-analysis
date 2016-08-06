@@ -58,26 +58,23 @@ public class DataAnalysis {
 		// Axis formatting and labels.
 		lineChart.showXAxis(true);
 		lineChart.showYAxis(true);
-		
-		
+
 		lineChart.setAxisValuesColour(p.color(360));
-		
+
 		lineChart.setMinY(0f);
 		lineChart.setMaxY(100f);
 
 		lineChart.setAxisColour(p.color(360, 50, 360, 360));
 		//lineChart.setDecorations(true);
 
-
-//		lineChart.setYFormat("0"); // Monetary value in $US
-	//	lineChart.setXFormat("0"); // Year
+		//		lineChart.setYFormat("0"); // Monetary value in $US
+		//	lineChart.setXFormat("0"); // Year
 
 		// Symbol colours
 		lineChart.setPointColour(p.color(180, 50, 360, 360));
 		lineChart.setPointSize(5);
 		lineChart.setLineWidth(2);
-		
-		
+
 	}
 
 	public void draw() {
@@ -86,7 +83,14 @@ public class DataAnalysis {
 		//p.background(360);
 		//p.fill(p.color(180, 50, 360, 360));
 		//p.stroke(360, 360, 360);
-		lineChart.draw(15f, 15f, p.width - 30f, p.height*2f*0.33f - 30f);
+		lineChart.draw(15f, 15f, p.width - 30f, p.height * 2f * 0.33f - 30f);
 		//p.line(x1, y1, x2, y2);
 	}
+
+	public void compare() {
+		
+//Glv.threadNN.net.thread.spaceSyntax.toNN
+
+	}
+
 }

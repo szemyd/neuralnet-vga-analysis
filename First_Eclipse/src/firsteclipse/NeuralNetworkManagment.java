@@ -357,7 +357,6 @@ public class NeuralNetworkManagment {
 			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 			//p.println(counter);
 			graphs.lineChart.setData(Glv.errorCounter);
-
 			System.out.println("Last sum of error: " + precentage + "%");
 
 			Glv.howManyCycles++;
