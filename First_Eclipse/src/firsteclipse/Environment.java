@@ -147,9 +147,17 @@ public class Environment {
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
 		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
 				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
-		cp5.addSlider("hiddenLayerSize").setPosition(180, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
-				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(2.5f).setLabel("Hidden Layer");
-
+		
+		cp5.addSlider("numOfCycles").setPosition(145, 20).setSize(20, 100).setRange(0, 100).setNumberOfTickMarks(21)
+		.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(10).setLabel("Cycles/Press");
+		
+		cp5.addSlider("hiddenLayerSize").setPosition(205, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
+				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(1.5f).setLabel("Hidden Layer");
+		
+		
+		
+		
+		
 		//---> Sliders for Generating Data.
 		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
@@ -281,7 +289,7 @@ public class Environment {
 	}
 
 	public void drawEditor() {
-		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length);
+		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length, "Editor");
 		
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
@@ -290,7 +298,23 @@ public class Environment {
 		}
 	}
 	
-	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+//		p.pushStyle();
+//		{
+//			p.noFill();
+//			//p.fill(360);
+//			p.stroke(360);
+//			p.pushMatrix();
+//			{
+//				p.rectMode(PConstants.CORNER);
+//				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
+//			}
+//			p.popMatrix();
+//		}
+//		p.popStyle();
+//	}
+	
+	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
 			p.noFill();
@@ -299,12 +323,38 @@ public class Environment {
 			p.pushMatrix();
 			{
 				p.rectMode(PConstants.CORNER);
-				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
+				p.rect(position.x - 10f - Glv.neuronSize, position.y - 10f - Glv.neuronSize,
+						(sizeX * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize,
+						(sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize, 20f);
 			}
 			p.popMatrix();
 		}
 		p.popStyle();
+
+		drawText(myText,
+				new PVector(
+						position.x - Glv.neuronSize,
+						position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize+ 20f));
 	}
+	
+	
+	private void drawText(String myText, PVector position) {
+		p.pushMatrix();
+		{
+			p.pushStyle();
+			{
+				p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				p.textSize(18);
+				p.fill(360);
+				p.text(myText, position.x+15f, position.y);
+				p.ellipse(position.x, position.y, 8f, 8f);
+			}
+			p.popStyle();
+
+		}
+		p.popMatrix();
+	}
+
 	//<---
 
 	//---> Data Loading for envionrment.

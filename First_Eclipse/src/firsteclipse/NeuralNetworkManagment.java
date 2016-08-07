@@ -278,11 +278,11 @@ public class NeuralNetworkManagment {
 		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 
 		if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
-			Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
+			Glv.netSize[2] = p.ceil(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 		} else {
-			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
-			Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+			Glv.netSize[2] = p.ceil(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
 		}
 	}
 
@@ -290,8 +290,8 @@ public class NeuralNetworkManagment {
 		Glv.netSize[0] = trainingSet.get(0)._analysis.length;
 		Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
 
-		Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
-		Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
+		Glv.netSize[2] = p.ceil(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.ceil(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
 
 		Glv.netSize[4] = trainingSet.get(0).rForm.length;
 		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
@@ -301,8 +301,8 @@ public class NeuralNetworkManagment {
 		Glv.netSize[0] = trainingSet.get(0).rForm.length;
 		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
 
-		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
-		Glv.netSize[3] = p.floor(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
+		Glv.netSize[2] = p.ceil(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.ceil(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
 
 		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
 		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length;
@@ -322,7 +322,7 @@ public class NeuralNetworkManagment {
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
 		System.out.println("inputs.length: " + inputs.length + " | " + inputs[0].length);
 
-		backTo3D(); // Generate the first random form it created.
+		if(Glv.genOrA != 2) backTo3D(); // Generate the first random form it created.
 
 		neuralnet.respond(card, inputs);
 		//			if (Glv.neuronsStored)
@@ -336,7 +336,7 @@ public class NeuralNetworkManagment {
 	public void trainNN(DataAnalysis graphs) {
 
 		if (dataLoaded) {
-			for (int Z = 0; Z < 10; Z++) {
+			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
 				float counter = 0f;
 				for (int i = 0; i < Glv.numOfLearning; i++) {
 					int row = (int) p.floor(p.random(0, trainingSet.size()));
@@ -375,7 +375,7 @@ public class NeuralNetworkManagment {
 				precentage *= 100f;
 				//p.println(precentage);
 
-				Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+				Glv.errorCounter.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
 
 				//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 				//p.println(counter);

@@ -60,7 +60,7 @@ public class MyData {
 		drawBoundary(
 				new PVector(p.width / 2 - (Glv.neuronSize * 1.2f * rForm.length) * 0.5f,
 						(p.height / 4) + p.height / 2 - (Glv.neuronSize * 1.2f * rForm[0].length * 0.5f)),
-				rForm.length, rForm[0].length);
+				rForm.length, rForm[0].length, "Loaded Form");
 
 		//---> THIS DRAWS WHAT THE LOADED FORM SHOULD BE IN THE MIDDLE, BUT BELOW!
 		if (rForm != null) {
@@ -93,7 +93,7 @@ public class MyData {
 		drawBoundary(
 				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
-				_analysis.length, _analysis[0].length);
+				_analysis.length, _analysis[0].length, "Loaded SpaceSyntax");
 
 		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
 		if (Glv.neuronsStored) {
@@ -135,10 +135,6 @@ public class MyData {
 						p.popMatrix();
 					}
 				}
-				p.fill(360);
-				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
-						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
-				p.text("Loaded Input", (p.width / 2f), (p.height * 0.5f));
 			}
 		}
 
@@ -180,7 +176,7 @@ public class MyData {
 		drawBoundary(
 				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
-				_analysis.length, _analysis[0].length);
+				_analysis.length, _analysis[0].length, "Loaded SpaceSyntax");
 
 		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
 		if (Glv.neuronsStored) {
@@ -223,14 +219,30 @@ public class MyData {
 					}
 				}
 				p.fill(360);
-				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
-						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
-				p.text("Loaded Input", (p.width / 2f), (p.height * 0.5f));
 			}
 		}
 	}
 	
-	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+//		p.pushStyle();
+//		{
+//			p.noFill();
+//			//p.fill(360);
+//			p.stroke(360);
+//			p.pushMatrix();
+//			{
+//				p.rectMode(PConstants.CORNER);
+//				p.rect(position.x - 10f - Glv.neuronSize, position.y - 10f - Glv.neuronSize,
+//						(sizeX * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize,
+//						(sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize, 20f);
+//			}
+//			p.popMatrix();
+//		}
+//		p.popStyle();
+//
+//	}
+	
+	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
 			p.noFill();
@@ -247,8 +259,30 @@ public class MyData {
 		}
 		p.popStyle();
 
+		drawText(myText,
+				new PVector(
+						position.x - Glv.neuronSize,
+						position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize+ 20f));
 	}
 
+	private void drawText(String myText, PVector position) {
+		p.pushMatrix();
+		{
+			p.pushStyle();
+			{
+				p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				p.textSize(18);
+				p.fill(360);
+				p.text(myText, position.x+15f, position.y);
+				p.ellipse(position.x, position.y, 8f, 8f);
+			}
+			p.popStyle();
+
+		}
+		p.popMatrix();
+	}
+	
+	
 	//---> Data cleaning
 	public void convert() {
 

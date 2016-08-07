@@ -448,6 +448,7 @@ public class FirstEclipse extends PApplet {
 		println(Glv.shouldDimReduction);
 	}
 
+	//---> For controlling the Neural Network
 	public void numOfLearning(int theValue) {
 		//println("numOfLearning: " + Glv.numOfLearning);
 		Glv.numOfLearning = theValue;
@@ -461,15 +462,16 @@ public class FirstEclipse extends PApplet {
 		Glv.howMuchBiggerHidden = theValue;
 	}
 
+	public void numOfCycles(int theValue)
+	{
+		Glv.numOfCycles = theValue;
+	}
+	//<---
+	
+	
 	public void genOrA(int theValue) {
 		Glv.genOrA = theValue;
-	}
-
-	public void startEditor() {
-		println("I have entered this");
-		if (Glv.threadNN != null)
-			if (Glv.threadNN.net.dataLoaded)
-				env.myEditor();
+		setupNeuralNetwork();
 	}
 
 	public void programMode(int theValue) {
@@ -485,6 +487,13 @@ public class FirstEclipse extends PApplet {
 	}
 
 	//---> For controlling the editor
+	public void startEditor() {
+		println("I have entered this");
+		if (Glv.threadNN != null)
+			if (Glv.threadNN.net.dataLoaded)
+				env.myEditor();
+	}
+	
 	public void resetEditor() {
 		//println("I am definitely here.");
 		if (env.editorLayer != null) {
@@ -501,8 +510,10 @@ public class FirstEclipse extends PApplet {
 		if (env.editorLayer != null) {
 			for (int i = 0; i < env.editorLayer.length; i++) {
 				for (int j = 0; j < env.editorLayer[i].length; j++) {
-					env.editorLayer[i][j].iAmChosen = true;
-					env.editorLayer[i][j].colour = 360;
+					if (i > 2 && i < env.editorLayer.length - 6 && j > 5 && j < env.editorLayer[i].length - 3) { // Leave the side area out.
+						env.editorLayer[i][j].iAmChosen = true;
+						env.editorLayer[i][j].colour = 360;
+					}
 				}
 			}
 		}

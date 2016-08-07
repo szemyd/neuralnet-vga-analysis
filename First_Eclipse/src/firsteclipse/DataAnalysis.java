@@ -141,7 +141,7 @@ public class DataAnalysis {
 			drawBoundary(
 					new PVector((6f * p.width / 10f) - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
 							(p.height / 2f) - (Glv.neuronSize * 1.2f * compareAnalysis[0].length) * 0.5f),
-					compareAnalysis.length, compareAnalysis[0].length);
+					compareAnalysis.length, compareAnalysis[0].length, "Selected neurons");
 
 			//---> THIS DRAWS THE SELECTED NEURONS OF THE SPACESYNTAX ANALYSIS OF THE OUTPUT FORM!
 			for (int i = 0; i < compareAnalysis.length; i++) {
@@ -182,7 +182,7 @@ public class DataAnalysis {
 										(p.height / 2f) - (Glv.neuronSize * 1.2f
 												* Glv.threadNN.net.thread.spaceSyntax.values[0].length) * 0.5f),
 								Glv.threadNN.net.thread.spaceSyntax.values.length,
-								Glv.threadNN.net.thread.spaceSyntax.values[0].length);
+								Glv.threadNN.net.thread.spaceSyntax.values[0].length, "VGA from generated form");
 
 						for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
 							for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
@@ -255,7 +255,8 @@ public class DataAnalysis {
 //		
 //	}
 	
-	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+
+	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
 			p.noFill();
@@ -271,8 +272,28 @@ public class DataAnalysis {
 			p.popMatrix();
 		}
 		p.popStyle();
-	}
 
+		drawText(myText, new PVector(position.x - Glv.neuronSize,
+				position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize + 20f));
+	}
+	
+	private void drawText(String myText, PVector position) {
+		p.pushMatrix();
+		{
+			p.pushStyle();
+			{
+				p.textAlign(PConstants.LEFT, PConstants.CENTER);
+				p.textSize(18);
+				p.fill(360);
+				p.text(myText, position.x + 15f, position.y);
+				p.ellipse(position.x, position.y, 8f, 8f);
+			}
+			p.popStyle();
+
+		}
+		p.popMatrix();
+	}
+	
 	public void compare(Environment env) {
 
 		//Glv.threadNN.net.thread.spaceSyntax.values;
