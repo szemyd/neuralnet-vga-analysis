@@ -1,5 +1,6 @@
 package firsteclipse;
 
+import java.awt.font.GlyphVector;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class DataAnalysis {
 
 	XYChart lineChart, lineChart2;
 	Float[][] compareAnalysis;// = new ArrayList<Float[]>();
+	public static Neuron[][] compareAnalysisN;
 
 	float difference = -1f;
 	float precentage;
@@ -110,12 +112,31 @@ public class DataAnalysis {
 		p.popStyle();
 
 		lineChart.draw(40f, 40f, p.width - 80f, p.height * 2f * 0.33f - 30f);
-		lineChart2.draw(40f, p.height * 2f * 0.33f +45f, p.width - 80f, p.height * 0.33f - 110f);
+		lineChart2.draw(40f, p.height * 2f * 0.33f + 45f, p.width - 80f, p.height * 0.33f - 110f);
 		//p.line(x1, y1, x2, y2);
 
 	}
 
 	public void drawNeuron(Environment env) {
+
+		switch (Glv.genOrA) {
+		case 0:
+			drawGenerating(env);
+			break;
+		case 1:
+			drawGenerating(env);
+			break;
+		case 2:
+			//drawAnalysis(env);
+			break;
+		}
+
+
+
+	}
+
+	private void drawGenerating(Environment env) {
+
 		if (compareAnalysis != null) {
 			drawBoundary(
 					new PVector((6f * p.width / 10f) - (Glv.neuronSize * 1.2f * compareAnalysis.length) * 0.5f,
@@ -198,13 +219,15 @@ public class DataAnalysis {
 						}
 					}
 				}
+
 			}
 		}
 		//<---
-
-		DecimalFormat df = new DecimalFormat("#.##"); // To chop of some of the decimal values!
-
+		
+		
 		//---> DISPLAYS DIFFERENCE IN THE MIDDLE!!
+		DecimalFormat df = new DecimalFormat("#.##"); // To chop of some of the decimal values!
+		
 		if (difference >= 0f) {
 			p.pushMatrix();
 			{
@@ -227,6 +250,11 @@ public class DataAnalysis {
 		//<---
 	}
 
+//	private void drawAnalysis(Environment env)
+//	{
+//		
+//	}
+	
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {
 		p.pushStyle();
 		{
@@ -274,12 +302,19 @@ public class DataAnalysis {
 
 			//if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
 			compareAnalysis = new Float[1][length];
+			compareAnalysisN = new Neuron[1][length];
 			//Float [][] temp;
 			int counter = 0;
 			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
 				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
-					if (env.editorLayer[i][j].iAmChosen)
-						compareAnalysis[0][counter++] = Glv.threadNN.net.thread.spaceSyntax.values[i][j];
+					if (env.editorLayer[i][j].iAmChosen) {
+						compareAnalysis[0][counter] = Glv.threadNN.net.thread.spaceSyntax.values[i][j];
+						compareAnalysisN[0][counter] = new Neuron(p,
+								new PVector(env.editorLayer[i][j].position.x + p.width / 10f * 3f,
+										env.editorLayer[i][j].position.y));
+						compareAnalysisN[0][counter].m_output = Glv.threadNN.net.thread.spaceSyntax.values[i][j];
+						counter++;
+					}
 				}
 			}
 			//}

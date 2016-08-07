@@ -77,7 +77,17 @@ public class FirstEclipse extends PApplet {
 
 		case 1:
 			env.cam.setActive(false); // Disable rotation of camera
-			drawNeuralNetwork();
+			switch (Glv.genOrA) {
+			case 0:
+				drawNeuralNetworkGenerating();
+				break;
+			case 1:
+				drawNeuralNetworkGeneratingRaw();
+				break;
+			case 2:
+				drawNeuralNetworkAnalysing();
+				break;
+			}
 			break;
 
 		case 2:
@@ -138,7 +148,7 @@ public class FirstEclipse extends PApplet {
 		popMatrix();
 	}
 
-	public void drawNeuralNetwork() { // ProgramMode == 1
+	public void drawNeuralNetworkGenerating() { // ProgramMode == 1 | 0
 
 		env.cam.beginHUD();
 		{
@@ -152,6 +162,48 @@ public class FirstEclipse extends PApplet {
 							graphs.drawNeuron(env); // Draw the comparing neurons.
 						}
 					}
+				}
+
+			} else {
+				textAlign(CENTER);
+				text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
+			}
+			env.cam.endHUD();
+		}
+	}
+
+	public void drawNeuralNetworkGeneratingRaw() // ProgramMode == 1 | 1
+	{
+		env.cam.beginHUD();
+		{
+			noLights();
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
+					Glv.threadNN.net.neuralnet.draw(env);
+
+					if (Glv.threadNN.net.thread != null) {
+						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+							graphs.drawNeuron(env); // Draw the comparing neurons.
+						}
+					}
+				}
+
+			} else {
+				textAlign(CENTER);
+				text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
+			}
+			env.cam.endHUD();
+		}
+	}
+
+	public void drawNeuralNetworkAnalysing() { // ProgramMode == 1 | 2
+
+		env.cam.beginHUD();
+		{
+			noLights();
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
+					Glv.threadNN.net.neuralnet.drawAnalysis(env);
 				}
 
 			} else {
@@ -323,8 +375,7 @@ public class FirstEclipse extends PApplet {
 	 * FOR CONTROLLER
 	 */
 
-	public void trainNeurons()
-	{
+	public void trainNeurons() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
 				if (Glv.threadNN.net.neuralnet != null) {
@@ -341,7 +392,7 @@ public class FirstEclipse extends PApplet {
 		} else
 			println("Load Cards first.");
 	}
-	
+
 	public void loadDataSetup() {
 		if (Glv.threadNN == null) {
 			Glv.threadNN = new MyThreadNeuralNet(this, 999);
@@ -382,7 +433,7 @@ public class FirstEclipse extends PApplet {
 	public void setupNeuralNetwork() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net != null) {
-				Glv.threadNN.net.setupNeuralNetwork();
+				Glv.threadNN.net.setupNeuralNetwork(env);
 				graphs.setup();
 			}
 		}
@@ -441,6 +492,17 @@ public class FirstEclipse extends PApplet {
 				for (int j = 0; j < env.editorLayer[i].length; j++) {
 					env.editorLayer[i][j].iAmChosen = false;
 					env.editorLayer[i][j].colour = 0;
+				}
+			}
+		}
+	}
+
+	public void selectAll() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					env.editorLayer[i][j].iAmChosen = true;
+					env.editorLayer[i][j].colour = 360;
 				}
 			}
 		}

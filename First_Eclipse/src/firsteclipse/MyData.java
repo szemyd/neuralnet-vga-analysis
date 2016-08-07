@@ -24,6 +24,7 @@ public class MyData {
 	public Float[][] _analysis;
 	public Float[][] _form;
 
+	public static Neuron[][] rAnalysisN;
 	Float[][] rAnalysis;// = new ArrayList<Float[]>();
 	Float[][] rForm;// = new ArrayList<Float[]>();;
 
@@ -137,8 +138,7 @@ public class MyData {
 				p.fill(360);
 				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
 						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
-				p.text("Loaded Input", (p.width / 2f),
-						(p.height * 0.5f));
+				p.text("Loaded Input", (p.width / 2f), (p.height * 0.5f));
 			}
 		}
 
@@ -175,6 +175,61 @@ public class MyData {
 		*/
 	}
 
+	public void drawOnlyAnalysis(Environment env)
+	{
+		drawBoundary(
+				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
+				_analysis.length, _analysis[0].length);
+
+		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
+		if (Glv.neuronsStored) {
+			if (_analysis != null) {
+				for (int i = 0; i < _analysis.length; i++) {
+					for (int j = 0; j < _analysis[i].length; j++) {
+						p.pushMatrix();
+						{
+							p.pushStyle();
+							{
+
+								p.translate(p.width / 5, p.height * 0.5f);
+								p.translate(
+										(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+										(Glv.neuronSize * 1.2f * j)
+												- (Glv.neuronSize * 1.2f * _analysis[i].length) * 0.5f);
+
+								if (env.editorLayer[i][j].iAmChosen) {
+									p.strokeWeight(1.2f);
+									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
+									p.fill(360, 80, 180 * (1 - _analysis[i][j]), 180);
+								} else {
+									p.strokeWeight(1.0f);
+									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								}
+
+								//							if (env.editorLayer[i][j].iAmChosen)
+								//								p.fill(360, 360, 180 * (1 - _analysis[i][j]), 180);
+								//
+								//							else
+								//								p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+								//p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
+
+								p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+							}
+							p.popStyle();
+						}
+						p.popMatrix();
+					}
+				}
+				p.fill(360);
+				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
+						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
+				p.text("Loaded Input", (p.width / 2f), (p.height * 0.5f));
+			}
+		}
+	}
+	
 	private void drawBoundary(PVector position, int sizeX, int sizeY) {
 		p.pushStyle();
 		{
@@ -307,18 +362,24 @@ public class MyData {
 			firstValue = 2;
 		if (length * Glv.neuronSize * 1.2f > (p.height - 40f) * 2f)
 			firstValue = 3;
-*/
+		*/
 
 		if (_analysis != null) {
 
 			if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
 				rAnalysis = new Float[1][length];
-				//Float [][] temp;
+				rAnalysisN = new Neuron[1][length];
+
 				int counter = 0;
 				for (int i = 0; i < _analysis.length; i++) {
 					for (int j = 0; j < _analysis[i].length; j++) {
-						if (env.editorLayer[i][j].iAmChosen)
-							rAnalysis[0][counter++] = _analysis[i][j];
+						if (env.editorLayer[i][j].iAmChosen) {
+							rAnalysis[0][counter] = _analysis[i][j];
+							
+							rAnalysisN[0][counter] = new Neuron(p, new PVector(env.editorLayer[i][j].position.x-p.width/10f*3f, env.editorLayer[i][j].position.y));
+							rAnalysisN[0][counter].m_output = _analysis[i][j];
+							counter++;
+						}
 					}
 				}
 			}

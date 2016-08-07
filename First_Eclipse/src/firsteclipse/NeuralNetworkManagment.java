@@ -238,7 +238,7 @@ public class NeuralNetworkManagment {
 	 * NEURAL NETWORK
 	 */
 	//---> SETUP NN.
-	public void setupNeuralNetwork() {
+	public void setupNeuralNetwork(Environment env) {
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
 
 		if (dataLoaded) {
@@ -247,20 +247,20 @@ public class NeuralNetworkManagment {
 			case 0:
 				if (Glv.neuronsStored) {
 					setupSpecifiedNeurons();
-					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis);
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis,0, env);
 				} else
 					p.println("Please specify neurons in editor");
 				break;
 
 			case 1:
 				setupRawNeurons();
-				createNetwork(trainingSet.get(0), trainingSet.get(0)._analysis);
+				createNetwork(trainingSet.get(0), trainingSet.get(0)._analysis,0, env);
 				break;
 
 			case 2:
 				if (Glv.neuronsStored) {
 					setupAnalysisNeurons();
-					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm);
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm,1, env);
 				} else
 					p.println("Please specify neurons in editor");
 				break;
@@ -308,10 +308,15 @@ public class NeuralNetworkManagment {
 		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length;
 	}
 
-	private void createNetwork(MyData card, Float[][] inputs) {
+	private void createNetwork(MyData card, Float[][] inputs, int dummyNum, Environment env) {
 
-		neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-				Glv.netSize[5]);
+		if (dummyNum == 0) {
+			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+					Glv.netSize[5]);
+		} else {
+			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+					Glv.netSize[5], env);
+		}
 
 		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
