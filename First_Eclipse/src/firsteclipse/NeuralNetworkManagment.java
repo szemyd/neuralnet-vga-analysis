@@ -247,20 +247,20 @@ public class NeuralNetworkManagment {
 			case 0:
 				if (Glv.neuronsStored) {
 					setupSpecifiedNeurons();
-					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis,0, env);
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis, 0, env);
 				} else
 					p.println("Please specify neurons in editor");
 				break;
 
 			case 1:
 				setupRawNeurons();
-				createNetwork(trainingSet.get(0), trainingSet.get(0)._analysis,0, env);
+				createNetwork(trainingSet.get(0), trainingSet.get(0)._analysis, 0, env);
 				break;
 
 			case 2:
 				if (Glv.neuronsStored) {
 					setupAnalysisNeurons();
-					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm,1, env);
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm, 1, env);
 				} else
 					p.println("Please specify neurons in editor");
 				break;
@@ -384,7 +384,7 @@ public class NeuralNetworkManagment {
 
 				Glv.howManyCycles++;
 			}
-			backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+			if(Glv.genOrA != 2) backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 
 		}
 
@@ -403,19 +403,36 @@ public class NeuralNetworkManagment {
 	}
 
 	public void testNN() {
+
 		int row = (int) p.floor(p.random(0, testingSet.size()));
-		if (Glv.neuronsStored) {
-			if (testingSet.get(row).rAnalysis != null && testingSet.get(row)._form != null) {
-				neuralnet.respond(testingSet.get(row), testingSet.get(row).rAnalysis);
-			} else
-				p.println("Card was NULL");
-		} else {
-			if (testingSet.get(row)._analysis != null && testingSet.get(row)._form != null) {
-				neuralnet.respond(testingSet.get(row), testingSet.get(row)._analysis);
-			} else
-				p.println("Card was NULL");
+
+		switch (Glv.genOrA) {
+		case 0:
+			if (Glv.neuronsStored)
+				testIt(testingSet.get(row), testingSet.get(row).rAnalysis);
+			else
+				p.println("Please specify neurons in editor");
+			break;
+		case 1:
+			testIt(testingSet.get(row), testingSet.get(row)._analysis);
+			break;
+		case 2:
+			if (Glv.neuronsStored) {
+				testIt(testingSet.get(row), testingSet.get(row).rForm);
+			}
+			break;
 		}
-		backTo3D();
+
+		if(Glv.genOrA != 2) backTo3D();
+	}
+
+	private void testIt(MyData card, Float[][] inputs) {
+		if (inputs != null) {
+			neuralnet.respond(card, inputs);
+		} else {
+			p.println("Card was NULL");
+			testingSet.remove(card);
+		}
 	}
 	//<---
 

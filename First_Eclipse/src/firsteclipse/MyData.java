@@ -200,12 +200,12 @@ public class MyData {
 
 								if (env.editorLayer[i][j].iAmChosen) {
 									p.strokeWeight(1.2f);
-									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
-									p.fill(360, 80, 180 * (1 - _analysis[i][j]), 180);
+									p.stroke(360, 360, 180 * (1 - _analysis[i][j]));
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]) );
 								} else {
 									p.strokeWeight(1.0f);
-									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
-									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+									p.stroke(360, 0, 180 * (1 - _analysis[i][j]));
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]));
 								}
 
 								//							if (env.editorLayer[i][j].iAmChosen)
