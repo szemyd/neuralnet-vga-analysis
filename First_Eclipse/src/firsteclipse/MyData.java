@@ -137,6 +137,8 @@ public class MyData {
 				p.fill(360);
 				p.text("Loaded Input", (p.width / 5f) + (Glv.neuronSize * 1.2f * _analysis.length) - (40f),
 						(p.height * 0.5f) + (Glv.neuronSize * 1.2f * _analysis[0].length) + (40f));
+				p.text("Loaded Input", (p.width / 2f),
+						(p.height * 0.5f));
 			}
 		}
 
@@ -320,7 +322,6 @@ public class MyData {
 					}
 				}
 			}
-			
 		}
 	}
 	//<--- Data Cleaning.

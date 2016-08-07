@@ -133,7 +133,7 @@ public class Environment {
 				.setSpacingColumn(10);
 
 		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(20, 80).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(5).addItem("Gen", 0).addItem("Ana", 1).setColorLabel(p.color(360)).activate(0)
+				.setItemsPerRow(5).addItem("Specified", 0).addItem("Raw", 1).addItem("Analys", 2).setColorLabel(p.color(360)).activate(0)
 				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		newOrNet = cp5.addRadioButton("newOrNet").setPosition(160, 80).setItemWidth(20).setItemHeight(50)

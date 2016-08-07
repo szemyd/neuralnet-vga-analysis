@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.lang.model.util.ElementKindVisitor6;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
+import com.sun.corba.se.impl.naming.cosnaming.TransientBindingIterator;
 import com.sun.media.jfxmedia.events.NewFrameEvent;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.sun.webkit.ThemeClient;
@@ -98,10 +99,10 @@ public class NeuralNetworkManagment {
 										isItID = false;
 										break;
 									} else {
-//										for (int k = 0; k < thisRow.length; k++) {
-//											p.println("thisRow: " + thisRow[k]);	
-//										}
-//										p.println("_______________");	
+										//										for (int k = 0; k < thisRow.length; k++) {
+										//											p.println("thisRow: " + thisRow[k]);	
+										//										}
+										//										p.println("_______________");	
 										data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
 										isItID = false;
 										break;
@@ -233,138 +234,167 @@ public class NeuralNetworkManagment {
 	}
 	//<---
 
-	//---> NEURAL NETWORK
+	/*
+	 * NEURAL NETWORK
+	 */
+	//---> SETUP NN.
 	public void setupNeuralNetwork() {
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
-		/*
+
 		if (dataLoaded) {
 			switch (Glv.genOrA) {
+
 			case 0:
-				setupLoadedNeurons();
+				if (Glv.neuronsStored) {
+					setupSpecifiedNeurons();
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis);
+				} else
+					p.println("Please specify neurons in editor");
 				break;
-		
+
 			case 1:
+				setupRawNeurons();
+				createNetwork(trainingSet.get(0), trainingSet.get(0)._analysis);
 				break;
-			
+
 			case 2:
+				if (Glv.neuronsStored) {
+					setupAnalysisNeurons();
+					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm);
+				} else
+					p.println("Please specify neurons in editor");
 				break;
-		
 			}
-		}
-		*/
-
-		if (dataLoaded) {
-			if (Glv.neuronsStored) {
-				Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
-				Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
-
-				Glv.netSize[4] = trainingSet.get(0).rForm.length;
-				Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
-
-				if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-					Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
-					Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
-				} else {
-					Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
-					Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
-				}
-			} else if (Glv.genOrA == 0) {
-				Glv.netSize[0] = trainingSet.get(0)._analysis.length;
-				Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
-
-				Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
-				Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
-
-				Glv.netSize[4] = trainingSet.get(0).rForm.length;
-				Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
-			}
-
-			else if (Glv.genOrA == 1) {
-
-				Glv.netSize[0] = trainingSet.get(0).rForm.length;
-				Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
-
-				Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
-				Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
-
-				Glv.netSize[4] = trainingSet.get(0)._analysis.length;
-				Glv.netSize[5] = trainingSet.get(0)._analysis[2].length;
-			}
-		}
-
-		if (dataLoaded) {
-			if (neuralnet == null || Glv.neuronsStored) {
-				neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3],
-						Glv.netSize[4], Glv.netSize[5]);
-				
-				System.out.println(
-						"InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
-								+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
-				
-				backTo3D(); // Generate the first random form it created.
-				
-				if (Glv.neuronsStored)
-					neuralnet.respond(trainingSet.get(0), trainingSet.get(0).rAnalysis);
-				else
-					neuralnet.respond(trainingSet.get(0), trainingSet.get(0)._analysis);
-			} else
-				System.out.println("Neural Net already created.");
 		} else
 			System.out.println("Please Load Data");
+
 	}
 
-	public void trainNN(DataAnalysis graphs) {
-		for (int Z = 0; Z < 10; Z++) {
-			float counter = 0f;
-			for (int i = 0; i < Glv.numOfLearning; i++) {
-				int row = (int) p.floor(p.random(0, trainingSet.size()));
-				//int row=i;
+	private void setupSpecifiedNeurons() {
+		Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
+		Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
 
-				if (Glv.neuronsStored) { // If I have given which neurons to input.
-					if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
-						neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
-						neuralnet.train(trainingSet.get(row).rForm);
-					} else {
-						p.println("Card was NULL");
-						trainingSet.remove(trainingSet.get(row));
-					}
-				} else {
-					if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
-						neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
-						neuralnet.train(trainingSet.get(row).rForm);
-					} else {
-						p.println("Card was NULL");
-						trainingSet.remove(trainingSet.get(row));
-					}
-				}
+		Glv.netSize[4] = trainingSet.get(0).rForm.length;
+		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 
-				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-						//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-						counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
-					}
-				}
-			}
-			counter /= Glv.numOfLearning;
-
-			float precentage = counter;
-
-			//p.println(precentage);
-			precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-					* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
-			precentage *= 100f;
-			//p.println(precentage);
-
-			Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-
-			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-			//p.println(counter);
-			graphs.lineChart.setData(Glv.errorCounter);
-			System.out.println("Last sum of error: " + precentage + "%");
-
-			Glv.howManyCycles++;
+		if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.floor(Glv.netSize[1] * Glv.howMuchBiggerHidden);
+		} else {
+			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.floor(Glv.netSize[5] * Glv.howMuchBiggerHidden);
 		}
-		backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+	}
+
+	private void setupRawNeurons() {
+		Glv.netSize[0] = trainingSet.get(0)._analysis.length;
+		Glv.netSize[1] = trainingSet.get(0)._analysis[2].length;
+
+		Glv.netSize[2] = p.floor(trainingSet.get(0)._analysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.floor(trainingSet.get(0)._analysis[2].length * Glv.howMuchBiggerHidden);
+
+		Glv.netSize[4] = trainingSet.get(0).rForm.length;
+		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+	}
+
+	private void setupAnalysisNeurons() {
+		Glv.netSize[0] = trainingSet.get(0).rForm.length;
+		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
+
+		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.floor(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
+
+		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
+		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length;
+	}
+
+	private void createNetwork(MyData card, Float[][] inputs) {
+
+		neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+				Glv.netSize[5]);
+
+		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
+				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
+		System.out.println("inputs.length: " + inputs.length + " | " + inputs[0].length);
+
+		backTo3D(); // Generate the first random form it created.
+
+		neuralnet.respond(card, inputs);
+		//			if (Glv.neuronsStored)
+		//				neuralnet.respond(trainingSet.get(0), trainingSet.get(0).rAnalysis);
+		//			else
+		//				neuralnet.respond(trainingSet.get(0), trainingSet.get(0)._analysis);
+	}
+	//<--- SETUP NN
+
+	//---> Interact with NN.
+	public void trainNN(DataAnalysis graphs) {
+
+		if (dataLoaded) {
+			for (int Z = 0; Z < 10; Z++) {
+				float counter = 0f;
+				for (int i = 0; i < Glv.numOfLearning; i++) {
+					int row = (int) p.floor(p.random(0, trainingSet.size()));
+
+					switch (Glv.genOrA) {
+					case 0:
+						if (Glv.neuronsStored)
+							trainIt(trainingSet.get(row), trainingSet.get(row).rAnalysis, trainingSet.get(row).rForm);
+						else
+							p.println("Please specify neurons in editor");
+						break;
+					case 1:
+						trainIt(trainingSet.get(row), trainingSet.get(row)._analysis, trainingSet.get(row).rForm);
+						break;
+					case 2:
+						if (Glv.neuronsStored) {
+							trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row).rAnalysis);
+						}
+						break;
+					}
+
+					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+						for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+							//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+							counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
+						}
+					}
+				}
+
+				counter /= Glv.numOfLearning;
+				float precentage = counter;
+				//p.println(precentage);
+
+				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+				precentage *= 100f;
+				//p.println(precentage);
+
+				Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+
+				//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+				//p.println(counter);
+				graphs.lineChart.setData(Glv.errorCounter);
+				System.out.println("Last sum of error: " + precentage + "%");
+
+				Glv.howManyCycles++;
+			}
+			backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+
+		}
+
+	}
+
+	private void trainIt(MyData card, Float[][] inputs, Float[][] outputs) {
+
+		if (inputs != null && outputs != null) {
+			neuralnet.respond(card, inputs);
+			neuralnet.train(outputs);
+		} else {
+			p.println("Card was NULL");
+			trainingSet.remove(card);
+		}
+
 	}
 
 	public void testNN() {
@@ -384,6 +414,9 @@ public class NeuralNetworkManagment {
 	}
 	//<---
 
+	/*
+	 * OTHER
+	 */
 	//---> For getting data back into Analysis & 3D
 	public void backTo3D() {
 
@@ -406,3 +439,55 @@ public class NeuralNetworkManagment {
 	}
 	//<---
 }
+
+//
+//			for (int Z = 0; Z < 10; Z++) {
+//				float counter = 0f;
+//				for (int i = 0; i < Glv.numOfLearning; i++) {
+//					int row = (int) p.floor(p.random(0, trainingSet.size()));
+//int row=i;
+
+//			if (Glv.neuronsStored) { // If I have given which neurons to input.
+//				if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
+//					neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
+//					neuralnet.train(trainingSet.get(row).rForm);
+//				} else {
+//					p.println("Card was NULL");
+//					trainingSet.remove(trainingSet.get(row));
+//				}
+//			} else {
+//				if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
+//					neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
+//					neuralnet.train(trainingSet.get(row).rForm);
+//				} else {
+//					p.println("Card was NULL");
+//					trainingSet.remove(trainingSet.get(row));
+//				}
+//			}
+
+//			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+//				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+//					//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+//					counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
+//				}
+//			}
+//		}
+//		counter /= Glv.numOfLearning;
+//
+//		float precentage = counter;
+//
+//		//p.println(precentage);
+//		precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+//				* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+//		precentage *= 100f;
+//		//p.println(precentage);
+//
+//		Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+//
+//		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+//		//p.println(counter);
+//		graphs.lineChart.setData(Glv.errorCounter);
+//		System.out.println("Last sum of error: " + precentage + "%");
+//
+//		Glv.howManyCycles++;
+//	}

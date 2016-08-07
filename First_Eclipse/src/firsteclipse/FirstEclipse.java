@@ -72,12 +72,12 @@ public class FirstEclipse extends PApplet {
 		switch (Glv.programMode) {
 		case 0:
 			env.cam.setActive(true); // Enable rotation of camera
-			drawGenerating();
+			draw3D();
 			break;
 
 		case 1:
 			env.cam.setActive(false); // Disable rotation of camera
-			drawTeaching();
+			drawNeuralNetwork();
 			break;
 
 		case 2:
@@ -96,7 +96,7 @@ public class FirstEclipse extends PApplet {
 		writeToFile(); // Checks if threads have terminated or not, and write to CSV if yes.
 	}
 
-	public void drawGenerating() { // ProgramMode == 0
+	public void draw3D() { // ProgramMode == 0
 		pushMatrix();
 		{
 			rotate(HALF_PI); // Rotate the whole scene.
@@ -138,7 +138,7 @@ public class FirstEclipse extends PApplet {
 		popMatrix();
 	}
 
-	public void drawTeaching() { // ProgramMode == 1
+	public void drawNeuralNetwork() { // ProgramMode == 1
 
 		env.cam.beginHUD();
 		{
@@ -244,21 +244,7 @@ public class FirstEclipse extends PApplet {
 			stopAnalysis();
 
 		if (key == ' ') {
-			if (Glv.threadNN != null) {
-				if (Glv.threadNN.net.dataLoaded) {
-					if (Glv.threadNN.net.neuralnet != null) {
-						int ellapsedTime = second() + minute() * 60 + hour() * 360;
-						Glv.threadNN.net.trainNN(graphs);
-
-						if (Glv.shP)
-							println("< Training NN. Ellapsed time: "
-									+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
-					} else
-						println("Setup NN first.");
-				} else
-					println("Load Cards first.");
-			} else
-				println("Load Cards first.");
+			trainNeurons();
 		}
 
 		if (keyCode == ENTER) {
@@ -337,6 +323,25 @@ public class FirstEclipse extends PApplet {
 	 * FOR CONTROLLER
 	 */
 
+	public void trainNeurons()
+	{
+		if (Glv.threadNN != null) {
+			if (Glv.threadNN.net.dataLoaded) {
+				if (Glv.threadNN.net.neuralnet != null) {
+					int ellapsedTime = second() + minute() * 60 + hour() * 360;
+					Glv.threadNN.net.trainNN(graphs);
+
+					if (Glv.shP)
+						println("< Training NN. Ellapsed time: "
+								+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+				} else
+					println("Setup NN first.");
+			} else
+				println("Load Cards first.");
+		} else
+			println("Load Cards first.");
+	}
+	
 	public void loadDataSetup() {
 		if (Glv.threadNN == null) {
 			Glv.threadNN = new MyThreadNeuralNet(this, 999);
@@ -406,7 +411,7 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void genOrA(int theValue) {
-
+		Glv.genOrA = theValue;
 	}
 
 	public void startEditor() {
