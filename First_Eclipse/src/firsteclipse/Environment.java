@@ -600,19 +600,31 @@ public class Environment {
 								}
 							}
 
-							Glv.threadNN.net.neuralnet.respond(new MyData(p), temporaryInfo);
+							Glv.threadNN.net.neuralnet.respond(Glv.threadNN.net.testingSet.get(0), temporaryInfo);
 
-							int counter = 0;
 							for (int i = 0; i < spaceSyntax.rectangles.length; i++) {
 								for (int j = 0; j < spaceSyntax.rectangles[i].length; j++) {
-									if (counter < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
-										spaceSyntax.rectangles[i][j].height = p.map(
-												Glv.threadNN.net.neuralnet.m_output_layer[0][counter++].m_output, -1f,
-												1f, 0f, 360f);
-									} else
-										spaceSyntax.rectangles[i][j].height = -1.0f; // This location was not selected, ergo not included in analysis!
+									spaceSyntax.rectangles[i][j].height = 0.0f;
 								}
 							}
+
+							for (int i = 0; i < Glv.threadNN.net.neuralnet.m_output_layer.length; i++) {
+								for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer[i].length; j++) {
+									spaceSyntax.rectangles[(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.x][(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.y].height = Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_output;
+								}
+							}
+							//							int counter = 0;
+							//							for (int i = 0; i < spaceSyntax.rectangles.length; i++) {
+							//								for (int j = 0; j < spaceSyntax.rectangles[i].length; j++) {
+							//									if (counter < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
+							//										if (Glv.threadNN.net.neuralnet.m_output_layer[0][counter].idNum.x == i
+							//												&& Glv.threadNN.net.neuralnet.m_output_layer[0][counter].idNum.y == j) {
+							//											spaceSyntax.rectangles[i][j].height = Glv.threadNN.net.neuralnet.m_output_layer[0][counter++].m_output;
+							//										}
+							//									} else
+							//										spaceSyntax.rectangles[i][j].height = -1.0f; // This location was not selected, ergo not included in analysis!
+							//								}
+							//							}
 
 						}
 					}

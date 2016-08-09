@@ -60,7 +60,7 @@ public class MyRect {
 		p.fill(p.map(height, -1f, 1f, 230, 360), 360, 360);
 		p.pushMatrix();
 		{
-			p.translate(position.x, position.y, 1.0f);
+			p.translate(position.x, position.y, 0.0f);
 			p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
 		}
 		p.popMatrix();

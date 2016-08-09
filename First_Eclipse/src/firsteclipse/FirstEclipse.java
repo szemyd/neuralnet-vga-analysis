@@ -145,22 +145,25 @@ public class FirstEclipse extends PApplet {
 				}
 			}
 
-			if (env.editorBoxes != null) {
-				if (env.editorBoxes.boxes != null) {
-					env.drawEditorBoxes();
-				}
-			}
-
 			env.draw(); // Draws the environment.
 
-			if (Glv.editorForAnalysisOn && !Glv.newOrNet) {
+			if (Glv.genOrA == 2) {
 				if (env.editorBoxes != null) {
-					env.drawThreeDEditor();
+					if (env.editorBoxes.boxes != null) {
+						env.drawEditorBoxes();
+					}
 				}
-				if (env.spaceSyntax != null) {
-					if (env.spaceSyntax.rectangles != null) {
-						env.spaceSyntax.drawResponded();
-						env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
+
+				if (Glv.editorForAnalysisOn && !Glv.newOrNet) {
+					if (env.spaceSyntax != null) {
+						if (env.spaceSyntax.rectangles != null) {
+							env.spaceSyntax.drawResponded();
+							env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
+						}
+					}
+					
+					if (env.editorBoxes != null) {
+						env.drawThreeDEditor();
 					}
 				}
 			}

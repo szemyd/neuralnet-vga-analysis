@@ -20,6 +20,7 @@ public class Network {
 	public static Neuron[][] m_output_layer;
 
 	public MyData lastCard;
+	
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) {
 		p = _p;
@@ -66,6 +67,7 @@ public class Network {
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY,
 			Environment env) {
 		p = _p;
+		
 
 		m_input_layer = new Neuron[inputsX][inputsY];
 		m_hidden_layer = new Neuron[hiddenX][hiddenY];
@@ -95,11 +97,13 @@ public class Network {
 		}
 
 		ArrayList<PVector> fromEditorLayer = new ArrayList<PVector>();
+		ArrayList<PVector> idsFromEditorLayer = new ArrayList<PVector>();
 
 		for (int i = 0; i < env.editorLayer.length; i++) {
 			for (int j = 0; j < env.editorLayer[i].length; j++) {
 				if (env.editorLayer[i][j].iAmChosen) {
 					fromEditorLayer.add(env.editorLayer[i][j].position);
+					idsFromEditorLayer.add(new PVector(i,j));
 				}
 			}
 		}
@@ -112,8 +116,10 @@ public class Network {
 				//						(Glv.neuronSize * 1.2f * j) - (p.height / 4)
 				//								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f));
 				PVector position = fromEditorLayer.get(j);
+				PVector ids = idsFromEditorLayer.get(j);
+				
 				m_output_layer[i][j] = new Neuron(p, new PVector(position.x + 3f * p.width / 10f, position.y),
-						m_hidden_layer);
+						m_hidden_layer, ids);
 			}
 		}
 	}
