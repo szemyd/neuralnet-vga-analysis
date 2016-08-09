@@ -587,21 +587,33 @@ public class Environment {
 		if (Glv.genOrA == 2) { // If I am actually in the mode where I trained the network to understand analysis.
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net != null) {
-					if(Glv.threadNN.net.dataLoaded)
-					{
-						if(Glv.threadNN.net.neuralnet != null)
-						{
-							Float [][] temporaryInfo = new Float[][];
-							
+					if (Glv.threadNN.net.dataLoaded) {
+						if (Glv.threadNN.net.neuralnet != null) {
+							Float[][] temporaryInfo = new Float[editorRect.length][editorRect[0].length];
+
 							for (int i = 0; i < editorRect.length; i++) {
-								for (int j = 0; j < editor[i].length; j++) {
-									
+								for (int j = 0; j < editorRect[i].length; j++) {
+									if (editorRect[i][j].height > 0.1f)
+										temporaryInfo[i][j] = 1.0f;
+									else
+										temporaryInfo[i][j] = -1.0f;
 								}
-								
 							}
-							for(editorRect)
-							
+
 							Glv.threadNN.net.neuralnet.respond(new MyData(p), temporaryInfo);
+
+							int counter = 0;
+							for (int i = 0; i < spaceSyntax.rectangles.length; i++) {
+								for (int j = 0; j < spaceSyntax.rectangles[i].length; j++) {
+									if (counter < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
+										spaceSyntax.rectangles[i][j].height = p.map(
+												Glv.threadNN.net.neuralnet.m_output_layer[0][counter++].m_output, -1f,
+												1f, 0f, 360f);
+									} else
+										spaceSyntax.rectangles[i][j].height = -1.0f; // This location was not selected, ergo not included in analysis!
+								}
+							}
+
 						}
 					}
 				}

@@ -53,7 +53,17 @@ public class MyRect {
 			}
 			p.popMatrix();
 		}
+	}
 
+	public void drawResponded(PVector highLow) {
+
+		p.fill(p.map(height, -1f, 1f, 230, 360), 360, 360);
+		p.pushMatrix();
+		{
+			p.translate(position.x, position.y, 1.0f);
+			p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
+		}
+		p.popMatrix();
 	}
 
 	public void drawEditor() {
@@ -66,7 +76,6 @@ public class MyRect {
 		{
 			p.translate(position.x, position.y, 0f);
 			p.rect(0, 0, size.x, size.y);
-
 		}
 		p.popMatrix();
 

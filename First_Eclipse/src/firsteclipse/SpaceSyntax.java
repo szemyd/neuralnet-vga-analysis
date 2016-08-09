@@ -60,6 +60,15 @@ public class SpaceSyntax {
 			}
 		}
 	}
+	
+	public void drawResponded() {
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				if (highLow != null && rectangles[i][j] != null)
+					rectangles[i][j].drawResponded(highLow);
+			}
+		}
+	}
 
 	public void VGA(MyBox[][] boxes) {
 		highLow = new PVector(0f, 1000f); // This is so that the colours are rightly mapped.

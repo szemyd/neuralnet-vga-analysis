@@ -159,7 +159,7 @@ public class FirstEclipse extends PApplet {
 				}
 				if (env.spaceSyntax != null) {
 					if (env.spaceSyntax.rectangles != null) {
-						env.spaceSyntax.draw();
+						env.spaceSyntax.drawResponded();
 						env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
 					}
 				}
