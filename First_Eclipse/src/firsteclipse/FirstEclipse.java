@@ -144,6 +144,12 @@ public class FirstEclipse extends PApplet {
 				}
 			}
 			env.draw(); // Draws the environment.
+
+			if (Glv.editorForAnalysisOn && !Glv.newOrNet) {
+				if (env.editorBoxes != null) {
+					env.drawThreeDEditor();
+				}
+			}
 		}
 		popMatrix();
 	}
@@ -462,13 +468,11 @@ public class FirstEclipse extends PApplet {
 		Glv.howMuchBiggerHidden = theValue;
 	}
 
-	public void numOfCycles(int theValue)
-	{
+	public void numOfCycles(int theValue) {
 		Glv.numOfCycles = theValue;
 	}
 	//<---
-	
-	
+
 	public void genOrA(int theValue) {
 		Glv.genOrA = theValue;
 		setupNeuralNetwork();
@@ -492,8 +496,10 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN != null)
 			if (Glv.threadNN.net.dataLoaded)
 				env.myEditor();
+		
+		env.setupThreeDEditor();
 	}
-	
+
 	public void resetEditor() {
 		//println("I am definitely here.");
 		if (env.editorLayer != null) {
@@ -580,6 +586,10 @@ public class FirstEclipse extends PApplet {
 				}
 			}
 		}
+	}
+
+	public void editorForAnalysisOn(boolean theValue) {
+		Glv.editorForAnalysisOn = theValue;
 	}
 	//<---
 

@@ -34,6 +34,7 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
+	public static ManageBoxes editorBoxes;
 
 	ControlP5 cp5;
 	Accordion accordion;
@@ -84,8 +85,8 @@ public class Environment {
 				.setPosition(1440, 40).hideBar();
 		g6 = cp5.addGroup("CameraNav").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(1750, 40)
 				.hideBar();
-		g7 = cp5.addGroup("DataAnalysis").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0).setPosition(2060, 40)
-				.hideBar();
+		g7 = cp5.addGroup("DataAnalysis").setBackgroundColor(p.color(0, 64)).setBackgroundHeight(0)
+				.setPosition(2060, 40).hideBar();
 
 		//		  cp5.addButton("buttonA")
 		//		     .setPosition(175,575)
@@ -118,12 +119,14 @@ public class Environment {
 		b10 = cp5.addBang("everySecond").setPosition(20, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 		b11 = cp5.addBang("everyThird").setPosition(90, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 		b12 = cp5.addBang("everyFourth").setPosition(160, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
-		
 
-		b7 = cp5.addBang("ninetyD").setPosition(20, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("+90°");
-		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle").setLabel("-90°");
-		
-		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(40, 20).moveTo(g7).plugTo(this, "shuffle").setLabel("COMPARE");
+		b7 = cp5.addBang("ninetyD").setPosition(20, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle")
+				.setLabel("+90°");
+		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle")
+				.setLabel("-90°");
+
+		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(40, 20).moveTo(g7).plugTo(this, "shuffle")
+				.setLabel("COMPARE");
 
 		//p.println(b5.getName());
 
@@ -135,11 +138,11 @@ public class Environment {
 				.setSpacingColumn(10);
 
 		genOrASwitch = cp5.addRadioButton("genOrA").setPosition(20, 80).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(5).addItem("Specified", 0).addItem("Raw", 1).addItem("Analys", 2).setColorLabel(p.color(360)).activate(0)
-				.moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
+				.setItemsPerRow(5).addItem("Specified", 0).addItem("Raw", 1).addItem("Analys", 2)
+				.setColorLabel(p.color(360)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		newOrNet = cp5.addRadioButton("newOrNet").setPosition(160, 80).setItemWidth(20).setItemHeight(50)
-				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(0)
+				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(1)
 				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		//---> Sliders for NN
@@ -147,25 +150,24 @@ public class Environment {
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
 		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.05f).setNumberOfTickMarks(21)
 				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
-		
+
 		cp5.addSlider("numOfCycles").setPosition(145, 20).setSize(20, 100).setRange(0, 100).setNumberOfTickMarks(21)
-		.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(10).setLabel("Cycles/Press");
-		
+				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(10).setLabel("Cycles/Press");
+
 		cp5.addSlider("hiddenLayerSize").setPosition(205, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(1.5f).setLabel("Hidden Layer");
-		
-		
-		
-		
-		
+
 		//---> Sliders for Generating Data.
 		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
 		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(11).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(500).setLabel("Solutions");
 
-		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(160, 20).setSize(60, 19).moveTo(g4)
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(160, 20).setSize(60, 20).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
+
+		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
+				.plugTo(Glv.editorForAnalysisOn);
 
 		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
 		g2.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
@@ -217,6 +219,10 @@ public class Environment {
 		cp5.setAutoDraw(false);
 	}
 
+	public void setupThreeDEditor() {
+		editorBoxes = new ManageBoxes(p);
+	}
+
 	//---> DRAWING THINGS
 	public void draw() {
 		//		p.pushStyle();
@@ -258,6 +264,13 @@ public class Environment {
 
 	public void drawGui() {
 		//hint(DISABLE_DEPTH_TEST);
+
+		if (cp5.isMouseOver()) {
+			cam.setActive(false);
+		} else {
+			cam.setActive(true);
+		}
+
 		cam.beginHUD();
 		{
 			p.noLights();
@@ -276,7 +289,7 @@ public class Environment {
 					p.rect(1440, 40, 300, 150, 30);
 					p.rect(1750, 40, 300, 150, 30);
 					p.rect(2060, 40, 300, 150, 30);
-				
+
 					//	p.rect(40, 40, p.width - 80, 150, 15);
 					//p.rect(40, 40, p.width - 80, 150, 15);
 				}
@@ -290,30 +303,30 @@ public class Environment {
 
 	public void drawEditor() {
 		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length, "Editor");
-		
+
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
 				editorLayer[i][j].draw();
 			}
 		}
 	}
-	
-//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
-//		p.pushStyle();
-//		{
-//			p.noFill();
-//			//p.fill(360);
-//			p.stroke(360);
-//			p.pushMatrix();
-//			{
-//				p.rectMode(PConstants.CORNER);
-//				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
-//			}
-//			p.popMatrix();
-//		}
-//		p.popStyle();
-//	}
-	
+
+	//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
+	//		p.pushStyle();
+	//		{
+	//			p.noFill();
+	//			//p.fill(360);
+	//			p.stroke(360);
+	//			p.pushMatrix();
+	//			{
+	//				p.rectMode(PConstants.CORNER);
+	//				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
+	//			}
+	//			p.popMatrix();
+	//		}
+	//		p.popStyle();
+	//	}
+
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
@@ -331,13 +344,10 @@ public class Environment {
 		}
 		p.popStyle();
 
-		drawText(myText,
-				new PVector(
-						position.x - Glv.neuronSize,
-						position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize+ 20f));
+		drawText(myText, new PVector(position.x - Glv.neuronSize,
+				position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize + 20f));
 	}
-	
-	
+
 	private void drawText(String myText, PVector position) {
 		p.pushMatrix();
 		{
@@ -346,7 +356,7 @@ public class Environment {
 				p.textAlign(PConstants.LEFT, PConstants.CENTER);
 				p.textSize(18);
 				p.fill(360);
-				p.text(myText, position.x+15f, position.y);
+				p.text(myText, position.x + 15f, position.y);
 				p.ellipse(position.x, position.y, 8f, 8f);
 			}
 			p.popStyle();
@@ -355,6 +365,57 @@ public class Environment {
 		p.popMatrix();
 	}
 
+	public void drawThreeDEditor() {
+		cam.beginHUD();
+		{
+			p.noLights();
+
+			p.pushStyle();
+			{
+				PVector size = new PVector(editorBoxes.boxes.length * 30f, editorBoxes.boxes[0].length * 30f);
+
+				PVector position = new PVector(p.width - size.x - 20, p.height * 0.5f - size.y * 0.5f);
+
+				p.rectMode(PConstants.CORNER);
+				p.noStroke();
+				p.stroke(360, 0, 160, 280);
+				p.fill(360, 0, 0, 200);
+				p.rect(position.x, position.y, size.x, size.y, 30);
+
+				p.stroke(280);
+				p.fill(280);
+				for (int i = 0; i < p.ceil(editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)) + 1; i++) {
+					for (int j = 0; j < p.ceil(editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))
+							+ 1; j++) {
+						p.line(position.x + 20f
+								+ (p.ceil((size.x - 40f)
+										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * i,
+								position.y
+										+ 20,
+								position.x + 20f
+										+ (p.ceil((size.x - 40f)
+												/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize))))
+												* i,
+								position.y + size.y - 20);
+
+						p.line(position.x + 20, position.y + 20f
+								+ (p.ceil((size.y - 40f)
+										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * j,
+								position.x + size.x - 20f,
+								position.y + 20f
+										+ (p.ceil((size.y - 40f)
+												/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))
+												* j);
+					}
+				}
+			}
+			p.popStyle();
+			//	p.rect(40, 40, p.width - 80, 150, 15);
+			//p.rect(40, 40, p.width - 80, 150, 15);
+
+		}
+		cam.endHUD();
+	}
 	//<---
 
 	//---> Data Loading for envionrment.
