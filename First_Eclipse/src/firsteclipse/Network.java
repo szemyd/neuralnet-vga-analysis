@@ -284,13 +284,13 @@ public class Network {
 	}
 
 	//---> Neuron interaction
-	public void respond(MyData card, Float[][] analysis) {
+	public void respond(MyData card, Float[][] input) {
 
 		lastCard = card;
 		//p.println(card.analysisID);
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
-				m_input_layer[i][j].m_output = analysis[i][j];
+				m_input_layer[i][j].m_output = input[i][j];
 			}
 		}
 

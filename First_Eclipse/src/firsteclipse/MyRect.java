@@ -2,6 +2,8 @@ package firsteclipse;
 
 import java.util.ArrayList;
 
+import com.sun.glass.ui.Size;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -9,6 +11,8 @@ public class MyRect {
 	private static PApplet p;
 
 	public PVector position;
+	public PVector size;
+
 	public ArrayList<MyRect> neighbourhood = new ArrayList<MyRect>();
 	public float height = 0.0f;
 
@@ -18,14 +22,23 @@ public class MyRect {
 		position = _position;
 	}
 
+	public MyRect(PApplet _p, PVector _position, PVector _size) {
+		p = _p;
+
+		position = _position;
+		size = _size;
+	}
+
 	public void draw(PVector highLow) {
 
-		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 230, 360), 360, 360);
-		else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 230, 360), 360, 360);
+		if (Glv.globalHighLow)
+			p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 230, 360), 360, 360);
+		else
+			p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 230, 360), 360, 360);
 
-//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
-//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);
-		
+		//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
+		//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);
+
 		if (height < 0.1f) {
 			p.pushMatrix();
 			{
@@ -40,6 +53,22 @@ public class MyRect {
 			}
 			p.popMatrix();
 		}
+
+	}
+
+	public void drawEditor() {
+		if (height < 0.1f) {
+			p.fill(180, 210);
+		} else
+			p.fill(220, 320);
+
+		p.pushMatrix();
+		{
+			p.translate(position.x, position.y, 0f);
+			p.rect(0, 0, size.x, size.y);
+
+		}
+		p.popMatrix();
 
 	}
 }

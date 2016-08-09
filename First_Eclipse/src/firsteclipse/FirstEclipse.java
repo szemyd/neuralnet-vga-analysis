@@ -6,6 +6,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
+import sun.security.krb5.internal.EncAPRepPart;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class FirstEclipse extends PApplet {
 						}
 					}
 				}
-			} else {
+			} else if (Glv.genOrA == 0) {
 				if (Glv.threadNN != null) {
 					if (Glv.threadNN.net != null) {
 						if (Glv.threadNN.net.thread != null) {
@@ -143,11 +144,24 @@ public class FirstEclipse extends PApplet {
 					}
 				}
 			}
+
+			if (env.editorBoxes != null) {
+				if (env.editorBoxes.boxes != null) {
+					env.drawEditorBoxes();
+				}
+			}
+
 			env.draw(); // Draws the environment.
 
 			if (Glv.editorForAnalysisOn && !Glv.newOrNet) {
 				if (env.editorBoxes != null) {
 					env.drawThreeDEditor();
+				}
+				if (env.spaceSyntax != null) {
+					if (env.spaceSyntax.rectangles != null) {
+						env.spaceSyntax.draw();
+						env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
+					}
 				}
 			}
 		}
@@ -339,6 +353,10 @@ public class FirstEclipse extends PApplet {
 		if (Glv.programMode == 3) {
 			env.reactEditor();
 		}
+
+		if (env.editorRect != null) {
+			env.reactEditor2();
+		}
 	}
 
 	public void mouseDragged() {
@@ -496,7 +514,7 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN != null)
 			if (Glv.threadNN.net.dataLoaded)
 				env.myEditor();
-		
+
 		env.setupThreeDEditor();
 	}
 

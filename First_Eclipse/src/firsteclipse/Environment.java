@@ -14,6 +14,7 @@ import com.jogamp.opengl.util.packrect.Rect;
 import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
+import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import controlP5.Accordion;
@@ -34,7 +35,12 @@ public class Environment {
 
 	private static PApplet p;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
+
+	//---> For editor && Dinamic VGA.
 	public static ManageBoxes editorBoxes;
+	public static MyRect[][] editorRect;
+	PVector edSize, edPosition;
+	SpaceSyntax spaceSyntax;
 
 	ControlP5 cp5;
 	Accordion accordion;
@@ -220,7 +226,44 @@ public class Environment {
 	}
 
 	public void setupThreeDEditor() {
+		spaceSyntax = new SpaceSyntax(p, 1999);
+
 		editorBoxes = new ManageBoxes(p);
+		editorRect = new MyRect[p.floor(editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize))][p
+				.floor(editorBoxes.boxes[0].length / (Glv.cubeSizeReduced / Glv.cubeSize))];
+
+		edSize = new PVector(editorBoxes.boxes.length * 30f, editorBoxes.boxes[0].length * 30f);
+		edPosition = new PVector(p.width - edSize.x - 20, p.height * 0.5f - edSize.y * 0.5f);
+
+		for (int i = 0; i < editorRect.length; i++) {
+			for (int j = 0; j < editorRect[i].length; j++) {
+				editorRect[i][j] = new MyRect(
+						p, new PVector(
+								edPosition.x + 20f
+										+ (p.floor((edSize.x - 40f)
+												/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize))))
+												* i,
+								edPosition.y + 20f
+										+ (p.floor((edSize.y - 40f)
+												/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))
+												* j),
+						new PVector(
+								(p.floor((edSize.x - 40f)
+										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))),
+								(p.floor((edSize.y - 40f)
+										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))));
+			}
+		}
+
+		for (int i = 0; i < editorBoxes.boxes.length; i++) {
+			for (int j = 0; j < editorBoxes.boxes[i].length; j++) {
+				PVector position = new PVector((Glv.cubeSize * i) - (Glv.cubeSize * Glv.divisionX) * 0.5f,
+						(Glv.cubeSize * j) - (Glv.cubeSize * Glv.divisionY) * 0.5f, 0);
+
+				editorBoxes.boxes[i][j] = new MyBox(p, position);
+			}
+		}
+		spaceSyntax.setup(editorBoxes.boxes);
 	}
 
 	//---> DRAWING THINGS
@@ -311,22 +354,6 @@ public class Environment {
 		}
 	}
 
-	//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
-	//		p.pushStyle();
-	//		{
-	//			p.noFill();
-	//			//p.fill(360);
-	//			p.stroke(360);
-	//			p.pushMatrix();
-	//			{
-	//				p.rectMode(PConstants.CORNER);
-	//				p.rect(position.x - 10f-Glv.neuronSize, position.y - 10f-Glv.neuronSize, (sizeX * Glv.neuronSize * 1.2f) + 20f +Glv.neuronSize, (sizeY * Glv.neuronSize * 1.2f) + 20f+Glv.neuronSize, 20f);
-	//			}
-	//			p.popMatrix();
-	//		}
-	//		p.popStyle();
-	//	}
-
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
@@ -372,49 +399,33 @@ public class Environment {
 
 			p.pushStyle();
 			{
-				PVector size = new PVector(editorBoxes.boxes.length * 30f, editorBoxes.boxes[0].length * 30f);
-
-				PVector position = new PVector(p.width - size.x - 20, p.height * 0.5f - size.y * 0.5f);
-
 				p.rectMode(PConstants.CORNER);
 				p.noStroke();
 				p.stroke(360, 0, 160, 280);
 				p.fill(360, 0, 0, 200);
-				p.rect(position.x, position.y, size.x, size.y, 30);
+				p.rect(edPosition.x, edPosition.y, edSize.x, edSize.y, 30);
 
-				p.stroke(280);
+				p.stroke(0);
 				p.fill(280);
-				for (int i = 0; i < p.ceil(editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)) + 1; i++) {
-					for (int j = 0; j < p.ceil(editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))
-							+ 1; j++) {
-						p.line(position.x + 20f
-								+ (p.ceil((size.x - 40f)
-										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * i,
-								position.y
-										+ 20,
-								position.x + 20f
-										+ (p.ceil((size.x - 40f)
-												/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize))))
-												* i,
-								position.y + size.y - 20);
 
-						p.line(position.x + 20, position.y + 20f
-								+ (p.ceil((size.y - 40f)
-										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * j,
-								position.x + size.x - 20f,
-								position.y + 20f
-										+ (p.ceil((size.y - 40f)
-												/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))
-												* j);
+				for (int i = 0; i < editorRect.length; i++) {
+					for (int j = 0; j < editorRect[i].length; j++) {
+						editorRect[i][j].drawEditor();
 					}
 				}
 			}
 			p.popStyle();
-			//	p.rect(40, 40, p.width - 80, 150, 15);
-			//p.rect(40, 40, p.width - 80, 150, 15);
-
 		}
 		cam.endHUD();
+
+	}
+
+	public void drawEditorBoxes() {
+		for (int i = 0; i < editorBoxes.boxes.length; i++) {
+			for (int j = 0; j < editorBoxes.boxes[i].length; j++) {
+				editorBoxes.boxes[i][j].draw();
+			}
+		}
 	}
 	//<---
 
@@ -523,7 +534,7 @@ public class Environment {
 		}
 	}
 
-	public void reactEditor() {
+	public void reactEditor() { // Reacts to the input so you can select the neurons.
 		if (editorLayer != null) {
 			for (int i = 0; i < editorLayer.length; i++) {
 				for (int j = 0; j < editorLayer[i].length; j++) {
@@ -538,6 +549,60 @@ public class Environment {
 							editorLayer[i][j].colour = 360;
 						} else
 							editorLayer[i][j].colour = 0;
+					}
+				}
+			}
+		}
+	}
+
+	public void reactEditor2() { // Changes the values of the rectangles in the editor and modifies the height of the boxes.
+		for (int i = 0; i < editorRect.length; i++) {
+			for (int j = 0; j < editorRect[i].length; j++) {
+				if (p.mouseX > editorRect[i][j].position.x
+						&& p.mouseX < editorRect[i][j].position.x + editorRect[i][j].size.x
+						&& p.mouseY > editorRect[i][j].position.y
+						&& p.mouseY < editorRect[i][j].position.y + editorRect[i][j].size.y) {
+
+					if (editorRect[i][j].height < 1.0f) {
+						editorRect[i][j].height = 1.0f;
+					} else
+						editorRect[i][j].height = 0.0f;
+
+					for (int k = 0; k < Glv.cubeSizeReduced / Glv.cubeSize; k++) {
+						for (int l = 0; l < Glv.cubeSizeReduced / Glv.cubeSize; l++) {
+							if ((i + k) >= 0 && (j + l) >= 0 && (i + k) < editorBoxes.boxes.length
+									&& (j + l) < editorBoxes.boxes[i].length) {
+								editorBoxes.boxes[p.floor(i * Glv.cubeSizeReduced / Glv.cubeSize) + k][p.floor(
+										j * Glv.cubeSizeReduced / Glv.cubeSize) + l].height = editorRect[i][j].height;
+							}
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+	public void setSpaceSyntaxValues() {
+		if (Glv.genOrA == 2) { // If I am actually in the mode where I trained the network to understand analysis.
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net != null) {
+					if(Glv.threadNN.net.dataLoaded)
+					{
+						if(Glv.threadNN.net.neuralnet != null)
+						{
+							Float [][] temporaryInfo = new Float[][];
+							
+							for (int i = 0; i < editorRect.length; i++) {
+								for (int j = 0; j < editor[i].length; j++) {
+									
+								}
+								
+							}
+							for(editorRect)
+							
+							Glv.threadNN.net.neuralnet.respond(new MyData(p), temporaryInfo);
+						}
 					}
 				}
 			}
