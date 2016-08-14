@@ -61,7 +61,7 @@ public class FirstEclipse extends PApplet {
 		//loadDataSetup();
 		//analysisSetup();
 		//dataAnalysis.setup();
-		
+
 		println("cores: " + Runtime.getRuntime().availableProcessors());
 	}
 
@@ -163,7 +163,7 @@ public class FirstEclipse extends PApplet {
 							env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
 						}
 					}
-					
+
 					if (env.editorBoxes != null) {
 						env.drawThreeDEditor();
 					}
@@ -387,7 +387,12 @@ public class FirstEclipse extends PApplet {
 
 			if (Glv.isDone == Glv.threads.size() && !Glv.isDoneBool) {
 				Glv.howManyUntilNow += Glv.numOfThreads;
-				GenerateCSV.save(Integer.toString(Glv.howManyUntilNow + Glv.initialSeed));
+
+				String fileName = Integer.toString(Glv.howManyUntilNow + Glv.initialSeed);
+				String myDirectory = "GeneratedData";
+				GenerateCSV.save(fileName, myDirectory);
+				GenerateCSV.generateCsvFile(
+						new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv");
 
 				if (Glv.howManyUntilNow < Glv.numOfSolutions - 1) {
 					analysisSetup();
@@ -616,6 +621,50 @@ public class FirstEclipse extends PApplet {
 	}
 	//<---
 
+	//---> For Data analysis
+	public void saveData() {
+
+		if (env.editorLayer != null) {
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net != null) {
+					if (Glv.threadNN.net.neuralnet != null) {
+
+						int counter = 0;
+						float avarageDistance = 0.0f;
+
+						for (int i = 0; i < env.editorLayer.length; i++) {
+							for (int j = 0; j < env.editorLayer[i].length; j++) {
+								if (env.editorLayer[i][j].iAmChosen) {
+									counter++;
+									avarageDistance += PVector
+											.dist(env.editorLayer[i][j].position,
+													PVector.div(
+															PVector.add(env.editorLayer[0][0].position,
+																	env.editorLayer[env.editorLayer.length
+																			- 1][env.editorLayer[0].length
+																					- 1].position),
+															2));
+								}
+							}
+						}
+						avarageDistance /= counter;
+
+						String counterS = Integer.toString(counter);
+						String avarageDistanceS = Float.toString(avarageDistance);
+
+						String fileName = Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS;
+						String myDirectory = "AnalysisData";
+
+						GenerateCSV.save(fileName, myDirectory);
+						GenerateCSV.saveValuesToCSV(
+								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv",
+								counterS, avarageDistanceS, env);
+					}
+				}
+			}
+		}
+	}
+
 	public void compareValues() {
 
 		if (Glv.threadNN.net.thread == null) {
@@ -628,7 +677,9 @@ public class FirstEclipse extends PApplet {
 			}
 		}
 	}
+	//<---
 
+	//---> For navigating in 3D
 	public void ninetyD() {
 		env.cam.rotateZ(HALF_PI);
 	}
@@ -637,6 +688,7 @@ public class FirstEclipse extends PApplet {
 		env.cam.rotateZ(-HALF_PI);
 
 	}
+	//<---
 
 	public void closeIt() {
 		if (env.g1.isOpen())

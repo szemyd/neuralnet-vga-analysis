@@ -52,7 +52,7 @@ public class Environment {
 	public Neuron[][] editorLayer;
 
 	public Group g1, g2, g3, g4, g5, g6, g7;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -131,8 +131,11 @@ public class Environment {
 		b8 = cp5.addBang("mNinetyD").setPosition(90, 20).setSize(40, 20).moveTo(g6).plugTo(this, "shuffle")
 				.setLabel("-90°");
 
-		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(40, 20).moveTo(g7).plugTo(this, "shuffle")
+		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("COMPARE");
+		
+		b14 = cp5.addBang("saveData").setPosition(90, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
+				.setLabel("saveData");
 
 		//p.println(b5.getName());
 

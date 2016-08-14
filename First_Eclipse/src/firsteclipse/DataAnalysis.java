@@ -1,6 +1,9 @@
 package firsteclipse;
 
 import java.awt.font.GlyphVector;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -131,8 +134,6 @@ public class DataAnalysis {
 			break;
 		}
 
-
-
 	}
 
 	private void drawGenerating(Environment env) {
@@ -223,11 +224,10 @@ public class DataAnalysis {
 			}
 		}
 		//<---
-		
-		
+
 		//---> DISPLAYS DIFFERENCE IN THE MIDDLE!!
 		DecimalFormat df = new DecimalFormat("#.##"); // To chop of some of the decimal values!
-		
+
 		if (difference >= 0f) {
 			p.pushMatrix();
 			{
@@ -250,11 +250,10 @@ public class DataAnalysis {
 		//<---
 	}
 
-//	private void drawAnalysis(Environment env)
-//	{
-//		
-//	}
-	
+	//	private void drawAnalysis(Environment env)
+	//	{
+	//		
+	//	}
 
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
@@ -276,7 +275,7 @@ public class DataAnalysis {
 		drawText(myText, new PVector(position.x - Glv.neuronSize,
 				position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize + 20f));
 	}
-	
+
 	private void drawText(String myText, PVector position) {
 		p.pushMatrix();
 		{
@@ -293,7 +292,7 @@ public class DataAnalysis {
 		}
 		p.popMatrix();
 	}
-	
+
 	public void compare(Environment env) {
 
 		//Glv.threadNN.net.thread.spaceSyntax.values;
