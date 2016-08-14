@@ -61,6 +61,8 @@ public class FirstEclipse extends PApplet {
 		//loadDataSetup();
 		//analysisSetup();
 		//dataAnalysis.setup();
+		
+		println("cores: " + Runtime.getRuntime().availableProcessors());
 	}
 
 	/*

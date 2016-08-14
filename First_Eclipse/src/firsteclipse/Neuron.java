@@ -103,7 +103,7 @@ public class Neuron {
 
 		for (int i = 0; i < m_inputs.length; i++) {
 			for (int j = 0; j < m_inputs[i].length; j++) {
-				m_inputs[i][j].m_error += m_weights[i][j] * m_error;
+				m_inputs[i][j].m_error += m_weights[i][j] * m_error; // This is so that the network corrects itself more between INPUT LAYER - HIDDEN LAYER
 				m_weights[i][j] += m_inputs[i][j].m_output * delta;
 			}
 		}

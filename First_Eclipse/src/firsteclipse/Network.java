@@ -110,11 +110,6 @@ public class Network {
 
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
-				//				PVector position = new PVector(
-				//						(Glv.neuronSize * 1.2f * i)
-				//								+ (7f * p.width / 10f - (Glv.neuronSize * 1.2f * m_output_layer.length) * 0.5f),
-				//						(Glv.neuronSize * 1.2f * j) - (p.height / 4)
-				//								+ (p.height / 2 - (Glv.neuronSize * 1.2f * m_output_layer[0].length) * 0.5f));
 				PVector position = fromEditorLayer.get(j);
 				PVector ids = idsFromEditorLayer.get(j);
 				
