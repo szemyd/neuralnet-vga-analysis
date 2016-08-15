@@ -1,6 +1,9 @@
 package firsteclipse;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -272,7 +275,44 @@ public class GenerateCSV {
 	}
 
 	public static void loadNeuralNetwork() {
+		String filePath = new File("").getAbsolutePath();
+		
 
+		String csvFile = filePath + "/src/data/sur.csv";
+
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+
+				PVector temp = new PVector();
+				// use comma as separator
+				String[] thisRow = line.split(cvsSplitBy);
+
+			
+				// p.println(buildings.size() + " temp.z: " + temp.z);
+			
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (Glv.shP)
+			System.out.println("CSV Data Loaded!");
 	}
 }
 

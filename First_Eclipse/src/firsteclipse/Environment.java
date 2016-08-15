@@ -53,7 +53,7 @@ public class Environment {
 	public Neuron[][] editorLayer;
 
 	public Group g1, g2, g3, g4, g5, g6, g7;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -140,6 +140,9 @@ public class Environment {
 		
 		b15 = cp5.addBang("saveNN").setPosition(160, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("saveNN");
+		
+		b16 = cp5.addBang("loadNN").setPosition(160, 60).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
+				.setLabel("loadNN");
 
 		//p.println(b5.getName());
 

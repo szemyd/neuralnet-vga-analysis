@@ -623,6 +623,7 @@ public class FirstEclipse extends PApplet {
 	//<---
 
 	//---> For Data analysis
+	
 	public void saveData() {
 
 		if (env.editorLayer != null) {
@@ -684,7 +685,7 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net != null) {
 					if (Glv.threadNN.net.neuralnet != null) {
-						
+
 						int counter = 0;
 						float avarageDistance = 0.0f;
 
@@ -704,28 +705,35 @@ public class FirstEclipse extends PApplet {
 							}
 						}
 						avarageDistance /= counter;
-						
+
 						String counterS = Integer.toString(counter);
 						String avarageDistanceS = Float.toString(avarageDistance);
-						
+
 						String myDirectory = "NetworkSettings";
 						GenerateCSV.save(myDirectory);
-						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS);
-						
-						GenerateCSV.saveNeuralNetwork(
-								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\" + "neuralNetwork" + ".csv");
+						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
+								+ avarageDistanceS);
+
+						GenerateCSV.saveNeuralNetwork(new File("").getAbsolutePath() + "\\" + myDirectory + "\\"
+								+ Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\"
+								+ "neuralNetwork" + ".csv");
 					}
 				}
 			}
 		}
 	}
-	public void saveSettings()
+
+	public void loadNN()
 	{
+		
+	}
+	
+	public void saveSettings() {
 		if (env.editorLayer != null) {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net != null) {
 					if (Glv.threadNN.net.neuralnet != null) {
-						
+
 						int counter = 0;
 						float avarageDistance = 0.0f;
 
@@ -745,24 +753,24 @@ public class FirstEclipse extends PApplet {
 							}
 						}
 						avarageDistance /= counter;
-						
+
 						String counterS = Integer.toString(counter);
 						String avarageDistanceS = Float.toString(avarageDistance);
-						
+
 						String myDirectory = "NetworkSettings";
 						GenerateCSV.save(myDirectory);
-						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS);
-						
-						GenerateCSV.saveSettings(
-								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\" + "generalSettings" + ".csv",
-								counterS, avarageDistanceS, env);
+						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
+								+ avarageDistanceS);
+
+						GenerateCSV.saveSettings(new File("").getAbsolutePath() + "\\" + myDirectory + "\\"
+								+ Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\"
+								+ "generalSettings" + ".csv", counterS, avarageDistanceS, env);
 					}
 				}
 			}
 		}
 	}
-	
-	
+
 	//<---
 
 	//---> For navigating in 3D
