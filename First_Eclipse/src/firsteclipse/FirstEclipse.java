@@ -490,6 +490,7 @@ public class FirstEclipse extends PApplet {
 
 	public void learningRate(float theValue) {
 		Glv.LEARNING_RATE = theValue;
+		println("Learning rate: " + Glv.LEARNING_RATE );
 	}
 
 	public void hiddenLayerSize(float theValue) {

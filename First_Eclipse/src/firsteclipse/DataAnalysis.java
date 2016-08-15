@@ -356,7 +356,7 @@ public class DataAnalysis {
 			precentage = difference;
 
 			//p.println(precentage);
-			precentage /= (compareAnalysis.length * compareAnalysis[0].length) * 2f;
+			precentage /= (compareAnalysis.length * compareAnalysis[0].length); //* 2f;
 			precentage *= 100f;
 
 			Glv.errorCounter2.add(new PVector(Glv.howManyCycles, precentage));

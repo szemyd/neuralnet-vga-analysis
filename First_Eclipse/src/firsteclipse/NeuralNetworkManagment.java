@@ -276,8 +276,10 @@ public class NeuralNetworkManagment {
 
 		Glv.netSize[4] = trainingSet.get(0).rForm.length;
 		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+		
+		if (Glv.netSize[0]* Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 
-		if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+		//if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 			Glv.netSize[2] = p.ceil(Glv.netSize[0] * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 		} else {
