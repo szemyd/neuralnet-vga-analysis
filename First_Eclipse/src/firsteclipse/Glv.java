@@ -33,7 +33,7 @@ public class Glv {
 	public static float spaceRoomSizeY = 160.42f * 1.5f;
 
 	//---> NEURAL NETWORK
-	public static float LEARNING_RATE = 0.01f; // This damms the speed at which the backpropagation happens: slower learning rate.
+	public static float LEARNING_RATE = 0.001f; // This damms the speed at which the backpropagation happens: slower learning rate.
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	public static ArrayList<ArrayList<Integer>> whichInputs;// = new ArrayList<ArrayList<Integer>>();
 	public static boolean neuronsStored = false; // Have I received the specified neurons?

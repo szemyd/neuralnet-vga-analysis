@@ -390,7 +390,7 @@ public class FirstEclipse extends PApplet {
 
 				String fileName = Integer.toString(Glv.howManyUntilNow + Glv.initialSeed);
 				String myDirectory = "GeneratedData";
-				GenerateCSV.save(fileName, myDirectory);
+				GenerateCSV.save(myDirectory);
 				GenerateCSV.generateCsvFile(
 						new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv");
 
@@ -490,7 +490,7 @@ public class FirstEclipse extends PApplet {
 
 	public void learningRate(float theValue) {
 		Glv.LEARNING_RATE = theValue;
-		println("Learning rate: " + Glv.LEARNING_RATE );
+		println("Learning rate: " + Glv.LEARNING_RATE);
 	}
 
 	public void hiddenLayerSize(float theValue) {
@@ -656,7 +656,7 @@ public class FirstEclipse extends PApplet {
 						String fileName = Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS;
 						String myDirectory = "AnalysisData";
 
-						GenerateCSV.save(fileName, myDirectory);
+						GenerateCSV.save(myDirectory);
 						GenerateCSV.saveValuesToCSV(
 								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv",
 								counterS, avarageDistanceS, env);
@@ -678,6 +678,91 @@ public class FirstEclipse extends PApplet {
 			}
 		}
 	}
+
+	public void saveNN() {
+		if (env.editorLayer != null) {
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net != null) {
+					if (Glv.threadNN.net.neuralnet != null) {
+						
+						int counter = 0;
+						float avarageDistance = 0.0f;
+
+						for (int i = 0; i < env.editorLayer.length; i++) {
+							for (int j = 0; j < env.editorLayer[i].length; j++) {
+								if (env.editorLayer[i][j].iAmChosen) {
+									counter++;
+									avarageDistance += PVector
+											.dist(env.editorLayer[i][j].position,
+													PVector.div(
+															PVector.add(env.editorLayer[0][0].position,
+																	env.editorLayer[env.editorLayer.length
+																			- 1][env.editorLayer[0].length
+																					- 1].position),
+															2));
+								}
+							}
+						}
+						avarageDistance /= counter;
+						
+						String counterS = Integer.toString(counter);
+						String avarageDistanceS = Float.toString(avarageDistance);
+						
+						String myDirectory = "NetworkSettings";
+						GenerateCSV.save(myDirectory);
+						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS);
+						
+						GenerateCSV.saveNeuralNetwork(
+								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\" + "neuralNetwork" + ".csv");
+					}
+				}
+			}
+		}
+	}
+	public void saveSettings()
+	{
+		if (env.editorLayer != null) {
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net != null) {
+					if (Glv.threadNN.net.neuralnet != null) {
+						
+						int counter = 0;
+						float avarageDistance = 0.0f;
+
+						for (int i = 0; i < env.editorLayer.length; i++) {
+							for (int j = 0; j < env.editorLayer[i].length; j++) {
+								if (env.editorLayer[i][j].iAmChosen) {
+									counter++;
+									avarageDistance += PVector
+											.dist(env.editorLayer[i][j].position,
+													PVector.div(
+															PVector.add(env.editorLayer[0][0].position,
+																	env.editorLayer[env.editorLayer.length
+																			- 1][env.editorLayer[0].length
+																					- 1].position),
+															2));
+								}
+							}
+						}
+						avarageDistance /= counter;
+						
+						String counterS = Integer.toString(counter);
+						String avarageDistanceS = Float.toString(avarageDistance);
+						
+						String myDirectory = "NetworkSettings";
+						GenerateCSV.save(myDirectory);
+						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS);
+						
+						GenerateCSV.saveSettings(
+								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS + "\\" + "generalSettings" + ".csv",
+								counterS, avarageDistanceS, env);
+					}
+				}
+			}
+		}
+	}
+	
+	
 	//<---
 
 	//---> For navigating in 3D

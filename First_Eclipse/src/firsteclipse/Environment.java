@@ -21,6 +21,7 @@ import controlP5.Accordion;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Group;
+import javafx.scene.input.KeyCode;
 import peasy.PeasyCam;
 import peasy.*;
 import controlP5.*;
@@ -52,7 +53,7 @@ public class Environment {
 	public Neuron[][] editorLayer;
 
 	public Group g1, g2, g3, g4, g5, g6, g7;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -133,9 +134,12 @@ public class Environment {
 
 		b9 = cp5.addBang("compareValues").setPosition(20, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("COMPARE");
-		
+
 		b14 = cp5.addBang("saveData").setPosition(90, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("saveData");
+		
+		b15 = cp5.addBang("saveNN").setPosition(160, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
+				.setLabel("saveNN");
 
 		//p.println(b5.getName());
 
@@ -157,8 +161,8 @@ public class Environment {
 		//---> Sliders for NN
 		cp5.addSlider("numOfLearning").setPosition(25, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
-		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.02f).setNumberOfTickMarks(51)
-				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.01f).setLabel("L-Rate");
+		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.01f).setNumberOfTickMarks(51)
+				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.001f).setLabel("L-Rate");
 
 		cp5.addSlider("numOfCycles").setPosition(145, 20).setSize(20, 100).setRange(0, 100).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(10).setLabel("Cycles/Press");
@@ -538,6 +542,7 @@ public class Environment {
 	}
 
 	public void reactEditor() { // Reacts to the input so you can select the neurons.
+
 		if (editorLayer != null) {
 			for (int i = 0; i < editorLayer.length; i++) {
 				for (int j = 0; j < editorLayer[i].length; j++) {
@@ -547,7 +552,14 @@ public class Environment {
 							&& p.mouseY > editorLayer[i][j].position.y - Glv.neuronSize * 0.5f
 							&& p.mouseY < editorLayer[i][j].position.y + Glv.neuronSize * 0.5f) {
 
-						editorLayer[i][j].iAmChosen = !editorLayer[i][j].iAmChosen;
+						//editorLayer[i][j].iAmChosen = !editorLayer[i][j].iAmChosen;
+						if (p.keyPressed) {
+							if (p.keyCode == PConstants.SHIFT)
+								editorLayer[i][j].iAmChosen = true;
+							else if (p.keyCode == PConstants.ALT)
+								editorLayer[i][j].iAmChosen = false;
+						}
+
 						if (editorLayer[i][j].iAmChosen) {
 							editorLayer[i][j].colour = 360;
 						} else
