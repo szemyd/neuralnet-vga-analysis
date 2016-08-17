@@ -261,7 +261,7 @@ public class Environment {
 								(p.floor((edSize.x - 40f)
 										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))),
 								(p.floor((edSize.y - 40f)
-										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))));
+										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))), editorRect.length*i +j);
 			}
 		}
 

@@ -15,6 +15,7 @@ public class Glv {
 	public static boolean shouldSpaceSyntax = true; // Should the SpaceSyntax Analysis work
 	public static boolean globalHighLow = true; // Should the mapping of the SpaceSyntax colouring be local relative or global relative.
 	public static boolean shP = true; // Should it print to the console?
+	public static boolean VGAormeanShort = true;
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
@@ -37,15 +38,15 @@ public class Glv {
 	public static int divisionOfTestingTraining = 5; // How should the testing and training test be divided.
 	public static ArrayList<ArrayList<Integer>> whichInputs;// = new ArrayList<ArrayList<Integer>>();
 	public static boolean neuronsStored = false; // Have I received the specified neurons?
-	public static Integer [] netSize  = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
-	public static int numOfLearning =500; // How many cards should I show with one click?
-	public static int numOfCycles=10;
-	
-	public static ArrayList<PVector> errorCounter=new ArrayList<PVector>();
-	public static ArrayList<PVector> errorCounter2=new ArrayList<PVector>();
-	public static float howManyCycles =0f; // How often have I pressed "train NN". Shown a predefined number of cards.
+	public static Integer[] netSize = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
+	public static int numOfLearning = 500; // How many cards should I show with one click?
+	public static int numOfCycles = 10;
+
+	public static ArrayList<PVector> errorCounter = new ArrayList<PVector>();
+	public static ArrayList<PVector> errorCounter2 = new ArrayList<PVector>();
+	public static float howManyCycles = 0f; // How often have I pressed "train NN". Shown a predefined number of cards.
 	public static float howMuchBiggerHidden = 2.5f;
-	
+
 	public static int genOrA = 0; // Am I feeding in to create the public space or to get a certain analysis? 
 
 	//---> For the ENVIRONMENT
@@ -76,7 +77,7 @@ public class Glv {
 	public static PVector highLow = new PVector(0f, 1000f);
 	//public static ArrayList<String> toNN = new ArrayList<String>();
 	public static PVector highLowForNN = new PVector(0f, 1000f);
-	public static int cardContainingHighest=0;
+	public static int cardContainingHighest = 0;
 
 	public static ArrayList<MyThread> threads = new ArrayList<MyThread>();
 	public static MyThreadNeuralNet threadNN;

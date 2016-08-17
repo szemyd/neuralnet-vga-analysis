@@ -63,7 +63,11 @@ public class FirstEclipse extends PApplet {
 		//dataAnalysis.setup();
 
 		println("cores: " + Runtime.getRuntime().availableProcessors());
+		
+		
+		
 	}
+	
 
 	/*
 	 * DRAW FUNCTIONS
@@ -318,7 +322,7 @@ public class FirstEclipse extends PApplet {
 			loadDataSetup();
 
 		if (key == 'q')
-			stopAnalysis();
+			Glv.VGAormeanShort =! Glv.VGAormeanShort;
 
 		if (key == ' ') {
 			trainNeurons();
