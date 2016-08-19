@@ -171,8 +171,7 @@ public class MyData {
 		*/
 	}
 
-	public void drawOnlyAnalysis(Environment env)
-	{
+	public void drawOnlyAnalysis(Environment env) {
 		drawBoundary(
 				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
@@ -197,19 +196,12 @@ public class MyData {
 								if (env.editorLayer[i][j].iAmChosen) {
 									p.strokeWeight(1.2f);
 									p.stroke(360, 360, 180 * (1 - _analysis[i][j]));
-									p.fill(360, 0, 180 * (1 - _analysis[i][j]) );
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]));
 								} else {
 									p.strokeWeight(1.0f);
 									p.stroke(360, 0, 180 * (1 - _analysis[i][j]));
 									p.fill(360, 0, 180 * (1 - _analysis[i][j]));
 								}
-
-								//							if (env.editorLayer[i][j].iAmChosen)
-								//								p.fill(360, 360, 180 * (1 - _analysis[i][j]), 180);
-								//
-								//							else
-								//								p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
-								//p.fill(360, 0, 180 * (1 - rAnalysis[i][j]));
 
 								p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 							}
@@ -222,26 +214,7 @@ public class MyData {
 			}
 		}
 	}
-	
-//	private void drawBoundary(PVector position, int sizeX, int sizeY) {
-//		p.pushStyle();
-//		{
-//			p.noFill();
-//			//p.fill(360);
-//			p.stroke(360);
-//			p.pushMatrix();
-//			{
-//				p.rectMode(PConstants.CORNER);
-//				p.rect(position.x - 10f - Glv.neuronSize, position.y - 10f - Glv.neuronSize,
-//						(sizeX * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize,
-//						(sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize, 20f);
-//			}
-//			p.popMatrix();
-//		}
-//		p.popStyle();
-//
-//	}
-	
+
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
@@ -259,10 +232,8 @@ public class MyData {
 		}
 		p.popStyle();
 
-		drawText(myText,
-				new PVector(
-						position.x - Glv.neuronSize,
-						position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize+ 20f));
+		drawText(myText, new PVector(position.x - Glv.neuronSize,
+				position.y - 10f - Glv.neuronSize + (sizeY * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize + 20f));
 	}
 
 	private void drawText(String myText, PVector position) {
@@ -273,7 +244,7 @@ public class MyData {
 				p.textAlign(PConstants.LEFT, PConstants.CENTER);
 				p.textSize(18);
 				p.fill(360);
-				p.text(myText, position.x+15f, position.y);
+				p.text(myText, position.x + 15f, position.y);
 				p.ellipse(position.x, position.y, 8f, 8f);
 			}
 			p.popStyle();
@@ -281,8 +252,7 @@ public class MyData {
 		}
 		p.popMatrix();
 	}
-	
-	
+
 	//---> Data cleaning
 	public void convert() {
 
@@ -300,35 +270,18 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (j < _analysis.length && i < _analysis[j].length)
 								//_analysis[i][j] = num; // Without mapping.
-								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1500f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								if (num > 1000f)
+								_analysis[j][i] = 1f;
+								else if (num < Glv.highLowForNN.y)
+								_analysis[j][i] = -1f;
+								else
+								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1000f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}
 				}
 				i++;
 			}
-
-			/*
-			_analysis = new Float[analysis.size()][analysis.get(0).length];
-			_form = new Float[form.size()][form.get(0).length];
-			
-			int i = 0;
-			for (String[] strings : analysis) {
-				for (int j = 0; j < _analysis[i].length; j++) {
-					if (j >= 0 && j < strings.length) {
-						//if (strings[j].length() > 0 && strings[j].length()<6) {
-						if (Character.isDigit(strings[j].charAt(0))) {
-							float num = (float) Integer.valueOf(strings[j]);
-							if (i < _analysis.length && j < _analysis[i].length)
-								//_analysis[i][j] = num; // Without mapping.
-								_analysis[i][j] = p.map(num, Glv.highLowForNN.y, 1500f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
-							//}
-						}
-					}
-				}
-				i++;
-			}
-			*/
 
 			//p.println("2) Analysis length: " + _analysis.length + " | analysis[i].length: " + _analysis[0].length);
 			//p.println("form length: " + form.size() + " | form[i].length: " + form.get(0).length);
@@ -409,8 +362,10 @@ public class MyData {
 					for (int j = 0; j < _analysis[i].length; j++) {
 						if (env.editorLayer[i][j].iAmChosen) {
 							rAnalysis[0][counter] = _analysis[i][j];
-							
-							rAnalysisN[0][counter] = new Neuron(p, new PVector(env.editorLayer[i][j].position.x-p.width/10f*3f, env.editorLayer[i][j].position.y));
+
+							rAnalysisN[0][counter] = new Neuron(p,
+									new PVector(env.editorLayer[i][j].position.x - p.width / 10f * 3f,
+											env.editorLayer[i][j].position.y));
 							rAnalysisN[0][counter].m_output = _analysis[i][j];
 							counter++;
 						}

@@ -179,14 +179,19 @@ public class NeuralNetworkManagment {
 			for (String[] strings : data.analysis) {
 				for (int i = 0; i < strings.length; i++) {
 					if (strings[i] != "\n" && strings[i] != "" && strings[i] != null) {
-						int num = Integer.valueOf(strings[i]);
-						if (num > Glv.highLowForNN.x) {
-							Glv.highLowForNN.x = num;
-							Glv.cardContainingHighest = testingSet.indexOf(data);
-							//p.println("Card containing lowest: " + Glv.cardContainingHighest);
+						try {
+							int num = Integer.valueOf(strings[i]);
+							if (num > Glv.highLowForNN.x) {
+								Glv.highLowForNN.x = num;
+								Glv.cardContainingHighest = testingSet.indexOf(data);
+								//p.println("Card containing lowest: " + Glv.cardContainingHighest);
+							}
+							if (num < Glv.highLowForNN.y && num > 6)
+								Glv.highLowForNN.y = num;
+						} catch (NumberFormatException ex) { // handle your exception
+							p.println("Was not a number: " + strings[i]);
 						}
-						if (num < Glv.highLowForNN.y && num > 6)
-							Glv.highLowForNN.y = num;
+
 					}
 				}
 			}
@@ -276,10 +281,10 @@ public class NeuralNetworkManagment {
 
 		Glv.netSize[4] = trainingSet.get(0).rForm.length;
 		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
-		
-		if (Glv.netSize[0]* Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 
-		//if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+
+			//if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 			Glv.netSize[2] = p.ceil(Glv.netSize[0] * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 		} else {
@@ -324,7 +329,8 @@ public class NeuralNetworkManagment {
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
 		System.out.println("inputs.length: " + inputs.length + " | " + inputs[0].length);
 
-		if(Glv.genOrA != 2) backTo3D(); // Generate the first random form it created.
+		if (Glv.genOrA != 2)
+			backTo3D(); // Generate the first random form it created.
 
 		neuralnet.respond(card, inputs);
 		//			if (Glv.neuronsStored)
@@ -363,7 +369,7 @@ public class NeuralNetworkManagment {
 					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
 						for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
 							//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-							counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
+							counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
 						}
 					}
 				}
@@ -372,8 +378,12 @@ public class NeuralNetworkManagment {
 				float precentage = counter;
 				//p.println(precentage);
 
-				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+//				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+//						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+				
+				precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
+						* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
+				
 				precentage *= 100f;
 				//p.println(precentage);
 
@@ -386,7 +396,8 @@ public class NeuralNetworkManagment {
 
 				Glv.howManyCycles++;
 			}
-			if(Glv.genOrA != 2) backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+			if (Glv.genOrA != 2)
+				backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 
 		}
 
@@ -425,7 +436,8 @@ public class NeuralNetworkManagment {
 			break;
 		}
 
-		if(Glv.genOrA != 2) backTo3D();
+		if (Glv.genOrA != 2)
+			backTo3D();
 	}
 
 	private void testIt(MyData card, Float[][] inputs) {

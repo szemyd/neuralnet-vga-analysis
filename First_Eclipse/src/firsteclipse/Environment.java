@@ -162,7 +162,7 @@ public class Environment {
 				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
 		//---> Sliders for NN
-		cp5.addSlider("numOfLearning").setPosition(25, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(21)
+		cp5.addSlider("numOfLearning").setPosition(25, 20).setSize(20, 100).setRange(0, 5000).setNumberOfTickMarks(41)
 				.plugTo(Glv.numOfLearning).moveTo(g3).setValue(500).setLabel("Learning");
 		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.01f).setNumberOfTickMarks(51)
 				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.001f).setLabel("L-Rate");

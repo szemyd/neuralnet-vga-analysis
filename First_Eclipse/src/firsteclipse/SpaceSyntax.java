@@ -115,7 +115,7 @@ public class SpaceSyntax {
 			p.println("Ellapsed time VGA: " + ((p.second() + p.minute() * 60f + p.hour() * 360f) - ellapsedTimeVGA));
 
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
-		meanShortestPath();
+		//meanShortestPath();
 
 		save(boxes);
 		//return true;
