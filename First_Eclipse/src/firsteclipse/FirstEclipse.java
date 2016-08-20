@@ -236,9 +236,10 @@ public class FirstEclipse extends PApplet {
 						Glv.threadNN.net.neuralnet.drawAnalysis(env);
 					}
 				} else {
-					if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.splitNeuralnets.length > 0) {
+					if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.splitNeuralnets != null) {
 						for (int i = 0; i < Glv.threadNN.net.splitNeuralnets.length; i++) {
 							Glv.threadNN.net.splitNeuralnets[i].drawAnalysis(env);
+							//Glv.threadNN.net.splitNeuralnets[5].drawAnalysis(env);
 						}
 					}
 				}
@@ -649,6 +650,7 @@ public class FirstEclipse extends PApplet {
 
 	public void splitNetwork(boolean theValue) {
 		Glv.splitNetwork = theValue;
+		//println(Glv.splitNetwork );
 	}
 	//<---
 

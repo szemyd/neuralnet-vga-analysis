@@ -43,7 +43,7 @@ public class Glv {
 	public static int numOfLearning = 500; // How many cards should I show with one click?
 	public static int numOfCycles = 10;
 	public static boolean splitNetwork = false; // Should the system consist of smaller networks
-	public static int splitSize = 9*9; // How big should the split be?
+	public static int splitSize = 25; // How big should the split be?
 
 	public static ArrayList<PVector> errorCounter = new ArrayList<PVector>();
 	public static ArrayList<PVector> errorCounter2 = new ArrayList<PVector>();

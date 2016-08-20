@@ -210,7 +210,7 @@ public class MyData {
 						p.popMatrix();
 					}
 				}
-				p.fill(360);
+				//p.fill(360);
 			}
 		}
 	}

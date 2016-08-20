@@ -343,16 +343,6 @@ public class NeuralNetworkManagment {
 
 	private void setupSplitNeurons(int split, Environment env) {
 
-		Glv.netSize[0] = trainingSet.get(0).rForm.length;
-		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
-
-		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
-		p.println("split: " + split);
-		Glv.netSize[5] = Glv.splitSize;
-
-		Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
-		Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
-
 		//		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 		//			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
 		//			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
@@ -362,27 +352,69 @@ public class NeuralNetworkManagment {
 		//		}
 		splitNeuralnets = new Network[split];
 
-		for (int i = 0; i < split - 1; i++) {
-			splitNeuralnets[i] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3],
-					Glv.netSize[4], Glv.netSize[5], env, i * Glv.netSize[5]);
-			System.out.println("i*Glv.netSize[5]: " + i * Glv.netSize[5]);
-			System.out
-					.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
-							+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
-		}
-		
+		int[] myNetSize = new int[6];
 
-		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length - (Glv.netSize[5] * (split));
-		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
-				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
-		
-		splitNeuralnets[splitNeuralnets.length - 1] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2],
-				Glv.netSize[3], Glv.netSize[4], Glv.netSize[5], env, (Glv.netSize[5] * (split-1)));
-	
+		myNetSize[0] = trainingSet.get(0).rForm.length;
+		myNetSize[1] = trainingSet.get(0).rForm[2].length;
+
+		myNetSize[4] = trainingSet.get(0).rAnalysis.length;
+		p.println("split: " + split);
+		myNetSize[5] = Glv.splitSize;
+
+		myNetSize[2] = p.floor(myNetSize[4] * Glv.howMuchBiggerHidden);
+		myNetSize[3] = p.ceil(myNetSize[5] * Glv.howMuchBiggerHidden);
+
+		Neuron[][] temporaryNeurons = new Neuron[env.editorLayer.length][env.editorLayer[0].length];
+		PVector[][] temporaryNeuronsPosition = new PVector[env.editorLayer.length][env.editorLayer[0].length];
+
+		for (int k = 0; k < temporaryNeuronsPosition.length; k++) {
+			for (int l = 0; l < temporaryNeuronsPosition[k].length; l++) {
+				temporaryNeuronsPosition[k][l] = new PVector(env.editorLayer[k][l].position.x,
+						env.editorLayer[k][l].position.y);
+				temporaryNeurons[k][l] = env.editorLayer[k][l];
+			}
+		}
+
+		for (int i = 0; i < split - 1; i++) {
+			splitNeuralnets[i] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2], myNetSize[3], myNetSize[4],
+					myNetSize[5], temporaryNeurons, i * myNetSize[5], i);
+
+			System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2]
+					+ " | " + myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
+		}
+
+		myNetSize[5] = trainingSet.get(0).rAnalysis[0].length - (myNetSize[5] * (split));
+		System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2] + " | "
+				+ myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
+
+		splitNeuralnets[splitNeuralnets.length - 1] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2],
+				myNetSize[3], myNetSize[4], myNetSize[5], temporaryNeurons,
+				(myNetSize[5] * (split - 1)), splitNeuralnets.length - 1);
 
 		for (int i = 0; i < split; i++) {
 			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
 		}
+
+//		for (int k = 0; k < split; k++) {
+//			for (int i = 0; i < splitNeuralnets[k].m_output_layer.length; i++) {
+//				for (int j = 0; j < splitNeuralnets[k].m_output_layer[i].length; j++) {
+//					p.print(splitNeuralnets[k].m_output_layer[i][j].position + " | ");
+//				}
+//				p.println("");
+//			}
+//			p.println("___");
+//			p.println("");
+//		}
+
+	}
+
+	public static Neuron[][] cloneArray(Neuron[][] src) {
+		int length = src.length;
+		Neuron[][] target = new Neuron[length][src[0].length];
+		for (int i = 0; i < length; i++) {
+			System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+		}
+		return target;
 	}
 
 	private void setupRawNeurons() {
@@ -420,22 +452,18 @@ public class NeuralNetworkManagment {
 			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
 					Glv.netSize[5]);
 		} else {
-			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-					Glv.netSize[5], env, 0);
+						neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+								Glv.netSize[5], env.editorLayer, 0, 0);
 		}
 
 		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
-		System.out.println("inputs.length: " + inputs.length + " | " + inputs[0].length);
+
 
 		if (Glv.genOrA != 2)
 			backTo3D(); // Generate the first random form it created.
 
 		neuralnet.respond(card, inputs);
-		//			if (Glv.neuronsStored)
-		//				neuralnet.respond(trainingSet.get(0), trainingSet.get(0).rAnalysis);
-		//			else
-		//				neuralnet.respond(trainingSet.get(0), trainingSet.get(0)._analysis);
 	}
 
 	private int calcSplit() {
@@ -452,6 +480,7 @@ public class NeuralNetworkManagment {
 			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
 				training(Glv.numOfLearning, graphs);
 			}
+
 			if (Glv.genOrA != 2)
 				backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 
@@ -481,10 +510,22 @@ public class NeuralNetworkManagment {
 				break;
 			}
 
-			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-					//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-					counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
+			if (Glv.splitNetwork) {
+				for (int m = 0; m < splitNeuralnets.length; m++) {
+					for (int j = 0; j < Glv.threadNN.net.splitNeuralnets[m].m_output_layer.length; j++) {
+						for (int k = 0; k < Glv.threadNN.net.splitNeuralnets[m].m_output_layer[j].length; k++) {
+							//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+							counter += (Math.pow(Glv.threadNN.net.splitNeuralnets[m].m_output_layer[j][k].m_error, 2f)
+									/ 2f); // Counts all the error of the last learning phase.
+						}
+					}
+				}
+			} else {
+				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+						//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+						counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
+					}
 				}
 			}
 		}
@@ -496,8 +537,18 @@ public class NeuralNetworkManagment {
 		//				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
 		//						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
 
-		precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
-				* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
+		if (Glv.splitNetwork) {
+			double possibleErrors = 0.0f;
+			float numOfAllNeurons = 0.0f;
+			for (int m = 0; m < splitNeuralnets.length; m++) {
+				numOfAllNeurons += (splitNeuralnets[m].m_output_layer.length
+						* splitNeuralnets[m].m_output_layer[0].length);
+			}
+			possibleErrors = numOfAllNeurons * (Math.pow(2f, 2f)) / 2f; // Counts all the error of the last learning phase.
+			precentage /= possibleErrors;
+		} else
+			precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
+					* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
 
 		precentage *= 100f;
 		//p.println(precentage);
@@ -516,9 +567,23 @@ public class NeuralNetworkManagment {
 
 		if (inputs != null && outputs != null) {
 			if (Glv.splitNetwork) {
-				for (int i = 0; i < splitNeuralnets.length; i++) {
-					splitNeuralnets[i].respond(card, inputs);
-					splitNeuralnets[i].train(outputs);
+			
+				
+				
+				for (int m = 0; m < splitNeuralnets.length; m++) {
+					
+					Float [][] selectedOutputs = new Float[splitNeuralnets[0].m_output_layer.length][splitNeuralnets[0].m_output_layer[0].length];
+					
+					for (int i = 0; i < selectedOutputs.length; i++) {
+						for (int j = 0; j < selectedOutputs[i].length; j++) {
+							selectedOutputs[i][j]=outputs[0][j+m*Glv.splitSize];
+						}
+					}
+					
+					
+					
+					splitNeuralnets[m].respond(card, inputs);
+					splitNeuralnets[m].train(selectedOutputs);
 				}
 			} else {
 				neuralnet.respond(card, inputs);
