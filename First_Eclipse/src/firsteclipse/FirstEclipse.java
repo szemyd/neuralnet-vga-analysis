@@ -63,11 +63,8 @@ public class FirstEclipse extends PApplet {
 		//dataAnalysis.setup();
 
 		println("cores: " + Runtime.getRuntime().availableProcessors());
-		
-		
-		
+
 	}
-	
 
 	/*
 	 * DRAW FUNCTIONS
@@ -119,6 +116,7 @@ public class FirstEclipse extends PApplet {
 			rotate(HALF_PI); // Rotate the whole scene.
 
 			if (Glv.newOrNet) {
+				
 				if (Glv.threads != null) {
 					if (Glv.threads.size() > 0) {
 						if (Glv.whichToDisplay >= 0) {
@@ -135,6 +133,7 @@ public class FirstEclipse extends PApplet {
 						}
 					}
 				}
+			
 			} else if (Glv.genOrA == 0) {
 				if (Glv.threadNN != null) {
 					if (Glv.threadNN.net != null) {
@@ -149,6 +148,7 @@ public class FirstEclipse extends PApplet {
 						}
 					}
 				}
+				
 			}
 
 			env.draw(); // Draws the environment.
@@ -322,7 +322,7 @@ public class FirstEclipse extends PApplet {
 			loadDataSetup();
 
 		if (key == 'q')
-			Glv.VGAormeanShort =! Glv.VGAormeanShort;
+			Glv.VGAormeanShort = !Glv.VGAormeanShort;
 
 		if (key == ' ') {
 			trainNeurons();
@@ -439,9 +439,10 @@ public class FirstEclipse extends PApplet {
 			//			env.cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
 			//					.setImages(loadImage("networkRoll.PNG"), loadImage("network.PNG"), loadImage("networkPress.PNG"))
 			//					.updateSize().moveTo(env.g1).plugTo(Glv.threadNN.net);
-		} else {
+		} else if (!Glv.threadNN.net.dataLoaded) {
+			//Glv.threadNN.t.start();
+		} else
 			println("Data already loaded");
-		}
 	}
 
 	public void analysisSetup() {
@@ -479,6 +480,14 @@ public class FirstEclipse extends PApplet {
 
 	public void numberOfThreads(int theValue) {
 		Glv.numOfThreads = theValue;
+	}
+
+	public void numberOfSolutions(int theValue) {
+		Glv.numOfSolutions = theValue;
+	}
+
+	public void numberOfRead(int theValue) {
+		Glv.numOfRead = theValue;
 	}
 
 	public void dimensionalityReduction(boolean theValue) {
@@ -624,10 +633,14 @@ public class FirstEclipse extends PApplet {
 	public void editorForAnalysisOn(boolean theValue) {
 		Glv.editorForAnalysisOn = theValue;
 	}
+
+	public void splitNetwork(boolean theValue) {
+		Glv.splitNetwork = theValue;
+	}
 	//<---
 
 	//---> For Data analysis
-	
+
 	public void saveData() {
 
 		if (env.editorLayer != null) {
@@ -727,11 +740,10 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
-	public void loadNN()
-	{
-		
+	public void loadNN() {
+
 	}
-	
+
 	public void saveSettings() {
 		if (env.editorLayer != null) {
 			if (Glv.threadNN != null) {

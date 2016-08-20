@@ -28,6 +28,7 @@ public class NeuralNetworkManagment {
 	public ArrayList<MyData> testingSet = new ArrayList<MyData>();
 
 	public Network neuralnet;
+	public Network[] splitNeuralnets;
 	public boolean dataLoaded = false;
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
@@ -52,95 +53,139 @@ public class NeuralNetworkManagment {
 		int numberOfAnalysis = 0;
 
 		if (!dataLoaded) {
-			for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles.length * 10f >= Glv.numOfRead) {
+				for (int i = 0; i < Glv.numOfRead; i++) {
 
-				try {
-					testingSet.add(new MyData(p));
-					trainingSet.add(new MyData(p));
-					boolean analysisOrForm = false;
-					boolean isItID = true;
+					try {
+						testingSet.add(new MyData(p));
+						trainingSet.add(new MyData(p));
+						boolean analysisOrForm = false;
+						boolean isItID = true;
 
-					br = new BufferedReader(new FileReader(listOfFiles[i]));
-					while ((line = br.readLine()) != null) {
+						br = new BufferedReader(new FileReader(listOfFiles[i]));
+						while ((line = br.readLine()) != null) {
 
-						MyData data;
+							MyData data;
 
-						if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
-							data = trainingSet.get(trainingSet.size() - 1);
-						else
-							data = testingSet.get(testingSet.size() - 1);
-						String[] thisRow = line.split(cvsSplitBy);
+							if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
+								data = trainingSet.get(trainingSet.size() - 1);
+							else
+								data = testingSet.get(testingSet.size() - 1);
 
-						for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
+							String[] thisRow = line.split(cvsSplitBy);
 
-							if (!thisRow[j].isEmpty()) {
-								char c = thisRow[j].charAt(0);
-
-								if (isItID) { // If this switch is on then store the file as an ID.
-									data.analysisID = Integer.valueOf(thisRow[j]);
-									//p.println(thisRow[j]);
-									isItID = false;
-								} else if (c == '_') {
-									if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
-										trainingSet.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
-									else
-										testingSet.add(new MyData(p));
-									analysisOrForm = false;
-									numberOfAnalysis++;
-									isItID = true;
-									break;
-								} else if (c == ':') {
-									analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
-									isItID = false;
-									break;
-								} else {
-									if (analysisOrForm) {
-										data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+							/*
+							for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
+							
+								if (!thisRow[j].isEmpty()) {
+									char c = thisRow[j].charAt(0);
+							
+									switch (c) {
+									case '_':
+										if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
+											trainingSet.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
+										else
+											testingSet.add(new MyData(p));
+										analysisOrForm = false;
+										numberOfAnalysis++;
+										isItID = true;
+										break;
+									case ':':
+										analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
 										isItID = false;
 										break;
-									} else {
-										//										for (int k = 0; k < thisRow.length; k++) {
-										//											p.println("thisRow: " + thisRow[k]);	
-										//										}
-										//										p.println("_______________");	
-										data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
-										isItID = false;
+									default:
+										if (isItID) {
+											data.analysisID = Integer.valueOf(thisRow[j]);
+											isItID = false;
+										} else if (analysisOrForm) {
+											data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+											isItID = false;
+										} else {
+											data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
+											isItID = false;
+										}
 										break;
 									}
 								}
 							}
+							*/
+
+							for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
+
+								if (!thisRow[j].isEmpty()) {
+									char c = thisRow[j].charAt(0);
+
+									if (isItID) { // If this switch is on then store the file as an ID.
+										data.analysisID = Integer.valueOf(thisRow[j]);
+										//p.println(thisRow[j]);
+										isItID = false;
+									} else if (c == '_') {
+										if (numberOfAnalysis % Glv.divisionOfTestingTraining != 0)
+											trainingSet.add(new MyData(p)); // Add new object MyData, essentially a new form + analysis.
+										else
+											testingSet.add(new MyData(p));
+										analysisOrForm = false;
+										numberOfAnalysis++;
+										isItID = true;
+										break;
+									} else if (c == ':') {
+										analysisOrForm = !analysisOrForm; // Is the data I am looking at the form or the analysis?
+										isItID = false;
+										break;
+									} else {
+										if (analysisOrForm) {
+											data.form.add(thisRow); // If form put line in ArrayList of MyData form.
+											isItID = false;
+											break;
+										} else {
+											//										for (int k = 0; k < thisRow.length; k++) {
+											//											p.println("thisRow: " + thisRow[k]);	
+											//										}
+											//										p.println("_______________");	
+											data.analysis.add(thisRow); // If analysis put line in ArrayList of MyData analysis.
+											isItID = false;
+											break;
+										}
+									}
+								}
+							}
+
+						}
+
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						if (br != null) {
+							try {
+								br.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					if (br != null) {
-						try {
-							br.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
 				}
 
+				if (Glv.shP)
+					p.println("Training set size: " + trainingSet.size() + " | " + "Testing set size: "
+							+ testingSet.size());
+
+				cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
+				setHighLow(); // Calculates the range of visibility in the data.
+				convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
+				extractValuableForm(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
+				//setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
+
+				dataLoaded = true;
+			} else {
+				System.out.println("There is not enough existing solutions.");
 			}
-
-			if (Glv.shP)
-				p.println(
-						"Training set size: " + trainingSet.size() + " | " + "Testing set size: " + testingSet.size());
-
-			cleanupReadData(); // Goes through each file and eliminates ones that are not suitable.
-			setHighLow(); // Calculates the range of visibility in the data.
-			convertData(); // Convert the data into a -1 to 1 and maps the data to high low.
-			extractValuableForm(); // Converts the outputs to the dimensionality-reducted grid size and cuts the analysis data to the right points.
-			//setupNeuralNetwork(); // Initialises the network and feeds in the size of the analysis and form.
-
-			dataLoaded = true;
 		} else
 			System.out.println("Data has already been loaded.");
+
 	}
 
 	private void cleanupReadData() {
@@ -251,6 +296,7 @@ public class NeuralNetworkManagment {
 
 			case 0:
 				if (Glv.neuronsStored) {
+
 					setupSpecifiedNeurons();
 					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis, 0, env);
 				} else
@@ -264,8 +310,12 @@ public class NeuralNetworkManagment {
 
 			case 2:
 				if (Glv.neuronsStored) {
-					setupAnalysisNeurons();
-					createNetwork(trainingSet.get(0), trainingSet.get(0).rForm, 1, env);
+					if (!Glv.splitNetwork) {
+						setupAnalysisNeurons();
+						createNetwork(trainingSet.get(0), trainingSet.get(0).rForm, 1, env);
+					} else {
+						setupSplitNeurons(calcSplit(), env); // Calculates how many parts it should be split then creates the networks
+					}
 				} else
 					p.println("Please specify neurons in editor");
 				break;
@@ -285,11 +335,28 @@ public class NeuralNetworkManagment {
 		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 
 			//if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-			Glv.netSize[2] = p.ceil(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 		} else {
-			Glv.netSize[2] = p.ceil(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+		}
+	}
+
+	private void setupSplitNeurons(int split, Environment env) {
+		Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
+		Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
+		
+		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.ceil(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
+
+		Glv.netSize[4] = trainingSet.get(0).rForm.length;
+		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+		
+		
+		for (int i = 0; i < split; i++) {
+			splitNeuralnets[i] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+					Glv.netSize[5], env);
 		}
 	}
 
@@ -308,7 +375,7 @@ public class NeuralNetworkManagment {
 		Glv.netSize[0] = trainingSet.get(0).rForm.length;
 		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
 
-		Glv.netSize[2] = p.ceil(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
+		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
 		Glv.netSize[3] = p.ceil(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
 
 		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
@@ -338,68 +405,78 @@ public class NeuralNetworkManagment {
 		//			else
 		//				neuralnet.respond(trainingSet.get(0), trainingSet.get(0)._analysis);
 	}
+
+	private int calcSplit() {
+		return p.ceil((trainingSet.get(0).rForm.length * trainingSet.get(0).rForm[2].length) / Glv.splitSize);
+	}
 	//<--- SETUP NN
 
 	//---> Interact with NN.
 	public void trainNN(DataAnalysis graphs) {
 
 		if (dataLoaded) {
+			training(10, graphs); // This is so we have the number the NN original performs as.
+
 			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
-				float counter = 0f;
-				for (int i = 0; i < Glv.numOfLearning; i++) {
-					int row = (int) p.floor(p.random(0, trainingSet.size()));
-
-					switch (Glv.genOrA) {
-					case 0:
-						if (Glv.neuronsStored)
-							trainIt(trainingSet.get(row), trainingSet.get(row).rAnalysis, trainingSet.get(row).rForm);
-						else
-							p.println("Please specify neurons in editor");
-						break;
-					case 1:
-						trainIt(trainingSet.get(row), trainingSet.get(row)._analysis, trainingSet.get(row).rForm);
-						break;
-					case 2:
-						if (Glv.neuronsStored) {
-							trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row).rAnalysis);
-						}
-						break;
-					}
-
-					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-						for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-							//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-							counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
-						}
-					}
-				}
-
-				counter /= Glv.numOfLearning;
-				float precentage = counter;
-				//p.println(precentage);
-
-//				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-//						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
-				
-				precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
-						* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
-				
-				precentage *= 100f;
-				//p.println(precentage);
-
-				Glv.errorCounter.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
-
-				//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-				//p.println(counter);
-				graphs.lineChart.setData(Glv.errorCounter);
-				System.out.println("Last sum of error: " + precentage + "%");
-
-				Glv.howManyCycles++;
+				training(Glv.numOfLearning, graphs);
 			}
 			if (Glv.genOrA != 2)
 				backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 
 		}
+
+	}
+
+	private void training(int numOfLearning, DataAnalysis graphs) {
+		float counter = 0f;
+		for (int i = 0; i < Glv.numOfLearning; i++) {
+			int row = (int) p.floor(p.random(0, trainingSet.size()));
+
+			switch (Glv.genOrA) {
+			case 0:
+				if (Glv.neuronsStored)
+					trainIt(trainingSet.get(row), trainingSet.get(row).rAnalysis, trainingSet.get(row).rForm);
+				else
+					p.println("Please specify neurons in editor");
+				break;
+			case 1:
+				trainIt(trainingSet.get(row), trainingSet.get(row)._analysis, trainingSet.get(row).rForm);
+				break;
+			case 2:
+				if (Glv.neuronsStored) {
+					trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row).rAnalysis);
+				}
+				break;
+			}
+
+			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
+				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
+					//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
+					counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
+				}
+			}
+		}
+
+		counter /= Glv.numOfLearning;
+		float precentage = counter;
+		//p.println(precentage);
+
+		//				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
+		//						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+
+		precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
+				* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
+
+		precentage *= 100f;
+		//p.println(precentage);
+
+		Glv.howManyCycles++;
+		Glv.errorCounter.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
+
+		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
+		//p.println(counter);
+		graphs.lineChart.setData(Glv.errorCounter);
+		System.out.println("Last sum of error: " + precentage + "%");
 
 	}
 

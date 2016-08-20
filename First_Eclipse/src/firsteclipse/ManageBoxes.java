@@ -256,7 +256,7 @@ public class ManageBoxes {
 			for (int j = 0; j < boxes[i].length; j += Glv.cubeSizeReduced / Glv.cubeSize) {
 				if (k < Glv.threadNN.net.neuralnet.m_output_layer.length
 						&& l < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
-					if (Glv.threadNN.net.neuralnet.m_output_layer[k][l].m_output < 0.0f) // If it's not really black then take it as down (0).
+					if (Glv.threadNN.net.neuralnet.m_output_layer[k][l].m_output < -0.1f) // If it's not really black then take it as down (0).
 					{
 						for (int m = 0; m < Glv.cubeSizeReduced / Glv.cubeSize; m++) {
 							for (int n = 0; n < Glv.cubeSizeReduced / Glv.cubeSize; n++) {

@@ -270,12 +270,12 @@ public class MyData {
 							float num = (float) Integer.valueOf(strings[j]);
 							if (j < _analysis.length && i < _analysis[j].length)
 								//_analysis[i][j] = num; // Without mapping.
-								if (num > 1000f)
+								if (num > 1429f)
 								_analysis[j][i] = 1f;
 								else if (num < Glv.highLowForNN.y)
 								_analysis[j][i] = -1f;
 								else
-								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1000f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1429f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 							//}
 						}
 					}

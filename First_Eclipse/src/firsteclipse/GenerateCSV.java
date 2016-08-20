@@ -50,7 +50,7 @@ public class GenerateCSV {
 
 					for (int j = 0; j < thread.spaceSyntax.toNN.size(); j++) {
 						String s = thread.spaceSyntax.toNN.get(j);
-						if (i == Glv.threads.size() - 1 && j == thread.spaceSyntax.toNN.size() - 2) {
+						if (i == Glv.threads.size() - 1 && j >= thread.spaceSyntax.toNN.size() - 2) {
 							System.out.println("im not writing this: '" + s + "'");
 						} else
 							writer.append(s); // Don't write the last '_'.

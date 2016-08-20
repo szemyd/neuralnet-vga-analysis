@@ -43,8 +43,8 @@ public class MyRect {
 				p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 230, 360), 360, 360);
 			else
 				p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 230, 360), 360, 360);
-		}
-		else if(meanShortestPath != null) p.fill(p.map(meanShortestPath, 0f, shortestPath.length*10f, 230, 360), 360, 360);
+		} else if (meanShortestPath != null)
+			p.fill(p.map(meanShortestPath, 0f, shortestPath.length * 10f, 230, 360), 360, 360);
 
 		//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
 		//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);
@@ -66,8 +66,10 @@ public class MyRect {
 	}
 
 	public void drawResponded(PVector highLow) {
-
-		p.fill(p.map(height, -1f, 1f, 230, 360), 360, 360);
+		if (height == 0.0f)
+			p.fill(110);
+		else
+			p.fill(p.map(height, -1f, 1f, 230, 360), 360, 360);
 		p.pushMatrix();
 		{
 			p.translate(position.x, position.y, 0.0f);
@@ -94,14 +96,14 @@ public class MyRect {
 	public void calcAvarage(int number_of_vertices) {
 		//shortestPath = new int[number_of_vertices];
 		meanShortestPath = 0f;
-		
+
 		for (int i = 0; i < shortestPath.length; i++) {
 			p.println(shortestPath[i]);
 			meanShortestPath += shortestPath[i];
 		}
 		p.println("meanShortestPath: " + meanShortestPath);
 		meanShortestPath /= shortestPath.length;
-		
+
 		p.println("meanShortestPath: " + meanShortestPath);
 	}
 }

@@ -319,7 +319,7 @@ public class DataAnalysis {
 			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
 				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
 					spaceSyntaxValuesTemp[i][j] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j],
-							Glv.highLowForNN.y, 1000f, -1f, 1f);
+							Glv.highLowForNN.y, 1429f, -1f, 1f);
 					Glv.threadNN.net.thread.spaceSyntax.values[i][j] = spaceSyntaxValuesTemp[i][j];
 				}
 			}
