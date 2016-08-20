@@ -161,7 +161,7 @@ public class Environment {
 				.setItemsPerRow(5).addItem("Specified", 0).addItem("Raw", 1).addItem("Analys", 2)
 				.setColorLabel(p.color(360)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
-		newOrNet = cp5.addRadioButton("newOrNet").setPosition(180, 80).setItemWidth(20).setItemHeight(50)
+		newOrNet = cp5.addRadioButton("newOrNet").setPosition(190, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(1)
 				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
@@ -184,12 +184,12 @@ public class Environment {
 		.setNumberOfTickMarks(21).plugTo(Glv.numOfRead).moveTo(g4).setValue(listOfFiles.length).setLabel("Reading");
 
 		
-		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(180, 20).setSize(60, 20).moveTo(g4)
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(190, 20).setSize(60, 20).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
 		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.editorForAnalysisOn);
 		cp5.addToggle("splitNetwork").setValue(false).setPosition(90, 100).setSize(60, 20).moveTo(g5)
-		.plugTo(Glv.splitNetwork);
+		.plugTo(Glv.splitNetwork).setLabel("Split");
 
 		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
 		g2.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));

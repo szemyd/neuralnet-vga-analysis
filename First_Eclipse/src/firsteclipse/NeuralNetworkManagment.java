@@ -333,8 +333,6 @@ public class NeuralNetworkManagment {
 		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
 
 		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-
-			//if (Glv.netSize[0] > Glv.netSize[4] && Glv.netSize[1] > Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
 			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
 			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
 		} else {
@@ -344,19 +342,46 @@ public class NeuralNetworkManagment {
 	}
 
 	private void setupSplitNeurons(int split, Environment env) {
-		Glv.netSize[0] = trainingSet.get(0).rAnalysis.length;
-		Glv.netSize[1] = trainingSet.get(0).rAnalysis[0].length;
-		
-		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
-		Glv.netSize[3] = p.ceil(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
 
-		Glv.netSize[4] = trainingSet.get(0).rForm.length;
-		Glv.netSize[5] = trainingSet.get(0).rForm[2].length;
+		Glv.netSize[0] = trainingSet.get(0).rForm.length;
+		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
+
+		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
+		p.println("split: " + split);
+		Glv.netSize[5] = Glv.splitSize;
+
+		Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+		Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+
+		//		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+		//			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+		//			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
+		//		} else {
+		//			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+		//			Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+		//		}
+		splitNeuralnets = new Network[split];
+
+		for (int i = 0; i < split - 1; i++) {
+			splitNeuralnets[i] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3],
+					Glv.netSize[4], Glv.netSize[5], env, i * Glv.netSize[5]);
+			System.out.println("i*Glv.netSize[5]: " + i * Glv.netSize[5]);
+			System.out
+					.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
+							+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
+		}
 		
+
+		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length - (Glv.netSize[5] * (split));
+		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
+				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
 		
+		splitNeuralnets[splitNeuralnets.length - 1] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2],
+				Glv.netSize[3], Glv.netSize[4], Glv.netSize[5], env, (Glv.netSize[5] * (split-1)));
+	
+
 		for (int i = 0; i < split; i++) {
-			splitNeuralnets[i] = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-					Glv.netSize[5], env);
+			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
 		}
 	}
 
@@ -372,14 +397,21 @@ public class NeuralNetworkManagment {
 	}
 
 	private void setupAnalysisNeurons() {
+
 		Glv.netSize[0] = trainingSet.get(0).rForm.length;
 		Glv.netSize[1] = trainingSet.get(0).rForm[2].length;
 
-		Glv.netSize[2] = p.floor(trainingSet.get(0).rAnalysis.length * Glv.howMuchBiggerHidden);
-		Glv.netSize[3] = p.ceil(trainingSet.get(0).rAnalysis[0].length * Glv.howMuchBiggerHidden);
-
 		Glv.netSize[4] = trainingSet.get(0).rAnalysis.length;
 		Glv.netSize[5] = trainingSet.get(0).rAnalysis[0].length;
+
+		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
+			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
+		} else {
+			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
+			Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
+		}
+
 	}
 
 	private void createNetwork(MyData card, Float[][] inputs, int dummyNum, Environment env) {
@@ -389,7 +421,7 @@ public class NeuralNetworkManagment {
 					Glv.netSize[5]);
 		} else {
 			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-					Glv.netSize[5], env);
+					Glv.netSize[5], env, 0);
 		}
 
 		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
@@ -407,7 +439,7 @@ public class NeuralNetworkManagment {
 	}
 
 	private int calcSplit() {
-		return p.ceil((trainingSet.get(0).rForm.length * trainingSet.get(0).rForm[2].length) / Glv.splitSize);
+		return p.ceil((trainingSet.get(0).rAnalysis.length * trainingSet.get(0).rAnalysis[0].length) / Glv.splitSize);
 	}
 	//<--- SETUP NN
 
@@ -483,8 +515,15 @@ public class NeuralNetworkManagment {
 	private void trainIt(MyData card, Float[][] inputs, Float[][] outputs) {
 
 		if (inputs != null && outputs != null) {
-			neuralnet.respond(card, inputs);
-			neuralnet.train(outputs);
+			if (Glv.splitNetwork) {
+				for (int i = 0; i < splitNeuralnets.length; i++) {
+					splitNeuralnets[i].respond(card, inputs);
+					splitNeuralnets[i].train(outputs);
+				}
+			} else {
+				neuralnet.respond(card, inputs);
+				neuralnet.train(outputs);
+			}
 		} else {
 			p.println("Card was NULL");
 			trainingSet.remove(card);

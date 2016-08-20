@@ -116,7 +116,7 @@ public class FirstEclipse extends PApplet {
 			rotate(HALF_PI); // Rotate the whole scene.
 
 			if (Glv.newOrNet) {
-				
+
 				if (Glv.threads != null) {
 					if (Glv.threads.size() > 0) {
 						if (Glv.whichToDisplay >= 0) {
@@ -133,7 +133,7 @@ public class FirstEclipse extends PApplet {
 						}
 					}
 				}
-			
+
 			} else if (Glv.genOrA == 0) {
 				if (Glv.threadNN != null) {
 					if (Glv.threadNN.net != null) {
@@ -148,7 +148,7 @@ public class FirstEclipse extends PApplet {
 						}
 					}
 				}
-				
+
 			}
 
 			env.draw(); // Draws the environment.
@@ -231,16 +231,24 @@ public class FirstEclipse extends PApplet {
 		{
 			noLights();
 			if (Glv.threadNN != null) {
-				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
-					Glv.threadNN.net.neuralnet.drawAnalysis(env);
+				if (!Glv.splitNetwork) {
+					if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
+						Glv.threadNN.net.neuralnet.drawAnalysis(env);
+					}
+				} else {
+					if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.splitNeuralnets.length > 0) {
+						for (int i = 0; i < Glv.threadNN.net.splitNeuralnets.length; i++) {
+							Glv.threadNN.net.splitNeuralnets[i].drawAnalysis(env);
+						}
+					}
 				}
 
 			} else {
 				textAlign(CENTER);
 				text("Please first set Neural Network up", width * 0.5f, height * 0.5f);
 			}
-			env.cam.endHUD();
 		}
+		env.cam.endHUD();
 	}
 
 	public void drawAnalysis() { // ProgramMode == 2
@@ -416,9 +424,14 @@ public class FirstEclipse extends PApplet {
 	public void trainNeurons() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
-				if (Glv.threadNN.net.neuralnet != null) {
+				if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets !=null) {
 					int ellapsedTime = second() + minute() * 60 + hour() * 360;
+					
+					
+				
 					Glv.threadNN.net.trainNN(graphs);
+					
+					
 
 					if (Glv.shP)
 						println("< Training NN. Ellapsed time: "
