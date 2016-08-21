@@ -171,9 +171,11 @@ public class Environment {
 		cp5.addSlider("learningRate").setPosition(85, 20).setSize(20, 100).setRange(0f, 0.01f).setNumberOfTickMarks(51)
 				.plugTo(Glv.LEARNING_RATE).moveTo(g3).setValue(0.001f).setLabel("L-Rate");
 		cp5.addSlider("numOfCycles").setPosition(145, 20).setSize(20, 100).setRange(0, 100).setNumberOfTickMarks(21)
-				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(10).setLabel("Cycles/Press");
+				.plugTo(Glv.numOfCycles).moveTo(g3).setValue(10).setLabel("Cycles/Press");
 		cp5.addSlider("hiddenLayerSize").setPosition(205, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(1.5f).setLabel("Hidden Layer");
+		cp5.addSlider("splitSize").setPosition(265, 20).setSize(20, 100).setRange(0, 10).setNumberOfTickMarks(11)
+		.plugTo(Glv.splitSize).moveTo(g3).setValue(5).setLabel("Split Size");
 
 		//---> Sliders for Generating Data.
 		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)

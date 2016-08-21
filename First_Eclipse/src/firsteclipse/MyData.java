@@ -27,6 +27,7 @@ public class MyData {
 	public static Neuron[][] rAnalysisN;
 	Float[][] rAnalysis;// = new ArrayList<Float[]>();
 	Float[][] rForm;// = new ArrayList<Float[]>();;
+	Float[][] rAnalysisSplit;// = new ArrayList<Float[]>();
 
 	public Integer analysisID = 0;
 
@@ -215,6 +216,50 @@ public class MyData {
 		}
 	}
 
+	public void drawLastDataForSplit(Environment env) {
+		drawBoundary(
+				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
+				_analysis.length, _analysis[0].length, "Loaded SpaceSyntax");
+
+		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
+		if (Glv.neuronsStored) {
+			if (_analysis != null) {
+				for (int i = 0; i < _analysis.length; i++) {
+					for (int j = 0; j < _analysis[i].length; j++) {
+						p.pushMatrix();
+						{
+							p.pushStyle();
+							{
+
+								p.translate(p.width / 5, p.height * 0.5f);
+								p.translate(
+										(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
+										(Glv.neuronSize * 1.2f * j)
+												- (Glv.neuronSize * 1.2f * _analysis[i].length) * 0.5f);
+
+								if (env.editorLayer[i][j].iAmChosen) {
+									p.strokeWeight(1.2f);
+									p.stroke(360, 360, 180 * (1 - _analysis[i][j]));
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]));
+								} else {
+									p.strokeWeight(1.0f);
+									p.stroke(360, 0, 180 * (1 - _analysis[i][j]));
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]));
+								}
+
+								p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
+							}
+							p.popStyle();
+						}
+						p.popMatrix();
+					}
+				}
+				//p.fill(360);
+			}
+		}
+	}
+
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
@@ -357,6 +402,9 @@ public class MyData {
 				rAnalysis = new Float[1][length];
 				rAnalysisN = new Neuron[1][length];
 
+				rAnalysisSplit = takeOutSelected(env.editorLayer);
+			
+				
 				int counter = 0;
 				for (int i = 0; i < _analysis.length; i++) {
 					for (int j = 0; j < _analysis[i].length; j++) {
@@ -374,6 +422,81 @@ public class MyData {
 			}
 		}
 	}
+
+	private Neuron[][] weedOutNull(Neuron[][] oneNetwork) {
+
+		int sizeX = 0, sizeY = 0;
+
+		for (int i = 0; i < oneNetwork.length; i++) {
+			if (oneNetwork[i][0] != null)
+				sizeX++;
+		}
+		for (int i = 0; i < oneNetwork[0].length; i++) {
+			if (oneNetwork[0][i] != null)
+				sizeY++;
+		}
+
+		Neuron[][] newNetwork = new Neuron[sizeX][sizeY];
+
+		int k = 0, l = 0;
+		for (int i = 0; i < oneNetwork.length; i++) {
+			for (int j = 0; j < oneNetwork[0].length; j++) {
+
+				if (oneNetwork[i][j] != null) {
+					if (k < newNetwork.length && l < newNetwork[0].length)
+						newNetwork[k][l] = oneNetwork[i][j];
+
+					l++;
+					if (l >= newNetwork[0].length) {
+						l = 0;
+						k++;
+					}
+				}
+			}
+		}
+
+		return newNetwork;
+	}
+
+	private Float[][] takeOutSelected(Neuron[][] selectedNeuron) { // This cuts out all parts that are not chosen.
+		int sizeX = 0;
+		int sizeY = 0;
+
+		for (int i = 0; i < selectedNeuron.length; i++) {
+			if (selectedNeuron[i][10].iAmChosen)
+				sizeX++;
+		}
+		for (int j = 0; j < selectedNeuron[10].length; j++) {
+			if (selectedNeuron[10][j].iAmChosen)
+				sizeY++;
+		}
+
+		p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
+
+		Float[][] temp = new Float[sizeX][sizeY];
+		int k = 0, l = 0;
+		for (int i = 0; i < selectedNeuron.length; i++) {
+			for (int j = 0; j < selectedNeuron[0].length; j++) {
+
+				if (selectedNeuron[i][j].iAmChosen) {
+
+					//p.println("i: " + i + " | j: " + j);
+					//p.println("k: " + k + " | l: " + l);
+					if (k < temp.length && l < temp[0].length)
+						temp[k][l] = _analysis[i][j];
+
+					l++;
+					if (l >= temp[0].length) {
+						l = 0;
+						k++;
+					}
+				}
+			}
+		}
+
+		return temp;
+	}
+
 	//<--- Data Cleaning.
 
 }

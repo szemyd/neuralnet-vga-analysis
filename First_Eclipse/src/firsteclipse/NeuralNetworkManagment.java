@@ -360,16 +360,17 @@ public class NeuralNetworkManagment {
 			for (int l = 0; l < temporaryNeuronsPosition[k].length; l++) {
 				temporaryNeuronsPosition[k][l] = new PVector(env.editorLayer[k][l].position.x,
 						env.editorLayer[k][l].position.y);
-				selectedNeurons[k][l] = new Neuron(p, env.editorLayer[k][l].position, new Neuron[10][10], env.editorLayer[k][l].idNum);// env.editorLayer[k][l];
+				selectedNeurons[k][l] = new Neuron(p, env.editorLayer[k][l].position, new Neuron[10][10],
+						env.editorLayer[k][l].idNum);// env.editorLayer[k][l];
 			}
 		}
 
-		for (int i = 0; i < env.editorLayer.length; i++) {
-			for (int j = 0; j < env.editorLayer[i].length; j++) {
-				p.println(env.editorLayer[i][j].idNum);
-			}
-		}
-		
+		//		for (int i = 0; i < env.editorLayer.length; i++) {
+		//			for (int j = 0; j < env.editorLayer[i].length; j++) {
+		//				p.println(env.editorLayer[i][j].idNum);
+		//			}
+		//		}
+
 		Neuron[][] justSelected = takeOutSelected(env.editorLayer); // Creates an array that only has the chosen ones.
 		//printThem(selectedNeurons, justSelected);
 
@@ -508,7 +509,7 @@ public class NeuralNetworkManagment {
 				sizeY++;
 		}
 
-		p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
+		//p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
 
 		Neuron[][] temp = new Neuron[sizeX][sizeY];
 		int k = 0, l = 0;
@@ -647,7 +648,10 @@ public class NeuralNetworkManagment {
 				break;
 			case 2:
 				if (Glv.neuronsStored) {
-					trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row).rAnalysis);
+					if (Glv.splitNetwork) {
+						trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row)._analysis);
+					} else
+						trainIt(trainingSet.get(row), trainingSet.get(row).rForm, trainingSet.get(row).rAnalysis);
 				}
 				break;
 			}
@@ -710,31 +714,40 @@ public class NeuralNetworkManagment {
 		if (inputs != null && outputs != null) {
 			if (Glv.splitNetwork) {
 
-				for (int m = 0; m < splitNeuralnets.length; m++) {
+				if (trainingSet.get(0)._analysis.length == outputs.length
+						&& trainingSet.get(0)._analysis[0].length <= outputs[0].length) {
+					for (int m = 0; m < splitNeuralnets.length; m++) {
 
-					Float[][] selectedOutputs = new Float[splitNeuralnets[m].m_output_layer.length][splitNeuralnets[m].m_output_layer[0].length];
+						Float[][] selectedOutputs = new Float[splitNeuralnets[m].m_output_layer.length][splitNeuralnets[m].m_output_layer[0].length];
 
-					int counter = 0;
+						int counter = 0;
 
-					//p.println("outputs.length: " + outputs.length + " | outputs[i].l: " + outputs[0].length);
-					for (int i = 0; i < splitNeuralnets[m].m_output_layer.length; i++) {
-						for (int j = 0; j < splitNeuralnets[m].m_output_layer[i].length; j++) {
-							//p.println("id X: " + splitNeuralnets[m].m_output_layer[i][j].idNum.x + " | id Y: " + splitNeuralnets[m].m_output_layer[i][j].idNum.y);
-							
-//							p.print((int) splitNeuralnets[m].m_output_layer[i][j].idNum.x
-//				                                   *splitNeuralnets[m].m_output_layer[i].length
-//						+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.y);
-							
-							selectedOutputs[i][j] = outputs[0][(int) splitNeuralnets[m].m_output_layer[i][j].idNum.x
-//									* Glv.threadNN.net.trainingSet.get(0)._analysis.length
-							                                   *splitNeuralnets[m].m_output_layer[i].length
-									+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.y];
+						//p.println("outputs.length: " + outputs.length + " | outputs[i].l: " + outputs[0].length);
+						for (int i = 0; i < splitNeuralnets[m].m_output_layer.length; i++) {
+							for (int j = 0; j < splitNeuralnets[m].m_output_layer[i].length; j++) {
+								//p.println("id X: " + splitNeuralnets[m].m_output_layer[i][j].idNum.x + " | id Y: " + splitNeuralnets[m].m_output_layer[i][j].idNum.y);
+
+								//							p.print((int) splitNeuralnets[m].m_output_layer[i][j].idNum.x
+								//				                                   *splitNeuralnets[m].m_output_layer[i].length
+								//						+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.y);
+								PVector id = splitNeuralnets[m].m_output_layer[i][j].idNum;
+								if ((int) id.x < outputs.length && (int) id.y < outputs[0].length) {
+									//								p.println("outputs.length: " + outputs.length + " | " + outputs[0].length + "idX: "
+									//										+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.x + "idY: "
+									//										+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.y);
+									selectedOutputs[i][j] = outputs[(int) id.x][(int) id.y];
+									//									//									* Glv.threadNN.net.trainingSet.get(0)._analysis.length
+									//									* splitNeuralnets[m].m_output_layer.length
+									//									+ (int) splitNeuralnets[m].m_output_layer[i][j].idNum.y];
+								}
+							}
 						}
+						splitNeuralnets[m].respond(card, inputs);
+						splitNeuralnets[m].train(selectedOutputs);
 					}
 
-					splitNeuralnets[m].respond(card, inputs);
-					splitNeuralnets[m].train(selectedOutputs);
-				}
+				} else
+					p.println("this card was faulty.");
 			} else {
 				neuralnet.respond(card, inputs);
 				neuralnet.train(outputs);

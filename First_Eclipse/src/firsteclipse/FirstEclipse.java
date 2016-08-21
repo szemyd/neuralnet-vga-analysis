@@ -524,6 +524,11 @@ public class FirstEclipse extends PApplet {
 	public void numOfCycles(int theValue) {
 		Glv.numOfCycles = theValue;
 	}
+
+	public void splitSize(int theValue)
+	{
+		Glv.splitSize = theValue;
+	}
 	//<---
 
 	public void genOrA(int theValue) {

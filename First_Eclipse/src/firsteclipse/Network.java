@@ -22,6 +22,8 @@ public class Network {
 
 	public MyData lastCard;
 
+	public MyData cardTrainedData;
+
 	int networkID;
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) { // FOR GENERATING NETWORKS
@@ -100,10 +102,8 @@ public class Network {
 
 		for (int i = 0; i < selectedNeurons.length; i++) {
 			for (int j = 0; j < selectedNeurons[i].length; j++) {
-				m_output_layer[i][j] = new Neuron(p,
-						new PVector(selectedNeurons[i][j].position.x + 3f * p.width / 10f,
-								selectedNeurons[i][j].position.y),
-						m_hidden_layer, selectedNeurons[i][j].idNum);
+				m_output_layer[i][j] = new Neuron(p, new PVector(selectedNeurons[i][j].position.x + 3f * p.width / 10f,
+						selectedNeurons[i][j].position.y), m_hidden_layer, selectedNeurons[i][j].idNum);
 			}
 		}
 		/*
@@ -313,7 +313,10 @@ public class Network {
 		}
 
 		if (lastCard != null)
-			lastCard.drawOnlyAnalysis(env);
+		lastCard.drawOnlyAnalysis(env);
+
+//		if (cardTrainedData != null)
+//			cardTrainedData.drawOnlyAnalysis(env);
 
 		if (m_input_layer != null && m_output_layer != null) {
 			drawLineBetween(
@@ -438,6 +441,15 @@ public class Network {
 		//		p.println("m_output_layer.length: " + m_output_layer.length + " | m_output_layer[0].length: "
 		//				+ m_output_layer[0].length);
 		//		p.println(" outputs.length: " + outputs.length);
+		cardTrainedData = new MyData(p);
+		cardTrainedData._analysis = new Float[outputs.length][outputs[0].length];
+
+		for (int i = 0; i < outputs.length; i++) {
+			for (int j = 0; j < outputs[i].length; j++) {
+				cardTrainedData._analysis[i][j] = outputs[i][j];
+			}
+		}
+
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
 				//		p.print(outputs[i][j] + ",");
