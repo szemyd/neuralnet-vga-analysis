@@ -43,6 +43,16 @@ public class NeuralNetworkManagment {
 		setupSigmoid();
 	}
 
+	
+	public void drawSplitNetworks(Environment env)
+	{
+		splitNeuralnets[0].drawAnalysis(env);
+		
+		for (int i = 1; i < splitNeuralnets.length; i++) {
+			splitNeuralnets[i].drawOutput();
+		}
+	}
+	
 	//---> Loading & Managing the data
 	public void loadGenData() {
 		String filePath = new File("").getAbsolutePath();
@@ -298,7 +308,6 @@ public class NeuralNetworkManagment {
 
 			case 0:
 				if (Glv.neuronsStored) {
-
 					setupSpecifiedNeurons();
 					createNetwork(trainingSet.get(0), trainingSet.get(0).rAnalysis, 0, env);
 				} else
@@ -345,16 +354,6 @@ public class NeuralNetworkManagment {
 
 	//---> For spliting
 	private void setupSplitNeurons(int split, Environment env) {
-
-		//		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
-		//			Glv.netSize[2] = p.floor(Glv.netSize[0] * Glv.howMuchBiggerHidden);
-		//			Glv.netSize[3] = p.ceil(Glv.netSize[1] * Glv.howMuchBiggerHidden);
-		//		} else {
-		//			Glv.netSize[2] = p.floor(Glv.netSize[4] * Glv.howMuchBiggerHidden);
-		//			Glv.netSize[3] = p.ceil(Glv.netSize[5] * Glv.howMuchBiggerHidden);
-		//		}
-		
-
 
 		Neuron[][] selectedNeurons = new Neuron[env.editorLayer.length][env.editorLayer[0].length];
 		PVector[][] temporaryNeuronsPosition = new PVector[env.editorLayer.length][env.editorLayer[0].length];
@@ -408,9 +407,9 @@ public class NeuralNetworkManagment {
 			//					+ " | " + myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
 		}			
 		
-//		for (int i = 0; i < splitNeuralnets.length; i++) {
-//			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
-//		}
+		for (int i = 0; i < splitNeuralnets.length; i++) {
+			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
+		}
 
 	}
 
@@ -601,7 +600,7 @@ public class NeuralNetworkManagment {
 					Glv.netSize[5]);
 		} else {
 			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-					Glv.netSize[5], env.editorLayer, 0);
+					Glv.netSize[5], env.editorLayer);
 		}
 
 		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
@@ -715,8 +714,15 @@ public class NeuralNetworkManagment {
 
 				for (int m = 0; m < splitNeuralnets.length; m++) {
 
-					Float[][] selectedOutputs = new Float[splitNeuralnets[0].m_output_layer.length][splitNeuralnets[0].m_output_layer[0].length];
+					Float[][] selectedOutputs = new Float[splitNeuralnets[m].m_output_layer.length][splitNeuralnets[m].m_output_layer[0].length];
 
+					for (int i = 0; i < outputs.length; i++) {
+						for (int j = 0; j < outputs[i].length; j++) {
+							if(i*j>=j + m * Glv.splitSize) break;
+							selectedOutputs[i][j] = outputs[i][j];
+						}
+					}
+					
 					for (int i = 0; i < selectedOutputs.length; i++) {
 						for (int j = 0; j < selectedOutputs[i].length; j++) {
 							selectedOutputs[i][j] = outputs[0][j + m * Glv.splitSize];

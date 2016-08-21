@@ -237,21 +237,7 @@ public class FirstEclipse extends PApplet {
 					}
 				} else {
 					if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.splitNeuralnets != null) {
-						for (int i = 0; i < Glv.threadNN.net.splitNeuralnets.length; i++) {
-							Glv.threadNN.net.splitNeuralnets[i].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[2].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[4].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[6].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[8].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[10].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[12].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[14].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[16].drawAnalysis(env);
-//							Glv.threadNN.net.splitNeuralnets[18].drawAnalysis(env);
-						//	Glv.threadNN.net.splitNeuralnets[1].drawAnalysis(env);
-							//Glv.threadNN.net.splitNeuralnets[5].drawAnalysis(env);
-							//println("i: " + i + " drawn.");
-						}
+						Glv.threadNN.net.drawSplitNetworks(env);
 					}
 				}
 
