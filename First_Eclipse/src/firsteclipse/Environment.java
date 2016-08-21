@@ -77,7 +77,7 @@ public class Environment {
 
 		PFont pfont = p.createFont("Arial", 20, true); // use true/false for smooth/no-smooth
 		ControlFont font = new ControlFont(pfont, 241);
-		
+
 		String filePath = new File("").getAbsolutePath();
 		File folder = new File(filePath + "\\" + "GeneratedData");
 		File[] listOfFiles = folder.listFiles();
@@ -141,10 +141,10 @@ public class Environment {
 
 		b14 = cp5.addBang("saveData").setPosition(90, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("saveData");
-		
+
 		b15 = cp5.addBang("saveNN").setPosition(160, 20).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("saveNN");
-		
+
 		b16 = cp5.addBang("loadNN").setPosition(160, 60).setSize(60, 20).moveTo(g7).plugTo(this, "shuffle")
 				.setLabel("loadNN");
 
@@ -175,7 +175,7 @@ public class Environment {
 		cp5.addSlider("hiddenLayerSize").setPosition(205, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(1.5f).setLabel("Hidden Layer");
 		cp5.addSlider("splitSize").setPosition(265, 20).setSize(20, 100).setRange(0, 10).setNumberOfTickMarks(11)
-		.plugTo(Glv.splitSize).moveTo(g3).setValue(5).setLabel("Split Size");
+				.plugTo(Glv.splitSize).moveTo(g3).setValue(5).setLabel("Split Size");
 
 		//---> Sliders for Generating Data.
 		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
@@ -183,15 +183,15 @@ public class Environment {
 		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(21).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(1).setLabel("Solutions");
 		cp5.addSlider("numberOfRead").setPosition(145, 20).setSize(20, 100).setRange(0, listOfFiles.length)
-		.setNumberOfTickMarks(21).plugTo(Glv.numOfRead).moveTo(g4).setValue(listOfFiles.length).setLabel("Reading");
+				.setNumberOfTickMarks(21).plugTo(Glv.numOfRead).moveTo(g4).setValue(listOfFiles.length)
+				.setLabel("Reading");
 
-		
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(190, 20).setSize(60, 20).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction);
 		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.editorForAnalysisOn);
 		cp5.addToggle("splitNetwork").setValue(false).setPosition(90, 100).setSize(60, 20).moveTo(g5)
-		.plugTo(Glv.splitNetwork).setLabel("Split");
+				.plugTo(Glv.splitNetwork).setLabel("Split");
 
 		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
 		g2.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
@@ -269,7 +269,8 @@ public class Environment {
 								(p.floor((edSize.x - 40f)
 										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))),
 								(p.floor((edSize.y - 40f)
-										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))), editorRect.length*i +j);
+										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))),
+						editorRect.length * i + j);
 			}
 		}
 
@@ -534,8 +535,8 @@ public class Environment {
 
 		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
 				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
-		
-		Neuron [][] dummyInput = new Neuron [1][1];
+
+		Neuron[][] dummyInput = new Neuron[1][1];
 
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
@@ -545,7 +546,7 @@ public class Environment {
 						(Glv.neuronSize * 1.2f * j)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
 
-				editorLayer[i][j] = new Neuron(p, position,dummyInput,new PVector(i,j));
+				editorLayer[i][j] = new Neuron(p, position, dummyInput, new PVector(i, j));
 				if (card._analysis[i][j] != null) {
 					editorLayer[i][j].m_output = card._analysis[i][j];
 				} else
@@ -616,7 +617,7 @@ public class Environment {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net != null) {
 					if (Glv.threadNN.net.dataLoaded) {
-						if (Glv.threadNN.net.neuralnet != null) {
+						if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets != null) {
 							Float[][] temporaryInfo = new Float[editorRect.length][editorRect[0].length];
 
 							for (int i = 0; i < editorRect.length; i++) {
@@ -628,32 +629,33 @@ public class Environment {
 								}
 							}
 
-							Glv.threadNN.net.neuralnet.respond(Glv.threadNN.net.testingSet.get(0), temporaryInfo);
-
 							for (int i = 0; i < spaceSyntax.rectangles.length; i++) {
 								for (int j = 0; j < spaceSyntax.rectangles[i].length; j++) {
 									spaceSyntax.rectangles[i][j].height = 0.0f;
 								}
 							}
 
-							for (int i = 0; i < Glv.threadNN.net.neuralnet.m_output_layer.length; i++) {
-								for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer[i].length; j++) {
-									spaceSyntax.rectangles[(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.x][(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.y].height = Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_output;
+							if (Glv.splitNetwork) {
+								for (int m = 0; m < Glv.threadNN.net.splitNeuralnets.length; m++) {
+									Glv.threadNN.net.splitNeuralnets[m].respond(Glv.threadNN.net.testingSet.get(0),
+											temporaryInfo);
+
+									for (int i = 0; i < Glv.threadNN.net.splitNeuralnets[m].m_output_layer.length; i++) {
+										for (int j = 0; j < Glv.threadNN.net.splitNeuralnets[m].m_output_layer[i].length; j++) {
+											spaceSyntax.rectangles[(int) Glv.threadNN.net.splitNeuralnets[m].m_output_layer[i][j].idNum.x][(int) Glv.threadNN.net.splitNeuralnets[m].m_output_layer[i][j].idNum.y].height = Glv.threadNN.net.splitNeuralnets[m].m_output_layer[i][j].m_output;
+										}
+									}
+								}
+							} else {
+								Glv.threadNN.net.neuralnet.respond(Glv.threadNN.net.testingSet.get(0), temporaryInfo);
+
+								for (int i = 0; i < Glv.threadNN.net.neuralnet.m_output_layer.length; i++) {
+									for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer[i].length; j++) {
+										spaceSyntax.rectangles[(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.x][(int) Glv.threadNN.net.neuralnet.m_output_layer[i][j].idNum.y].height = Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_output;
+									}
+
 								}
 							}
-							//							int counter = 0;
-							//							for (int i = 0; i < spaceSyntax.rectangles.length; i++) {
-							//								for (int j = 0; j < spaceSyntax.rectangles[i].length; j++) {
-							//									if (counter < Glv.threadNN.net.neuralnet.m_output_layer[0].length) {
-							//										if (Glv.threadNN.net.neuralnet.m_output_layer[0][counter].idNum.x == i
-							//												&& Glv.threadNN.net.neuralnet.m_output_layer[0][counter].idNum.y == j) {
-							//											spaceSyntax.rectangles[i][j].height = Glv.threadNN.net.neuralnet.m_output_layer[0][counter++].m_output;
-							//										}
-							//									} else
-							//										spaceSyntax.rectangles[i][j].height = -1.0f; // This location was not selected, ergo not included in analysis!
-							//								}
-							//							}
-
 						}
 					}
 				}

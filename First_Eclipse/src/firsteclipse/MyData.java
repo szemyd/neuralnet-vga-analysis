@@ -471,7 +471,7 @@ public class MyData {
 				sizeY++;
 		}
 
-		p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
+		//p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
 
 		Float[][] temp = new Float[sizeX][sizeY];
 		int k = 0, l = 0;
