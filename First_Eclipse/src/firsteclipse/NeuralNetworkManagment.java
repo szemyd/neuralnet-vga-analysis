@@ -377,7 +377,7 @@ public class NeuralNetworkManagment {
 
 		for (int i = 0; i < split - 1; i++) {
 			splitNeuralnets[i] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2], myNetSize[3], myNetSize[4],
-					myNetSize[5], temporaryNeurons, i * myNetSize[5], i);
+					myNetSize[5], temporaryNeurons, i * ((int) Math.sqrt(Glv.splitSize)), i);
 
 			System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2]
 					+ " | " + myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
@@ -389,10 +389,11 @@ public class NeuralNetworkManagment {
 
 		splitNeuralnets[splitNeuralnets.length - 1] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2],
 				myNetSize[3], myNetSize[4], myNetSize[5], temporaryNeurons,
-				(myNetSize[5] * (split - 1)), splitNeuralnets.length - 1);
+				((int) Math.sqrt(Glv.splitSize) * (split - 1)), splitNeuralnets.length - 1);
 
 		for (int i = 0; i < split; i++) {
 			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
+			p.println("splitNeuralnet " + i + " is done.");
 		}
 
 //		for (int k = 0; k < split; k++) {

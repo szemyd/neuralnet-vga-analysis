@@ -13,17 +13,16 @@ import processing.core.PConstants;
 import processing.core.PVector;
 
 public class Network {
-	private static  PApplet p;
+	private static PApplet p;
 
-	public  Neuron[][] m_input_layer;
-	public  Neuron[][] m_hidden_layer;
-	public  Neuron[][] m_output_layer;
+	public Neuron[][] m_input_layer;
+	public Neuron[][] m_hidden_layer;
+	public Neuron[][] m_output_layer;
 
 	public MyData lastCard;
-	
+
 	int networkID;
 	int howManySplit;
-
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY) {
 		p = _p;
@@ -68,16 +67,15 @@ public class Network {
 	}
 
 	public Network(PApplet _p, int inputsX, int inputsY, int hiddenX, int hiddenY, int outputsX, int outputsY,
-			Neuron [][] selectedNeurons, int _howManySplit, int _networkID) {
+			Neuron[][] selectedNeurons, int _howManySplit, int _networkID) {
 		p = _p;
-		networkID=_networkID;
-
+		networkID = _networkID;
 
 		howManySplit = _howManySplit;
 
 		m_input_layer = new Neuron[inputsX][inputsY];
 		m_hidden_layer = new Neuron[hiddenX][hiddenY];
-		 m_output_layer = new Neuron[outputsX][outputsY];
+		m_output_layer = new Neuron[outputsX][outputsY];
 
 		for (int i = 0; i < m_input_layer.length; i++) {
 			for (int j = 0; j < m_input_layer[i].length; j++) {
@@ -109,33 +107,48 @@ public class Network {
 			for (int j = 0; j < selectedNeurons[i].length; j++) {
 				if (selectedNeurons[i][j].iAmChosen) {
 					fromEditorLayer.add(selectedNeurons[i][j].position);
-					idsFromEditorLayer.add(new PVector(i,j));
+					idsFromEditorLayer.add(new PVector(i, j));
 				}
 			}
 		}
 
-		
-		int k=-1;
+		int k = -1;
+		int l= 0;
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
+
+				if (j % Math.sqrt(Glv.splitSize) == 0)
+					k++;
+				if((k+1)* (int) Math.sqrt(Glv.splitSize)>=selectedNeurons.length)
+					{l++;
+					p.println("this happened.");
+					}
 				
-				
-				if(j%Math.sqrt(Glv.splitSize) == 0) k++;
-			p.println(j-(k* (int)Math.sqrt(Glv.splitSize)) + k*selectedNeurons.length);
-			
-		
-			PVector position = fromEditorLayer.get(j-(k* (int)Math.sqrt(Glv.splitSize)) + k*(selectedNeurons.length+1));
-				//PVector position = fromEditorLayer.get((j+selectedNeurons[0].length)%Glv.splitSize);
-			//PVector position = fromEditorLayer.get((j%selectedNeurons.length) + (j%Glv.splitSize) +howManySplit);
-			//	PVector position = fromEditorLayer.get(j%Glv.splitSize+howManySplit);
-				PVector ids = idsFromEditorLayer.get(j-(k* (int)Math.sqrt(Glv.splitSize)) + k*(selectedNeurons.length+1));
-				
-//				System.out.print(ids.x + " | " + ids.y + " ||| ");
-//				System.out.println("");
-//				System.out.print(position.x + " | " + position.y + " ||| ");
-				
-				m_output_layer[i][j] = new Neuron(p, new PVector(position.x + 3f * p.width / 10f, position.y),
-						m_hidden_layer, ids);
+				p.println("m_output_layer.length: " + m_output_layer.length + "m_output_layer[0].length: " + m_output_layer[0].length);
+
+				if (j - (k * (int) Math.sqrt(Glv.splitSize)) + k*(selectedNeurons.length + 1)
+						+howManySplit+ selectedNeurons.length* l*Glv.splitSize < fromEditorLayer.size()) {
+					
+					p.println(j - (k * (int) Math.sqrt(Glv.splitSize)) + k * selectedNeurons.length + selectedNeurons.length*l*Glv.splitSize);
+					
+					PVector position = fromEditorLayer.get(
+							j - (k * (int) Math.sqrt(Glv.splitSize)) + k * (selectedNeurons.length+1)+howManySplit + selectedNeurons.length*l*(int) Math.sqrt(Glv.splitSize));// + selectedNeurons.length*l);
+					//PVector position = fromEditorLayer.get((j+selectedNeurons[0].length)%Glv.splitSize);
+					//PVector position = fromEditorLayer.get((j%selectedNeurons.length) + (j%Glv.splitSize) +howManySplit);
+					//	PVector position = fromEditorLayer.get(j%Glv.splitSize+howManySplit);
+					PVector ids = idsFromEditorLayer.get(
+							j - (k * (int) Math.sqrt(Glv.splitSize)) + k * (selectedNeurons.length+1)+howManySplit+ selectedNeurons.length*l*(int) Math.sqrt(Glv.splitSize));// + selectedNeurons.length*l);
+
+					//				System.out.print(ids.x + " | " + ids.y + " ||| ");
+					//				System.out.println("");
+					//				System.out.print(position.x + " | " + position.y + " ||| ");
+
+					m_output_layer[i][j] = new Neuron(p, new PVector(position.x + 3f * p.width / 10f, position.y),
+							m_hidden_layer, ids);
+				//}
+			}
+				else m_output_layer[i][j] = new Neuron(p, new PVector(fromEditorLayer.get(fromEditorLayer.size()-1).x + 3f * p.width / 10f, fromEditorLayer.get(fromEditorLayer.size()-1).y),
+						m_hidden_layer, new PVector(idsFromEditorLayer.get(fromEditorLayer.size()-1).x,idsFromEditorLayer.get(fromEditorLayer.size()-1).y));
 			}
 		}
 	}
@@ -167,14 +180,15 @@ public class Network {
 		}
 		if (lastCard != null)
 			lastCard.draw(env);
-		
-		drawLineBetween(new PVector(
-				m_input_layer[0][0].position.x - 10f - Glv.neuronSize + (m_input_layer.length * Glv.neuronSize * 1.2f)
-						+ 20f + Glv.neuronSize,
-				m_input_layer[0][0].position.y - 10f - Glv.neuronSize
-						+ ((m_input_layer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f),
+
+		drawLineBetween(
 				new PVector(
-						m_output_layer[0][0].position.x - 10f - Glv.neuronSize,
+						m_input_layer[0][0].position.x - 10f - Glv.neuronSize
+								+ (m_input_layer.length * Glv.neuronSize * 1.2f) + 20f
+								+ Glv.neuronSize,
+						m_input_layer[0][0].position.y - 10f - Glv.neuronSize
+								+ ((m_input_layer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f),
+				new PVector(m_output_layer[0][0].position.x - 10f - Glv.neuronSize,
 						m_output_layer[0][0].position.y - 10f - Glv.neuronSize
 								+ ((m_output_layer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f));
 	}
@@ -209,13 +223,14 @@ public class Network {
 		if (lastCard != null)
 			lastCard.drawOnlyAnalysis(env);
 
-		drawLineBetween(new PVector(
-				m_input_layer[0][0].position.x - 10f - Glv.neuronSize + (m_input_layer.length * Glv.neuronSize * 1.2f)
-						+ 20f + Glv.neuronSize,
-				m_input_layer[0][0].position.y - 10f - Glv.neuronSize
-						+ ((m_input_layer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f),
+		drawLineBetween(
 				new PVector(
-						(env.editorLayer[0][0].position.x + 3f * p.width / 10f) - 10f - Glv.neuronSize,
+						m_input_layer[0][0].position.x - 10f - Glv.neuronSize
+								+ (m_input_layer.length * Glv.neuronSize * 1.2f) + 20f
+								+ Glv.neuronSize,
+						m_input_layer[0][0].position.y - 10f - Glv.neuronSize
+								+ ((m_input_layer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f),
+				new PVector((env.editorLayer[0][0].position.x + 3f * p.width / 10f) - 10f - Glv.neuronSize,
 						env.editorLayer[0][0].position.y - 10f - Glv.neuronSize
 								+ ((env.editorLayer[0].length * Glv.neuronSize * 1.2f) + 20f + Glv.neuronSize) * 0.5f));
 
@@ -263,11 +278,11 @@ public class Network {
 		{
 			p.pushStyle();
 			{
-				p.stroke(360,180);
+				p.stroke(360, 180);
 				p.line(input.x, input.y, output.x, output.y);
 				p.fill(360);
-				p.ellipse(input.x, input.y,  7f, 7f);
-				p.ellipse(output.x, output.y,  7f, 7f);
+				p.ellipse(input.x, input.y, 7f, 7f);
+				p.ellipse(output.x, output.y, 7f, 7f);
 			}
 			p.popStyle();
 		}
