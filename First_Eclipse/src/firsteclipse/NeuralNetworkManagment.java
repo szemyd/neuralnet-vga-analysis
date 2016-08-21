@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.lang.model.util.ElementKindVisitor6;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
@@ -341,6 +342,7 @@ public class NeuralNetworkManagment {
 		}
 	}
 
+	//---> For spliting
 	private void setupSplitNeurons(int split, Environment env) {
 
 		//		if (Glv.netSize[0] * Glv.netSize[1] > Glv.netSize[4] * Glv.netSize[5]) { // Depends if the input or the output layer is bigger the hidden layer's size is chosen accordinglyhgt21q`	a\2R
@@ -364,59 +366,155 @@ public class NeuralNetworkManagment {
 		myNetSize[2] = p.floor(myNetSize[4] * Glv.howMuchBiggerHidden);
 		myNetSize[3] = p.ceil(myNetSize[5] * Glv.howMuchBiggerHidden);
 
-		Neuron[][] temporaryNeurons = new Neuron[env.editorLayer.length][env.editorLayer[0].length];
+		Neuron[][] selectedNeurons = new Neuron[env.editorLayer.length][env.editorLayer[0].length];
 		PVector[][] temporaryNeuronsPosition = new PVector[env.editorLayer.length][env.editorLayer[0].length];
 
 		for (int k = 0; k < temporaryNeuronsPosition.length; k++) {
 			for (int l = 0; l < temporaryNeuronsPosition[k].length; l++) {
 				temporaryNeuronsPosition[k][l] = new PVector(env.editorLayer[k][l].position.x,
 						env.editorLayer[k][l].position.y);
-				temporaryNeurons[k][l] = env.editorLayer[k][l];
+				selectedNeurons[k][l] = env.editorLayer[k][l];
 			}
 		}
 
+		//		 double inputArray[][] = createInputArray(160, 100);
+		//	        System.out.println("inputArray: "+toString(inputArray));
+
+		Neuron[][] justSelected = takeOutSelected(selectedNeurons);
+
+		printThem(selectedNeurons, justSelected);
+
+		//List<double[][]> subArrays = createSubArrays(justSelected, Glv.splitSize, Glv.splitSize);
+
+		//		for (double subArray[][] : subArrays) {
+		//			System.out.println("subArray:\n" + toString(subArray));
+		//		}
+
 		for (int i = 0; i < split - 1; i++) {
 			splitNeuralnets[i] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2], myNetSize[3], myNetSize[4],
-					myNetSize[5], temporaryNeurons, i * ((int) Math.sqrt(Glv.splitSize)), i);
-
-			System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2]
-					+ " | " + myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
+					myNetSize[5], selectedNeurons, i * ((int) Math.sqrt(Glv.splitSize)), i);
+			//			System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2]
+			//					+ " | " + myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
 		}
 
-		myNetSize[5] = trainingSet.get(0).rAnalysis[0].length - (myNetSize[5] * (split));
-		System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2] + " | "
-				+ myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
+		//		System.out.println("InputSize: " + myNetSize[0] + " | " + myNetSize[1] + " HiddenSize: " + myNetSize[2] + " | "
+		//				+ myNetSize[3] + " OutputSize: " + myNetSize[4] + " | " + myNetSize[5]);
 
+		myNetSize[5] = trainingSet.get(0).rAnalysis[0].length - (myNetSize[5] * (split)); // The last network is smaller
 		splitNeuralnets[splitNeuralnets.length - 1] = new Network(p, myNetSize[0], myNetSize[1], myNetSize[2],
-				myNetSize[3], myNetSize[4], myNetSize[5], temporaryNeurons,
+				myNetSize[3], myNetSize[4], myNetSize[5], selectedNeurons,
 				((int) Math.sqrt(Glv.splitSize) * (split - 1)), splitNeuralnets.length - 1);
 
 		for (int i = 0; i < split; i++) {
 			splitNeuralnets[i].respond(trainingSet.get(0), trainingSet.get(0).rForm);
-			p.println("splitNeuralnet " + i + " is done.");
+			//p.println("splitNeuralnet " + i + " is done.");
 		}
 
-//		for (int k = 0; k < split; k++) {
-//			for (int i = 0; i < splitNeuralnets[k].m_output_layer.length; i++) {
-//				for (int j = 0; j < splitNeuralnets[k].m_output_layer[i].length; j++) {
-//					p.print(splitNeuralnets[k].m_output_layer[i][j].position + " | ");
-//				}
-//				p.println("");
-//			}
-//			p.println("___");
-//			p.println("");
-//		}
+		//		for (int k = 0; k < split; k++) {
+		//			for (int i = 0; i < splitNeuralnets[k].m_output_layer.length; i++) {
+		//				for (int j = 0; j < splitNeuralnets[k].m_output_layer[i].length; j++) {
+		//					p.print(splitNeuralnets[k].m_output_layer[i][j].position + " | ");
+		//				}
+		//				p.println("");
+		//			}
+		//			p.println("___");
+		//			p.println("");
+		//		}
 
 	}
 
-	public static Neuron[][] cloneArray(Neuron[][] src) {
-		int length = src.length;
-		Neuron[][] target = new Neuron[length][src[0].length];
-		for (int i = 0; i < length; i++) {
-			System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+	private void printThem(Neuron[][] one, Neuron[][] two) {
+		for (int i = 0; i < one.length; i++) {
+			for (int j = 0; j < one[i].length; j++) {
+				if(one[i][j].iAmChosen == true) p.print("0");
+				else p.print("1");
+			}
+			p.println("");
 		}
-		return target;
+		p.println("___");
+		p.println("");
+
+		for (int i = 0; i < two.length; i++) {
+			for (int j = 0; j < two[i].length; j++) {
+				if(two[i][j].iAmChosen == true) p.print("0");
+				else p.print("1");
+			}
+			p.println("");
+		}
 	}
+
+	private Neuron[][] takeOutSelected(Neuron[][] selectedNeuron) { // This cuts out all parts that are not chosen.
+		int sizeX = 0;
+		int sizeY = 0;
+
+		for (int i = 0; i < selectedNeuron.length; i++) {
+			if (selectedNeuron[i][10].iAmChosen)
+				sizeX++;
+		}
+		for (int j = 0; j < selectedNeuron[10].length; j++) {
+			if (selectedNeuron[10][j].iAmChosen)
+				sizeY++;
+		}
+
+		p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
+
+		Neuron[][] temp = new Neuron[sizeX][sizeY];
+		int k = 0, l = 0;
+		for (int i = 0; i < selectedNeuron.length; i++) {
+			for (int j = 0; j < selectedNeuron[0].length; j++) {
+
+				if (selectedNeuron[i][j].iAmChosen) {
+
+					//p.println("i: " + i + " | j: " + j);
+					//p.println("k: " + k + " | l: " + l);
+					if (k < temp.length && l < temp[0].length)
+						temp[k][l] = selectedNeuron[i][j];
+
+					l++;
+					if (l >= temp[0].length) {
+						l = 0;
+						k++;
+					}
+				}
+			}
+		}
+
+		return temp;
+	}
+
+	private static List<double[][]> createSubArrays(double inputArray[][], int subRows, int subCols) {
+		List<double[][]> subArrays = new ArrayList<double[][]>();
+		for (int r = 0; r < inputArray.length; r += subRows) {
+			for (int c = 0; c < inputArray[r].length; c += subCols) {
+				double subArray[][] = new double[subRows][subCols];
+				fillSubArray(inputArray, r, c, subArray);
+				subArrays.add(subArray);
+			}
+		}
+		return subArrays;
+	}
+
+	private static void fillSubArray(double[][] inputArray, int r0, int c0, double subArray[][]) {
+		for (int r = 0; r < subArray.length; r++) {
+			for (int c = 0; c < subArray[r].length; c++) {
+				int ir = r0 + r;
+				int ic = c0 + c;
+				if (ir < inputArray.length && ic < inputArray[ir].length) {
+					subArray[r][c] = inputArray[ir][ic];
+				}
+			}
+		}
+	}
+
+	//	public static Neuron[][] cloneArray(Neuron[][] src) {
+	//		int length = src.length;
+	//		Neuron[][] target = new Neuron[length][src[0].length];
+	//		for (int i = 0; i < length; i++) {
+	//			System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+	//		}
+	//		return target;
+	//	}
+	//<---
 
 	private void setupRawNeurons() {
 		Glv.netSize[0] = trainingSet.get(0)._analysis.length;
@@ -453,13 +551,12 @@ public class NeuralNetworkManagment {
 			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
 					Glv.netSize[5]);
 		} else {
-						neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
-								Glv.netSize[5], env.editorLayer, 0, 0);
+			neuralnet = new Network(p, Glv.netSize[0], Glv.netSize[1], Glv.netSize[2], Glv.netSize[3], Glv.netSize[4],
+					Glv.netSize[5], env.editorLayer, 0, 0);
 		}
 
 		System.out.println("InputSize: " + Glv.netSize[0] + " | " + Glv.netSize[1] + " HiddenSize: " + Glv.netSize[2]
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
-
 
 		if (Glv.genOrA != 2)
 			backTo3D(); // Generate the first random form it created.
@@ -568,21 +665,17 @@ public class NeuralNetworkManagment {
 
 		if (inputs != null && outputs != null) {
 			if (Glv.splitNetwork) {
-			
-				
-				
+
 				for (int m = 0; m < splitNeuralnets.length; m++) {
-					
-					Float [][] selectedOutputs = new Float[splitNeuralnets[0].m_output_layer.length][splitNeuralnets[0].m_output_layer[0].length];
-					
+
+					Float[][] selectedOutputs = new Float[splitNeuralnets[0].m_output_layer.length][splitNeuralnets[0].m_output_layer[0].length];
+
 					for (int i = 0; i < selectedOutputs.length; i++) {
 						for (int j = 0; j < selectedOutputs[i].length; j++) {
-							selectedOutputs[i][j]=outputs[0][j+m*Glv.splitSize];
+							selectedOutputs[i][j] = outputs[0][j + m * Glv.splitSize];
 						}
 					}
-					
-					
-					
+
 					splitNeuralnets[m].respond(card, inputs);
 					splitNeuralnets[m].train(selectedOutputs);
 				}

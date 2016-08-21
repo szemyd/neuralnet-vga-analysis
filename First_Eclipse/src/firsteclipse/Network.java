@@ -1,6 +1,7 @@
 package firsteclipse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.corba.se.spi.orbutil.fsm.Input;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -112,47 +113,81 @@ public class Network {
 			}
 		}
 
+		
+		int l=0;
+		for (int i = howManySplit; i < selectedNeurons.length; i++) {
+			for (int j = howManySplit; j < selectedNeurons[i].length; j++) {
+
+				if (l>=m_output_layer[0].length) break;
+				if (selectedNeurons[i][j].iAmChosen) {					
+					m_output_layer[0][l] = new Neuron(p,
+							new PVector(selectedNeurons[i][j].position.x + 3f * p.width / 10f,
+									selectedNeurons[i][j].position.y),
+							m_hidden_layer, selectedNeurons[i][j].idNum);
+					
+					l++;
+				}
+			}
+			
+		}
+		
+		
+	
+		   
+
+		/*
 		int k = -1;
-		int l= 0;
+		int l = 0;
 		for (int i = 0; i < m_output_layer.length; i++) {
 			for (int j = 0; j < m_output_layer[i].length; j++) {
-
+		
 				if (j % Math.sqrt(Glv.splitSize) == 0)
 					k++;
-				if((k+1)* (int) Math.sqrt(Glv.splitSize)>=selectedNeurons.length)
-					{l++;
-					p.println("this happened.");
-					}
-				
-				p.println("m_output_layer.length: " + m_output_layer.length + "m_output_layer[0].length: " + m_output_layer[0].length);
-
-				if (j - (k * (int) Math.sqrt(Glv.splitSize)) + k*(selectedNeurons.length + 1)
-						+howManySplit+ selectedNeurons.length* l*Glv.splitSize < fromEditorLayer.size()) {
-					
-					p.println(j - (k * (int) Math.sqrt(Glv.splitSize)) + k * selectedNeurons.length + selectedNeurons.length*l*Glv.splitSize);
-					
-					PVector position = fromEditorLayer.get(
-							j - (k * (int) Math.sqrt(Glv.splitSize)) + k * (selectedNeurons.length+1)+howManySplit + selectedNeurons.length*l*(int) Math.sqrt(Glv.splitSize));// + selectedNeurons.length*l);
+				//				if ((k + 1) * (int) Math.sqrt(Glv.splitSize) >= selectedNeurons.length) {
+				//					l++;
+				//					p.println("this happened.");
+				//				}
+				l = p.floor(howManySplit / selectedNeurons.length);
+		
+				p.println("m_output_layer.length: " + m_output_layer.length + "m_output_layer[0].length: "
+						+ m_output_layer[0].length);
+		
+				int selectThis = j - (k * (int) Math.sqrt(Glv.splitSize)) + k * (selectedNeurons.length + 1)
+						+ howManySplit + (selectedNeurons.length * l * (int) Math.sqrt(Glv.splitSize));
+		
+				if (selectThis < fromEditorLayer.size()) {
+		
+					PVector position = fromEditorLayer.get(selectThis);
+					PVector ids = idsFromEditorLayer.get(selectThis);
+		
+					//p.println(j - (k * (int) Math.sqrt(Glv.splitSize)) + k * selectedNeurons.length+ selectedNeurons.length * l * Glv.splitSize);
+		
 					//PVector position = fromEditorLayer.get((j+selectedNeurons[0].length)%Glv.splitSize);
 					//PVector position = fromEditorLayer.get((j%selectedNeurons.length) + (j%Glv.splitSize) +howManySplit);
 					//	PVector position = fromEditorLayer.get(j%Glv.splitSize+howManySplit);
-					PVector ids = idsFromEditorLayer.get(
-							j - (k * (int) Math.sqrt(Glv.splitSize)) + k * (selectedNeurons.length+1)+howManySplit+ selectedNeurons.length*l*(int) Math.sqrt(Glv.splitSize));// + selectedNeurons.length*l);
-
+		
 					//				System.out.print(ids.x + " | " + ids.y + " ||| ");
 					//				System.out.println("");
 					//				System.out.print(position.x + " | " + position.y + " ||| ");
-
+		
 					m_output_layer[i][j] = new Neuron(p, new PVector(position.x + 3f * p.width / 10f, position.y),
 							m_hidden_layer, ids);
-				//}
-			}
-				else m_output_layer[i][j] = new Neuron(p, new PVector(fromEditorLayer.get(fromEditorLayer.size()-1).x + 3f * p.width / 10f, fromEditorLayer.get(fromEditorLayer.size()-1).y),
-						m_hidden_layer, new PVector(idsFromEditorLayer.get(fromEditorLayer.size()-1).x,idsFromEditorLayer.get(fromEditorLayer.size()-1).y));
+					//}
+				} else
+					m_output_layer[i][j] = new Neuron(p,
+							new PVector(fromEditorLayer.get(fromEditorLayer.size() - 1).x + 3f * p.width / 10f,
+									fromEditorLayer.get(fromEditorLayer.size() - 1).y),
+							m_hidden_layer, new PVector(idsFromEditorLayer.get(fromEditorLayer.size() - 1).x,
+									idsFromEditorLayer.get(fromEditorLayer.size() - 1).y));
 			}
 		}
+		*/
 	}
 
+	 
+	
+	
+	
 	public void draw(Environment env) {
 
 		drawBoundary(m_input_layer[0][0].position, m_input_layer.length, m_input_layer[0].length, "Input Layer");
