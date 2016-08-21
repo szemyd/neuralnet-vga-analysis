@@ -532,6 +532,8 @@ public class Environment {
 
 		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
 				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
+		
+		Neuron [][] dummyInput = new Neuron [1][1];
 
 		for (int i = 0; i < editorLayer.length; i++) {
 			for (int j = 0; j < editorLayer[i].length; j++) {
@@ -541,7 +543,7 @@ public class Environment {
 						(Glv.neuronSize * 1.2f * j)
 								+ (p.height / 2 - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
 
-				editorLayer[i][j] = new Neuron(p, position);
+				editorLayer[i][j] = new Neuron(p, position,dummyInput,new PVector(i,j));
 				if (card._analysis[i][j] != null) {
 					editorLayer[i][j].m_output = card._analysis[i][j];
 				} else

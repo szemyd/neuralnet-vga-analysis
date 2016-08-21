@@ -100,12 +100,22 @@ public class Network {
 
 		for (int i = 0; i < selectedNeurons.length; i++) {
 			for (int j = 0; j < selectedNeurons[i].length; j++) {
+				m_output_layer[i][j] = new Neuron(p,
+						new PVector(selectedNeurons[i][j].position.x + 3f * p.width / 10f,
+								selectedNeurons[i][j].position.y),
+						m_hidden_layer, selectedNeurons[i][j].idNum);
+			}
+		}
+		/*
+		for (int i = 0; i < selectedNeurons.length; i++) {
+			for (int j = 0; j < selectedNeurons[i].length; j++) {
 				m_output_layer[0][i * selectedNeurons[0].length + j] = new Neuron(p,
 						new PVector(selectedNeurons[i][j].position.x + 3f * p.width / 10f,
 								selectedNeurons[i][j].position.y),
 						m_hidden_layer, selectedNeurons[i][j].idNum);
 			}
 		}
+		*/
 		//		
 		//		for (int i = 0; i < m_output_layer.length; i++) {
 		//			for (int j = 0; j < m_output_layer[i].length; j++) {
