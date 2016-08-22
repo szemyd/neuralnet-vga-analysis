@@ -14,6 +14,7 @@ import javafx.scene.transform.Translate;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
+import sun.util.locale.provider.FallbackLocaleProviderAdapter;
 
 public class MyData {
 
@@ -403,8 +404,7 @@ public class MyData {
 				rAnalysisN = new Neuron[1][length];
 
 				rAnalysisSplit = takeOutSelected(env.editorLayer);
-			
-				
+
 				int counter = 0;
 				for (int i = 0; i < _analysis.length; i++) {
 					for (int j = 0; j < _analysis[i].length; j++) {
@@ -474,27 +474,29 @@ public class MyData {
 		//p.println("sizeX: " + sizeX + " | Size Y: " + sizeY);
 
 		Float[][] temp = new Float[sizeX][sizeY];
-		int k = 0, l = 0;
-		for (int i = 0; i < selectedNeuron.length; i++) {
-			for (int j = 0; j < selectedNeuron[0].length; j++) {
+		if (sizeX > 0 && sizeY > 0) {
+			int k = 0, l = 0;
+			for (int i = 0; i < selectedNeuron.length; i++) {
+				for (int j = 0; j < selectedNeuron[0].length; j++) {
 
-				if (selectedNeuron[i][j].iAmChosen) {
+					if (selectedNeuron[i][j].iAmChosen) {
 
-					//p.println("i: " + i + " | j: " + j);
-					//p.println("k: " + k + " | l: " + l);
-					if (k < temp.length && l < temp[0].length)
-						temp[k][l] = _analysis[i][j];
+						//p.println("i: " + i + " | j: " + j);
+						//p.println("k: " + k + " | l: " + l);
+						if (k < temp.length && l < temp[0].length)
+							temp[k][l] = _analysis[i][j];
 
-					l++;
-					if (l >= temp[0].length) {
-						l = 0;
-						k++;
+						l++;
+						if (l >= temp[0].length) {
+							l = 0;
+							k++;
+						}
 					}
 				}
 			}
 		}
-
 		return temp;
+
 	}
 
 	//<--- Data Cleaning.

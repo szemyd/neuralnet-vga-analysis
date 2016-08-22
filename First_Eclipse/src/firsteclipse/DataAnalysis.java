@@ -28,7 +28,7 @@ public class DataAnalysis {
 	public static Neuron[][] compareAnalysisN;
 
 	float difference = -1f;
-	float precentage, actualDifference;
+	float precentage, precentageNormal;
 
 	public DataAnalysis(PApplet _p) {
 		p = _p;
@@ -61,7 +61,7 @@ public class DataAnalysis {
 		lineChart.setAxisValuesColour(p.color(360));
 
 		lineChart.setMinY(0f);
-		lineChart.setMaxY(100f);
+		//lineChart.setMaxY(100f);
 
 		lineChart.setAxisColour(p.color(360, 50, 360, 360));
 		//lineChart.setDecorations(true);
@@ -84,7 +84,7 @@ public class DataAnalysis {
 		lineChart2.setAxisValuesColour(p.color(360));
 
 		lineChart2.setMinY(0f);
-		lineChart2.setMaxY(15f);
+		//lineChart2.setMaxY(15f);
 
 		lineChart2.setAxisColour(p.color(360, 50, 360, 360));
 		//lineChart.setDecorations(true);
@@ -243,7 +243,7 @@ public class DataAnalysis {
 					p.fill(360);
 					p.stroke(360);
 					p.text(df.format(precentage) + "%", p.width * 0.5f, p.height * 0.5f - 70f);
-					p.text(df.format(actualDifference) + "%", p.width * 0.5f, p.height * 0.5f + 70f);
+					p.text(df.format(precentageNormal) + "%", p.width * 0.5f, p.height * 0.5f + 70f);
 				}
 				p.popStyle();
 			}
@@ -363,37 +363,39 @@ public class DataAnalysis {
 	public void calcDifference() {
 		if (compareAnalysis != null) {
 			difference = 0f;
-			actualDifference = 0f;
+			precentageNormal = 0f;
 			//test(); // This checks if how I calculate the difference is accurate or not.
 
 			for (int i = 0; i < compareAnalysis.length; i++) {
 				for (int j = 0; j < compareAnalysis[i].length; j++) {
 					//										difference += (Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
 					//												2));
-					p.print("compAna: " + compareAnalysis[i][j] + " - rAnalysis[i][j]: "
-							+ Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j] + " | ");
+//					p.print("compAna: " + compareAnalysis[i][j] + " - rAnalysis[i][j]: "
+//							+ Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j] + " | ");
 					difference += Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
 							2f) / 2f;
-					actualDifference += Math
+					precentageNormal += Math
 							.abs(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j]);
-					//					difference += (Math
-					//							.abs(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j]));
 				}
 			}
-			//			2));
-			p.println("");
+			
+			//p.println("");
 
 			precentage = 0;
 			precentage = difference;
 
-			actualDifference /= (compareAnalysis.length * compareAnalysis[0].length) * 2f;
-			actualDifference *= 100f;
-
+			precentageNormal /= (compareAnalysis.length * compareAnalysis[0].length) * 2f;
 			precentage /= (((compareAnalysis.length * compareAnalysis[0].length) * (Math.pow(2f, 2f)) / 2f));
+	
 			precentage *= 100f;
+			precentageNormal *= 100f;
 
+			Glv.bestVGAMSE = setSmaller(precentage, Glv.bestVGAMSE);
+			Glv.bestVGAE = setSmaller(precentageNormal, Glv.bestVGAE);
+			
+			
 			Glv.errorCounter2.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
-
+			Glv.errorCounter2Normal.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentageNormal));
 			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 			//p.println(counter);
 			lineChart2.setData(Glv.errorCounter2);
@@ -401,5 +403,11 @@ public class DataAnalysis {
 					+ "All possible differences: "
 					+ (((compareAnalysis.length * compareAnalysis[0].length) * (Math.pow(2f, 2f)) / 2f)));
 		}
+	}
+	
+	public  float setSmaller(float input, float comparingTo)
+	{
+		if(input<comparingTo) return input;
+		else return comparingTo;
 	}
 }

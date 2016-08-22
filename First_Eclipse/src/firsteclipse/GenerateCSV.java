@@ -8,12 +8,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import processing.core.PApplet;
 import processing.core.PVector;
 import sun.net.www.content.text.plain;
 
 public class GenerateCSV {
+	private static PApplet p;
 
-	public static void save(String myDirectory) {
+	public static void createDir(String myDirectory) {
 		String filePath = new File("").getAbsolutePath();
 
 		File file = new File(filePath + "\\" + myDirectory);
@@ -74,11 +76,13 @@ public class GenerateCSV {
 	}
 
 	public static void saveValuesToCSV(String sFileName, String counter, String avarageDistanceOfNeurons,
-			Environment env) {
-		File f = new File(sFileName);
-
-		final String[][] csvMatrix = new String[Glv.errorCounter.size() + 2][10 + env.editorLayer[0].length];
-
+			Environment env, PApplet _p) {
+		File f = new File(sFileName + ".csv");
+		p = _p;
+		final String[][] csvMatrix;
+		if(Glv.errorCounter.size() > env.editorLayer.length)		csvMatrix = new String[Glv.errorCounter.size() + 2][20 + env.editorLayer[0].length];
+		else csvMatrix = new String[env.editorLayer.length + 2][20 + env.editorLayer[0].length];
+		
 		csvMatrix[0][0] = Integer.toString(Glv.genOrA) + " | " + counter + " | " + avarageDistanceOfNeurons;
 		csvMatrix[1][0] = "Size of Input";
 		csvMatrix[1][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer.length);
@@ -132,52 +136,82 @@ public class GenerateCSV {
 		csvMatrix[15][1] = Integer.toString(Glv.threadNN.net.testingSet.get(0).rForm.length);
 		csvMatrix[15][2] = Integer.toString(Glv.threadNN.net.testingSet.get(0).rForm[0].length);
 
-		csvMatrix[0][5] = "<PEFORMANCE OF NETWORK>";
-		csvMatrix[1][5] = "NN x";
-		csvMatrix[1][6] = "NN f(x)";
+		csvMatrix[16][0] = "Best NN after (MSE_E): " + Glv.numOfCycles * Glv.numOfLearning;
+		csvMatrix[16][1] = Float.toString(Glv.bestMSE);
+		csvMatrix[16][2] = Float.toString(Glv.bestE);
 
-		csvMatrix[1][7] = "VGA x";
-		csvMatrix[1][8] = "VGA f(x)";
+		csvMatrix[17][0] = "Best VGA after (MSE_E): " + Glv.numOfCycles * Glv.numOfLearning;
+		csvMatrix[17][1] = Float.toString(Glv.bestVGAMSE);
+		csvMatrix[17][2] = Float.toString(Glv.bestVGAE);
 
-		csvMatrix[0][10] = "<FORM OF SELECTED>";
+		csvMatrix[18][0] = "Time to Calculate: " + Glv.numOfLearning;
+		float newCounter = 0f;
+		for (Float num : Glv.timeToCalc) {
+			newCounter += num;
+		}
+		newCounter /= Glv.timeToCalc.size();
+		csvMatrix[18][1] = Float.toString(newCounter);
+
+		csvMatrix[0][5] = "Squared Mean Error %";
+		csvMatrix[0][7] = "Normal Error %";
+		csvMatrix[0][9] = "VGA Squared Mean Error %";
+		csvMatrix[0][11] = "VGA Normal Error %";
+
+		csvMatrix[1][5] = "x";
+		csvMatrix[1][6] = "f(x)";
+
+		csvMatrix[1][7] = "x";
+		csvMatrix[1][8] = "f(x)";
+
+		csvMatrix[1][9] = "x";
+		csvMatrix[1][10] = "f(x)";
+
+		csvMatrix[1][11] = "x";
+		csvMatrix[1][12] = "f(x)";
+
+		csvMatrix[0][14] = "<FORM OF SELECTED>";
 
 		int i = 0;
 		for (PVector myVector : Glv.errorCounter) {
 			csvMatrix[2 + i][5] = Float.toString(myVector.x);
-			i++;
-		}
-
-		i = 0;
-		for (PVector myVector : Glv.errorCounter) {
 			csvMatrix[2 + i][6] = Float.toString(myVector.y);
 			i++;
 		}
 
 		i = 0;
-		for (PVector myVector : Glv.errorCounter2) {
+		for (PVector myVector : Glv.errorCounterNormal) {
 			csvMatrix[2 + i][7] = Float.toString(myVector.x);
+			csvMatrix[2 + i][8] = Float.toString(myVector.y);
 			i++;
 		}
 
 		i = 0;
 		for (PVector myVector : Glv.errorCounter2) {
-			csvMatrix[2 + i][8] = Float.toString(myVector.y);
+			csvMatrix[2 + i][9] = Float.toString(myVector.x);
+			csvMatrix[2 + i][10] = Float.toString(myVector.y);
+			i++;
+		}
+
+		i = 0;
+		for (PVector myVector : Glv.errorCounter2Normal) {
+			csvMatrix[2 + i][11] = Float.toString(myVector.x);
+			csvMatrix[2 + i][12] = Float.toString(myVector.y);
 			i++;
 		}
 
 		for (int k = 0; k < env.editorLayer.length; k++) {
 			for (int l = 0; l < env.editorLayer[k].length; l++) {
 				if (env.editorLayer[k][l].iAmChosen)
-					csvMatrix[1 + k][10 + l] = "1";
+					csvMatrix[1 + k][14 + l] = "1";
 				else
-					csvMatrix[1 + k][10 + l] = "0";
+					csvMatrix[1 + k][14 + l] = "0";
 			}
 		}
 
 		if (!f.isFile()) { // If the file doesn't exist yet
 
 			try {
-				FileWriter writer = new FileWriter(sFileName);
+				FileWriter writer = new FileWriter(sFileName + ".csv");
 
 				for (int j = 0; j < csvMatrix.length; j++) {
 					for (int j2 = 0; j2 < csvMatrix[j].length; j2++) {
@@ -203,7 +237,10 @@ public class GenerateCSV {
 			System.out.println("File already exists.");
 
 		//Glv.toNN=new ArrayList<String>();
-
+		Glv.programMode = 1;
+		p.saveFrame(sFileName +"\\" + "neuralNet");
+		Glv.programMode = 3;
+		p.saveFrame(sFileName +"\\" + "editor");
 	}
 
 	public static void saveSettings(String sFileName, String counter, String avarageDistanceOfNeurons,
@@ -233,7 +270,8 @@ public class GenerateCSV {
 					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_hidden_layer[i].length; j++) {
 						for (int k = 0; k < Glv.threadNN.net.neuralnet.m_hidden_layer[i][j].m_weights.length; k++) {
 							for (int l = 0; l < Glv.threadNN.net.neuralnet.m_hidden_layer[i][j].m_weights[k].length; l++) {
-								writer.append(Float.toString(Glv.threadNN.net.neuralnet.m_hidden_layer[i][j].m_weights[k][l]));
+								writer.append(Float
+										.toString(Glv.threadNN.net.neuralnet.m_hidden_layer[i][j].m_weights[k][l]));
 								writer.append(",");
 							}
 							writer.append(",");
@@ -242,14 +280,15 @@ public class GenerateCSV {
 					}
 					writer.append("\n");
 				}
-				
+
 				writer.append("_");
-				
+
 				for (int i = 0; i < Glv.threadNN.net.neuralnet.m_output_layer.length; i++) {
 					for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer[i].length; j++) {
 						for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_weights.length; k++) {
 							for (int l = 0; l < Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_weights[k].length; l++) {
-								writer.append(Float.toString(Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_weights[k][l]));
+								writer.append(Float
+										.toString(Glv.threadNN.net.neuralnet.m_output_layer[i][j].m_weights[k][l]));
 								writer.append(",");
 							}
 							writer.append(",");
@@ -276,7 +315,6 @@ public class GenerateCSV {
 
 	public static void loadNeuralNetwork() {
 		String filePath = new File("").getAbsolutePath();
-		
 
 		String csvFile = filePath + "/src/data/sur.csv";
 
@@ -292,9 +330,8 @@ public class GenerateCSV {
 				// use comma as separator
 				String[] thisRow = line.split(cvsSplitBy);
 
-			
 				// p.println(buildings.size() + " temp.z: " + temp.z);
-			
+
 			}
 
 		} catch (FileNotFoundException e) {

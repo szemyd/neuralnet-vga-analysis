@@ -1,5 +1,6 @@
 package firsteclipse;
 
+import java.awt.event.InputMethodListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -633,6 +634,7 @@ public class NeuralNetworkManagment {
 
 	private void training(int numOfLearning, DataAnalysis graphs) {
 		float counter = 0f;
+		float counterNormal = 0f;
 		for (int i = 0; i < Glv.numOfLearning; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
 
@@ -660,28 +662,27 @@ public class NeuralNetworkManagment {
 				for (int m = 0; m < splitNeuralnets.length; m++) {
 					for (int j = 0; j < Glv.threadNN.net.splitNeuralnets[m].m_output_layer.length; j++) {
 						for (int k = 0; k < Glv.threadNN.net.splitNeuralnets[m].m_output_layer[j].length; k++) {
-							//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
 							counter += (Math.pow(Glv.threadNN.net.splitNeuralnets[m].m_output_layer[j][k].m_error, 2f)
-									/ 2f); // Counts all the error of the last learning phase.
+									/ 2f); // Counts all the mean squared error of the last learning phase.
+							counterNormal += p.abs(Glv.threadNN.net.splitNeuralnets[m].m_output_layer[j][k].m_error);
+
 						}
 					}
 				}
 			} else {
 				for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
 					for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-						//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-						counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the error of the last learning phase.
+						counter += (Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f); // Counts all the mean squared error of the last learning phase.
+						counterNormal += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
 					}
 				}
 			}
 		}
 
 		counter /= Glv.numOfLearning;
+		counterNormal /= Glv.numOfLearning;
 		float precentage = counter;
-		//p.println(precentage);
-
-		//				precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-		//						* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+		float precentageNormal = counterNormal;
 
 		if (Glv.splitNetwork) {
 			double possibleErrors = 0.0f;
@@ -692,21 +693,30 @@ public class NeuralNetworkManagment {
 			}
 			possibleErrors = numOfAllNeurons * (Math.pow(2f, 2f)) / 2f; // Counts all the error of the last learning phase.
 			precentage /= possibleErrors;
-		} else
+			precentageNormal /= numOfAllNeurons * 2f;
+		} else {
 			precentage /= (((Glv.threadNN.net.neuralnet.m_output_layer.length
 					* Glv.threadNN.net.neuralnet.m_output_layer[0].length) * (Math.pow(2f, 2f)) / 2f));
-
+			precentageNormal /= Glv.threadNN.net.neuralnet.m_output_layer.length
+					* Glv.threadNN.net.neuralnet.m_output_layer[0].length * 2f;
+		}
 		precentage *= 100f;
-		//p.println(precentage);
+		precentageNormal *= 100f;
+
 
 		Glv.howManyCycles++;
 		Glv.errorCounter.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
-
+		Glv.errorCounterNormal.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentageNormal));
 		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
-		System.out.println("Last sum of error: " + precentage + "%");
+		System.out.println("Squared Mean Error: " + precentage + "%  |  Error: " + precentageNormal + "%");
+		
 
+		Glv.bestMSE = setSmaller(precentage, Glv.bestMSE);
+		Glv.bestE = setSmaller(precentageNormal, Glv.bestE);
+		
+		//p.println("smallest: " + Glv.bestMSE);
 	}
 
 	private void trainIt(MyData card, Float[][] inputs, Float[][] outputs) {
@@ -797,6 +807,13 @@ public class NeuralNetworkManagment {
 			testingSet.remove(card);
 		}
 	}
+	
+	public  float setSmaller(float input, float comparingTo)
+	{
+		p.println("input: " + input + "comparingTo: " + comparingTo);
+		if(input<comparingTo) return input;
+		else return comparingTo;
+	}
 	//<---
 
 	/*
@@ -824,55 +841,3 @@ public class NeuralNetworkManagment {
 	}
 	//<---
 }
-
-//
-//			for (int Z = 0; Z < 10; Z++) {
-//				float counter = 0f;
-//				for (int i = 0; i < Glv.numOfLearning; i++) {
-//					int row = (int) p.floor(p.random(0, trainingSet.size()));
-//int row=i;
-
-//			if (Glv.neuronsStored) { // If I have given which neurons to input.
-//				if (trainingSet.get(row).rAnalysis != null && trainingSet.get(row).rForm != null) {
-//					neuralnet.respond(trainingSet.get(row), trainingSet.get(row).rAnalysis);
-//					neuralnet.train(trainingSet.get(row).rForm);
-//				} else {
-//					p.println("Card was NULL");
-//					trainingSet.remove(trainingSet.get(row));
-//				}
-//			} else {
-//				if (trainingSet.get(row)._analysis != null && trainingSet.get(row).rForm != null) {
-//					neuralnet.respond(trainingSet.get(row), trainingSet.get(row)._analysis);
-//					neuralnet.train(trainingSet.get(row).rForm);
-//				} else {
-//					p.println("Card was NULL");
-//					trainingSet.remove(trainingSet.get(row));
-//				}
-//			}
-
-//			for (int j = 0; j < Glv.threadNN.net.neuralnet.m_output_layer.length; j++) {
-//				for (int k = 0; k < Glv.threadNN.net.neuralnet.m_output_layer[j].length; k++) {
-//					//counter += p.abs(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error); // Counts all the error of the last learning phase.
-//					counter += Math.pow(Glv.threadNN.net.neuralnet.m_output_layer[j][k].m_error, 2f) / 2f; // Counts all the error of the last learning phase.
-//				}
-//			}
-//		}
-//		counter /= Glv.numOfLearning;
-//
-//		float precentage = counter;
-//
-//		//p.println(precentage);
-//		precentage /= (Glv.threadNN.net.neuralnet.m_output_layer.length
-//				* Glv.threadNN.net.neuralnet.m_output_layer[0].length);
-//		precentage *= 100f;
-//		//p.println(precentage);
-//
-//		Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-//
-//		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
-//		//p.println(counter);
-//		graphs.lineChart.setData(Glv.errorCounter);
-//		System.out.println("Last sum of error: " + precentage + "%");
-//
-//		Glv.howManyCycles++;
-//	}

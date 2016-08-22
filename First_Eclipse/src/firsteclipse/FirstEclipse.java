@@ -63,7 +63,6 @@ public class FirstEclipse extends PApplet {
 		//dataAnalysis.setup();
 
 		println("cores: " + Runtime.getRuntime().availableProcessors());
-
 	}
 
 	/*
@@ -400,7 +399,7 @@ public class FirstEclipse extends PApplet {
 
 				String fileName = Integer.toString(Glv.howManyUntilNow + Glv.initialSeed);
 				String myDirectory = "GeneratedData";
-				GenerateCSV.save(myDirectory);
+				GenerateCSV.createDir(myDirectory);
 				GenerateCSV.generateCsvFile(
 						new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv");
 
@@ -422,18 +421,14 @@ public class FirstEclipse extends PApplet {
 	public void trainNeurons() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
-				if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets !=null) {
-					int ellapsedTime = second() + minute() * 60 + hour() * 360;
-					
-					
-				
-					Glv.threadNN.net.trainNN(graphs);
-					
-					
+				if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets != null) {
+					float ellapsedTime = second() + minute() * 60 + hour() * 360;
 
-					if (Glv.shP)
-						println("< Training NN. Ellapsed time: "
-								+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+					Glv.threadNN.net.trainNN(graphs);
+					Glv.timeToCalc.add(ellapsedTime / Glv.numOfCycles);
+
+					println("< Training NN. Ellapsed time: "
+							+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
 				} else
 					println("Setup NN first.");
 			} else
@@ -485,6 +480,12 @@ public class FirstEclipse extends PApplet {
 			if (Glv.threadNN.net != null) {
 				Glv.threadNN.net.setupNeuralNetwork(env);
 				graphs.setup();
+
+				Glv.bestE = 100f;
+				Glv.bestMSE = 100f;
+				Glv.bestVGAMSE = 100f;
+				Glv.bestVGAE = 100f;
+				Glv.timeToCalc = new ArrayList<Float>();
 			}
 		}
 	}
@@ -525,8 +526,7 @@ public class FirstEclipse extends PApplet {
 		Glv.numOfCycles = theValue;
 	}
 
-	public void splitSize(int theValue)
-	{
+	public void splitSize(int theValue) {
 		Glv.splitSize = theValue;
 	}
 	//<---
@@ -690,11 +690,21 @@ public class FirstEclipse extends PApplet {
 
 						String fileName = Integer.toString(Glv.genOrA) + "_" + counterS + "_" + avarageDistanceS;
 						String myDirectory = "AnalysisData";
+						String myDirectorySecond;
 
-						GenerateCSV.save(myDirectory);
+						if (Glv.genOrA == 0)
+							myDirectorySecond = "Generating";
+						else
+							myDirectorySecond = "Analysing";
+
+						GenerateCSV.createDir(myDirectory); // Creats Directory
+						GenerateCSV.createDir(myDirectory + "\\" + myDirectorySecond);
+						String combination = myDirectory + "\\" + myDirectorySecond + "\\" + fileName;
+						GenerateCSV.createDir(combination);
+
 						GenerateCSV.saveValuesToCSV(
-								new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv",
-								counterS, avarageDistanceS, env);
+								new File("").getAbsolutePath() + "\\" + combination + "\\" + fileName,
+								counterS, avarageDistanceS, env, this);
 					}
 				}
 			}
@@ -744,8 +754,8 @@ public class FirstEclipse extends PApplet {
 						String avarageDistanceS = Float.toString(avarageDistance);
 
 						String myDirectory = "NetworkSettings";
-						GenerateCSV.save(myDirectory);
-						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
+						GenerateCSV.createDir(myDirectory);
+						GenerateCSV.createDir(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
 								+ avarageDistanceS);
 
 						GenerateCSV.saveNeuralNetwork(new File("").getAbsolutePath() + "\\" + myDirectory + "\\"
@@ -791,8 +801,8 @@ public class FirstEclipse extends PApplet {
 						String avarageDistanceS = Float.toString(avarageDistance);
 
 						String myDirectory = "NetworkSettings";
-						GenerateCSV.save(myDirectory);
-						GenerateCSV.save(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
+						GenerateCSV.createDir(myDirectory);
+						GenerateCSV.createDir(myDirectory + "\\" + Integer.toString(Glv.genOrA) + "_" + counterS + "_"
 								+ avarageDistanceS);
 
 						GenerateCSV.saveSettings(new File("").getAbsolutePath() + "\\" + myDirectory + "\\"

@@ -46,7 +46,12 @@ public class Glv {
 	public static int splitSize = 2; // How big should the split be?
 
 	public static ArrayList<PVector> errorCounter = new ArrayList<PVector>();
+	public static ArrayList<PVector> errorCounterNormal = new ArrayList<PVector>();
 	public static ArrayList<PVector> errorCounter2 = new ArrayList<PVector>();
+	public static ArrayList<PVector> errorCounter2Normal = new ArrayList<PVector>();
+	public static float bestMSE=100f, bestE=100f, bestVGAMSE=100f, bestVGAE=100f;
+	public static ArrayList<Float> timeToCalc = new ArrayList<Float>();
+	
 	public static float howManyCycles = 0f; // How often have I pressed "train NN". Shown a predefined number of cards.
 	public static float howMuchBiggerHidden = 2.5f;
 
@@ -87,4 +92,7 @@ public class Glv {
 	public static boolean threadSuspended = false;
 
 	public static int neuronSize = 16;
+	
+	
+	
 }
