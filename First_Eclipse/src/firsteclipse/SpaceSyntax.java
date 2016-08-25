@@ -23,7 +23,6 @@ public class SpaceSyntax {
 
 	public SpaceSyntax(PApplet _p, int _threadID) {
 		p = _p;
-
 		threadID = _threadID;
 	}
 
@@ -108,6 +107,63 @@ public class SpaceSyntax {
 				}
 				// p.println(boxes[i][j].neighbourhood.size());
 				calcHighLow(rectangles[i][j].neighbourhood.size());
+			}
+		}
+		float ellapsedTimeVGA = p.second() + p.minute() * 60f + p.hour() * 360f;
+		if (Glv.shP)
+			p.println("Ellapsed time VGA: " + ((p.second() + p.minute() * 60f + p.hour() * 360f) - ellapsedTimeVGA));
+
+		// p.println("high: " + highLow.x + " | low: " + highLow.y);
+		//meanShortestPath();
+
+		save(boxes);
+		//return true;
+	}
+
+	public void VGAforSpecific(MyBox[][] boxes, Neuron[][] selectedNeurons) {
+		highLow = new PVector(0f, 1000f); // This is so that the colours are rightly mapped.
+		//for vi in V(G) { for vj in V(G) if vi sees vj then add vj to V(T); } // Alasdiars PseudoCode.		 
+
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+
+				if (selectedNeurons[i][j].iAmChosen) {
+
+					// Find if rectangle is inside a building or not!
+					for (Building build : Environment.buildings) {
+						if (build.myPolygon.xpoints[0] < Glv.spaceRoomSizeY) {
+							boolean isItIn = build.myPolygon.contains((int) rectangles[i][j].position.x,
+									(int) rectangles[i][j].position.y);
+
+							if (isItIn) {
+								rectangles[i][j].height = 1.0f;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+
+				if (selectedNeurons[i][j].iAmChosen) {
+					for (int k = 0; k < rectangles.length; k++) {
+						for (int l = 0; l < rectangles[k].length; l++) {
+							if (Glv.shouldDimReduction) {
+								if (canIseeBigCube(rectangles[i][j], rectangles[k][l], boxes)) { // Check big boxes.
+									rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+								}
+							} else {
+								if (canIsee(rectangles[i][j], rectangles[k][l], boxes)) { // Check every box
+									rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+								}
+							}
+						}
+					}
+					// p.println(boxes[i][j].neighbourhood.size());
+					calcHighLow(rectangles[i][j].neighbourhood.size());
+				}
 			}
 		}
 		float ellapsedTimeVGA = p.second() + p.minute() * 60f + p.hour() * 360f;
@@ -387,52 +443,44 @@ public class SpaceSyntax {
 
 		// Source is the vertex that is being checked!!!
 
-	
-		
-		
-		adjacency_matrix= new int[number_of_vertices+1][number_of_vertices+1];
+		adjacency_matrix = new int[number_of_vertices + 1][number_of_vertices + 1];
 		for (int i = 0; i < adjacency_matrix.length; i++) {
 			for (int j = 0; j < adjacency_matrix[i].length; j++) {
-				adjacency_matrix[i][j]=0;
+				adjacency_matrix[i][j] = 0;
 			}
 		}
-//		adjacency_matrix[2][1]=9;
-//		adjacency_matrix[3][1]=6;
-//		adjacency_matrix[4][1]=5;
-//		adjacency_matrix[5][1]=3;
-//		adjacency_matrix[2][3]=2;
-//		adjacency_matrix[4][3]=4;
-		
-		
-		
-		
-		adjacency_matrix[1][2]=9;
-		adjacency_matrix[1][3]=6;
-		adjacency_matrix[1][4]=5;
-		adjacency_matrix[1][5]=3;
-		adjacency_matrix[3][2]=2;
-		adjacency_matrix[3][4]=4;
-		
+		//		adjacency_matrix[2][1]=9;
+		//		adjacency_matrix[3][1]=6;
+		//		adjacency_matrix[4][1]=5;
+		//		adjacency_matrix[5][1]=3;
+		//		adjacency_matrix[2][3]=2;
+		//		adjacency_matrix[4][3]=4;
+
+		adjacency_matrix[1][2] = 9;
+		adjacency_matrix[1][3] = 6;
+		adjacency_matrix[1][4] = 5;
+		adjacency_matrix[1][5] = 3;
+		adjacency_matrix[3][2] = 2;
+		adjacency_matrix[3][4] = 4;
+
 		for (int i = 1; i < adjacency_matrix.length; i++) {
 			for (int j = 1; j < adjacency_matrix[i].length; j++) {
 				p.print(adjacency_matrix[i][j]);
 			}
 			p.println("");
 		}
-		
-		
+
 		DijkstraAlgorithmSet dijkstrasAlgorithm = new DijkstraAlgorithmSet(number_of_vertices);
 		dijkstrasAlgorithm.dijkstra_algorithm(adjacency_matrix, source);
-		
-		 for (int i = 1; i <= dijkstrasAlgorithm.distances.length - 1; i++)
-         {
-             System.out.println(source + " to " + i + " is "+ dijkstrasAlgorithm.distances[i]);
-         }
 
-	//	rectangles[0][0].shortestPath = 
+		for (int i = 1; i <= dijkstrasAlgorithm.distances.length - 1; i++) {
+			System.out.println(source + " to " + i + " is " + dijkstrasAlgorithm.distances[i]);
+		}
+
+		//	rectangles[0][0].shortestPath = 
 		p.println(rectangles[0][0].shortestPath);
 		//rectangles[0][0].calcAvarage(number_of_vertices);
-		
+
 		/*
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
@@ -461,7 +509,8 @@ public class SpaceSyntax {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				int k = 0;
 				for (MyRect rect : rectangles[i][j].neighbourhood) {
-					if(rect.iD != null) adjacency_matrix[i* rectangles[0].length + j ][rect.iD] = 1;
+					if (rect.iD != null)
+						adjacency_matrix[i * rectangles[0].length + j][rect.iD] = 1;
 					k++;
 				}
 

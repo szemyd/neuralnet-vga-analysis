@@ -23,6 +23,7 @@ import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 import controlP5.Println;
 import processing.core.PApplet;
 import processing.core.PVector;
+import sun.awt.windows.ThemeReader;
 
 public class NeuralNetworkManagment {
 
@@ -36,7 +37,9 @@ public class NeuralNetworkManagment {
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
-	MyThread thread;
+	List <MyThread> threads;
+	List <Integer> shownCardIds= new ArrayList<Integer>();
+	//MyThread thread;
 
 	public NeuralNetworkManagment(PApplet _p) {
 		p = _p;
@@ -302,6 +305,8 @@ public class NeuralNetworkManagment {
 	public void setupNeuralNetwork(Environment env) {
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
 
+		threads = new ArrayList<MyThread>();
+		
 		if (dataLoaded) {
 			switch (Glv.genOrA) {
 
@@ -608,7 +613,7 @@ public class NeuralNetworkManagment {
 				+ " | " + Glv.netSize[3] + " OutputSize: " + Glv.netSize[4] + " | " + Glv.netSize[5]);
 
 		if (Glv.genOrA != 2)
-			backTo3D(); // Generate the first random form it created.
+			backTo3D(env); // Generate the first random form it created.
 
 		neuralnet.respond(card, inputs);
 	}
@@ -616,28 +621,30 @@ public class NeuralNetworkManagment {
 	//<--- SETUP NN
 
 	//---> Interact with NN.
-	public void trainNN(DataAnalysis graphs) {
+	public void trainNN(DataAnalysis graphs, Environment env) {
 
 		if (dataLoaded) {
-			training(10, graphs); // This is so we have the number the NN original performs as.
+			//training(10, graphs, Glv.howManyCycles); // This is so we have the number the NN original performs as.
 
 			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
-				training(Glv.numOfLearning, graphs);
+				training(Glv.numOfLearning, graphs, Glv.howManyCycles);
+				
+				if (Glv.genOrA != 2)
+					backTo3D(env); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
 			}
 
-			if (Glv.genOrA != 2)
-				backTo3D(); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+			
 
 		}
 
 	}
 
-	private void training(int numOfLearning, DataAnalysis graphs) {
+	private void training(int numOfLearning, DataAnalysis graphs, float num) {
 		float counter = 0f;
 		float counterNormal = 0f;
 		for (int i = 0; i < Glv.numOfLearning; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
-
+			
 			switch (Glv.genOrA) {
 			case 0:
 				if (Glv.neuronsStored)
@@ -657,6 +664,8 @@ public class NeuralNetworkManagment {
 				}
 				break;
 			}
+			
+			shownCardIds.add(row);
 
 			if (Glv.splitNetwork) {
 				for (int m = 0; m < splitNeuralnets.length; m++) {
@@ -705,8 +714,8 @@ public class NeuralNetworkManagment {
 
 
 		Glv.howManyCycles++;
-		Glv.errorCounter.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
-		Glv.errorCounterNormal.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentageNormal));
+		Glv.errorCounter.add(new PVector(num * Glv.numOfLearning, precentage));
+		Glv.errorCounterNormal.add(new PVector(num * Glv.numOfLearning, precentageNormal));
 		//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
@@ -769,7 +778,7 @@ public class NeuralNetworkManagment {
 
 	}
 
-	public void testNN() {
+	public void testNN(Environment env) {
 
 		int row = (int) p.floor(p.random(0, testingSet.size()));
 
@@ -791,7 +800,7 @@ public class NeuralNetworkManagment {
 		}
 
 		if (Glv.genOrA != 2)
-			backTo3D();
+			backTo3D(env);
 	}
 
 	private void testIt(MyData card, Float[][] inputs) {
@@ -820,12 +829,14 @@ public class NeuralNetworkManagment {
 	 * OTHER
 	 */
 	//---> For getting data back into Analysis & 3D
-	public void backTo3D() {
+	public void backTo3D(Environment env) {
+		threads.add(new MyThread(p, 1000, env.editorLayer));
 
-		thread = new MyThread(p, 1000);
-
-		if (!thread.VGADone) // If it is a new thread then start it!
-			thread.start();
+		if (!threads.get(threads.size()-1).VGADone) // If it is a new thread then start it!
+			threads.get(threads.size()-1).start();
+		
+//		if (thread.VGADone)
+//			graphs.compare(env);
 	}
 
 	//---> Calculating sigmoid

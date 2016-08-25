@@ -16,6 +16,7 @@ public class Glv {
 	public static boolean globalHighLow = true; // Should the mapping of the SpaceSyntax colouring be local relative or global relative.
 	public static boolean shP = true; // Should it print to the console?
 	public static boolean VGAormeanShort = true;
+	public static boolean shouldICalculateWhole = false;
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
@@ -51,6 +52,7 @@ public class Glv {
 	public static ArrayList<PVector> errorCounter2Normal = new ArrayList<PVector>();
 	public static float bestMSE=100f, bestE=100f, bestVGAMSE=100f, bestVGAE=100f;
 	public static ArrayList<Float> timeToCalc = new ArrayList<Float>();
+	public static ArrayList<Float> timeToRespond = new ArrayList<Float>();
 	
 	public static float howManyCycles = 0f; // How often have I pressed "train NN". Shown a predefined number of cards.
 	public static float howMuchBiggerHidden = 2.5f;

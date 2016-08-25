@@ -136,14 +136,18 @@ public class FirstEclipse extends PApplet {
 			} else if (Glv.genOrA == 0) {
 				if (Glv.threadNN != null) {
 					if (Glv.threadNN.net != null) {
-						if (Glv.threadNN.net.thread != null) {
-							if (Glv.threadNN.net.thread.manBox.boxes[0][0] != null
-									&& Glv.threadNN.net.thread.manBox.boxes[0][0].height != null
-									&& Glv.threadNN.net.thread.manBox != null) {
-								Glv.threadNN.net.thread.manBox.draw();
+						if (Glv.threadNN.net.threads != null) {
+							if (Glv.threadNN.net.threads
+									.get(Glv.threadNN.net.threads.size() - 1).manBox.boxes[0][0] != null
+									&& Glv.threadNN.net.threads
+											.get(Glv.threadNN.net.threads.size() - 1).manBox.boxes[0][0].height != null
+									&& Glv.threadNN.net.threads
+											.get(Glv.threadNN.net.threads.size() - 1).manBox != null) {
+								Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size() - 1).manBox.draw();
 							}
-							if (Glv.shouldSpaceSyntax && Glv.threadNN.net.thread.spaceSyntax.highLow != null)
-								Glv.threadNN.net.thread.spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
+							if (Glv.shouldSpaceSyntax && Glv.threadNN.net.threads
+									.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.highLow != null)
+								Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.draw(); // Draws the first SpaceSyntax analysis 
 						}
 					}
 				}
@@ -185,8 +189,9 @@ public class FirstEclipse extends PApplet {
 				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
 					Glv.threadNN.net.neuralnet.draw(env);
 
-					if (Glv.threadNN.net.thread != null) {
-						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+					if (Glv.threadNN.net.threads != null) {
+						if (Glv.threadNN.net.threads
+								.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
 							graphs.drawNeuron(env); // Draw the comparing neurons.
 						}
 					}
@@ -209,8 +214,9 @@ public class FirstEclipse extends PApplet {
 				if (Glv.threadNN.net.dataLoaded && Glv.threadNN.net.neuralnet != null) {
 					Glv.threadNN.net.neuralnet.draw(env);
 
-					if (Glv.threadNN.net.thread != null) {
-						if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+					if (Glv.threadNN.net.threads != null) {
+						if (Glv.threadNN.net.threads
+								.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
 							graphs.drawNeuron(env); // Draw the comparing neurons.
 						}
 					}
@@ -334,24 +340,7 @@ public class FirstEclipse extends PApplet {
 		}
 
 		if (keyCode == ENTER) {
-			if (Glv.programMode == 1) {
-				if (Glv.threadNN != null) {
-					if (Glv.threadNN.net.dataLoaded) {
-						Glv.threadNN.net.testNN();
-					} else
-						println("Load Cards first.");
-				} else
-					println("Load Cards first.");
-			} else if (Glv.programMode == 3) {
-				//if (!Glv.neuronsStored) {
-				println("I'm going to store the neurons now.");
-				if (Glv.threadNN.net.setInputNeurons(env) > 3) // Creates the network according to the selected neurons.
-				{
-					Glv.neuronsStored = true;
-				} else
-					println("Not enough input neurons specified.");
-				//}
-			}
+			testNeurons();
 		}
 
 		if (Glv.threads.size() > 0) {
@@ -418,17 +407,45 @@ public class FirstEclipse extends PApplet {
 	 * FOR CONTROLLER
 	 */
 
+	public void testNeurons() {
+		if (Glv.programMode == 1) {
+			if (Glv.threadNN != null) {
+				if (Glv.threadNN.net.dataLoaded) {
+					float ellapsedTime = second() + minute() * 60 + hour() * 360;
+
+					Glv.threadNN.net.testNN(env);
+					ellapsedTime = (second() + minute() * 60 + hour() * 360) - ellapsedTime;
+					Glv.timeToRespond.add(ellapsedTime);
+				} else
+					println("Load Cards first.");
+			} else
+				println("Load Cards first.");
+		} else if (Glv.programMode == 3) {
+			//if (!Glv.neuronsStored) {
+			println("I'm going to store the neurons now.");
+			if (Glv.threadNN.net.setInputNeurons(env) > 3) // Creates the network according to the selected neurons.
+			{
+				Glv.neuronsStored = true;
+			} else
+				println("Not enough input neurons specified.");
+			//}
+		}
+	}
+
 	public void trainNeurons() {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
 				if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets != null) {
 					float ellapsedTime = second() + minute() * 60 + hour() * 360;
+					
+					for (int i = 0; i < Glv.numOfLearning; i++) {
+						Glv.threadNN.net.trainNN(graphs, env);
+					}					
 
-					Glv.threadNN.net.trainNN(graphs);
+					ellapsedTime = (second() + minute() * 60 + hour() * 360) - ellapsedTime;
 					Glv.timeToCalc.add(ellapsedTime / Glv.numOfCycles);
 
-					println("< Training NN. Ellapsed time: "
-							+ ((second() + minute() * 60 + hour() * 360) - ellapsedTime) + " >");
+					println("< Training NN. Ellapsed time: " + ellapsedTime + " >");
 				} else
 					println("Setup NN first.");
 			} else
@@ -703,8 +720,8 @@ public class FirstEclipse extends PApplet {
 						GenerateCSV.createDir(combination);
 
 						GenerateCSV.saveValuesToCSV(
-								new File("").getAbsolutePath() + "\\" + combination + "\\" + fileName,
-								counterS, avarageDistanceS, env, this);
+								new File("").getAbsolutePath() + "\\" + combination + "\\" + fileName, counterS,
+								avarageDistanceS, env, this);
 					}
 				}
 			}
@@ -713,15 +730,19 @@ public class FirstEclipse extends PApplet {
 
 	public void compareValues() {
 
-		if (Glv.threadNN.net.thread == null) {
-			Glv.threadNN.net.backTo3D();
+		if (Glv.threadNN.net.threads == null) {
+			Glv.threadNN.net.backTo3D(env);
 		}
 
-		if (Glv.threadNN.net.thread != null) {
+		if (Glv.threadNN.net.threads != null) {
 			if (graphs != null) {
 				graphs.compare(env);
 			}
 		}
+	}
+
+	public void shouldICalculateWhole(boolean theValue) { // Should I calculate whole VGA or just part of it?
+		Glv.shouldICalculateWhole = theValue;
 	}
 
 	public void saveNN() {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.gicentre.utils.stat.*;
 
+import com.sun.jmx.snmp.tasks.ThreadService;
 import com.sun.org.apache.bcel.internal.generic.POP;
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
@@ -43,6 +44,9 @@ public class DataAnalysis {
 
 		Glv.errorCounter = new ArrayList<PVector>();
 		Glv.errorCounter2 = new ArrayList<PVector>();
+		
+		Glv.errorCounter2Normal = new ArrayList<PVector>();
+		Glv.errorCounterNormal = new ArrayList<PVector>();
 
 		Glv.howManyCycles = 0f;
 
@@ -173,44 +177,64 @@ public class DataAnalysis {
 		//---> THIS DRAWS THE SPACESYNTAX ANALYSIS OF THE OUTPUT FORM AS NEURONS ON THE RIGHT OF THE SCREEN!
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net != null) {
-				if (Glv.threadNN.net.thread != null) {
-					if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+				if (Glv.threadNN.net.threads != null) {
+					if (Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
 
 						drawBoundary(
-								new PVector((8f * p.width
-										/ 10f) - (Glv.neuronSize * 1.2f
-												* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
+								new PVector(
+										(8f * p.width / 10f)
+												- (Glv.neuronSize * 1.2f
+														* Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size()
+																- 1).spaceSyntax.values.length)
+														* 0.5f,
 										(p.height / 2f) - (Glv.neuronSize * 1.2f
-												* Glv.threadNN.net.thread.spaceSyntax.values[0].length) * 0.5f),
-								Glv.threadNN.net.thread.spaceSyntax.values.length,
-								Glv.threadNN.net.thread.spaceSyntax.values[0].length, "VGA from generated form");
+												* Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size()
+														- 1).spaceSyntax.values[0].length)
+												* 0.5f),
+								Glv.threadNN.net.threads
+										.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values.length,
+								Glv.threadNN.net.threads
+										.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[0].length,
+								"VGA from generated form");
 
-						for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
-							for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
+						for (int i = 0; i < Glv.threadNN.net.threads
+								.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values.length; i++) {
+							for (int j = 0; j < Glv.threadNN.net.threads
+									.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i].length; j++) {
 								p.pushMatrix();
 								{
 									p.pushStyle();
 									{
 										if (env.editorLayer[i][j].iAmChosen) {
 											p.strokeWeight(1.2f);
-											p.stroke(360, 360,
-													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 360);
-											p.fill(360, 80,
-													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
+											p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.threads
+													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
+													360);
+											p.fill(360, 80, 180 * (1 - Glv.threadNN.net.threads
+													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
+													180);
 										} else {
 											p.strokeWeight(1.0f);
-											p.stroke(360, 0,
-													180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]), 180);
-											p.fill(360, 0, 180 * (1 - Glv.threadNN.net.thread.spaceSyntax.values[i][j]),
+											p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.threads
+													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
+													180);
+											p.fill(360, 0, 180 * (1 - Glv.threadNN.net.threads
+													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
 													180);
 										}
 
 										p.translate(8f * p.width / 10f, p.height / 2f);
 										p.translate(
 												(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f
-														* Glv.threadNN.net.thread.spaceSyntax.values.length) * 0.5f,
-												(Glv.neuronSize * 1.2f * j) - (Glv.neuronSize * 1.2f
-														* Glv.threadNN.net.thread.spaceSyntax.values[i].length) * 0.5f);
+														* Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size()
+																- 1).spaceSyntax.values.length)
+														* 0.5f,
+												(Glv.neuronSize * 1.2f * j)
+														- (Glv.neuronSize * 1.2f
+																* Glv.threadNN.net.threads
+																		.get(Glv.threadNN.net.threads.size()
+																				- 1).spaceSyntax.values[i].length)
+																* 0.5f);
 										p.ellipse(0, 0, Glv.neuronSize, Glv.neuronSize);
 									}
 									p.popStyle();
@@ -306,43 +330,61 @@ public class DataAnalysis {
 					num++;
 			}
 		}
-		extractValuableAnalysis(env, num);
-		calcDifference(); // Calculate difference between the selected points of the original loaded VGA and the newly generated one!
+
+		boolean areThreadsStillRunning = false;
+
+		for (MyThread thread : Glv.threadNN.net.threads) {
+			if (thread.isAlive())
+				areThreadsStillRunning = true;
+		}
+
+		if (!areThreadsStillRunning) {
+			int i = 0;
+			for (MyThread thread : Glv.threadNN.net.threads) {
+
+				extractValuableAnalysis(env, num, thread);
+				calcDifference(i++, thread, env); // Calculate difference between the selected points of the original loaded VGA and the newly generated one!
+			}
+		}
 	}
 
-	public void extractValuableAnalysis(Environment env, int length) {
+	public void extractValuableAnalysis(Environment env, int length, MyThread thread) {
 
-		if (Glv.threadNN.net.thread.spaceSyntax.values != null) {
+		if (Glv.threadNN.net.threads.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
 
-			float[][] spaceSyntaxValuesTemp = new float[Glv.threadNN.net.thread.spaceSyntax.values.length][Glv.threadNN.net.thread.spaceSyntax.values[0].length];
+			float[][] spaceSyntaxValuesTemp = new float[Glv.threadNN.net.threads
+					.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values.length][Glv.threadNN.net.threads
+							.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[0].length];
+
 			//---> MAP the values!
-			for (int i = 0; i < Glv.threadNN.net.thread.spaceSyntax.values.length; i++) {
-				for (int j = 0; j < Glv.threadNN.net.thread.spaceSyntax.values[i].length; j++) {
-					spaceSyntaxValuesTemp[i][j] = p.map(Glv.threadNN.net.thread.spaceSyntax.values[i][j],
-							Glv.highLowForNN.y, 1429f, -1f, 1f);
-					Glv.threadNN.net.thread.spaceSyntax.values[i][j] = spaceSyntaxValuesTemp[i][j];
+			for (int i = 0; i < thread.spaceSyntax.values.length; i++) {
+				for (int j = 0; j < thread.spaceSyntax.values[i].length; j++) {
+					spaceSyntaxValuesTemp[i][j] = p.map(thread.spaceSyntax.values[i][j], Glv.highLowForNN.y, 1429f, -1f,
+							1f);
+					thread.spaceSyntax.values[i][j] = spaceSyntaxValuesTemp[i][j];
 				}
 			}
 
 			//if (env.editorLayer[0].length == _analysis[0].length && env.editorLayer.length == _analysis.length) {
 			compareAnalysis = new Float[1][length];
-			compareAnalysisN = new Neuron[1][length];
+			//compareAnalysisN = new Neuron[1][length];
 			//Float [][] temp;
 			int counter = 0;
 			for (int i = 0; i < spaceSyntaxValuesTemp.length; i++) {
 				for (int j = 0; j < spaceSyntaxValuesTemp[i].length; j++) {
 					if (env.editorLayer[i][j].iAmChosen) {
 						compareAnalysis[0][counter] = spaceSyntaxValuesTemp[i][j];
-						compareAnalysisN[0][counter] = new Neuron(p,
-								new PVector(env.editorLayer[i][j].position.x + p.width / 10f * 3f,
-										env.editorLayer[i][j].position.y));
-						compareAnalysisN[0][counter].m_output = spaceSyntaxValuesTemp[i][j];
+						//						compareAnalysisN[0][counter] = new Neuron(p,
+						//								new PVector(env.editorLayer[i][j].position.x + p.width / 10f * 3f,
+						//										env.editorLayer[i][j].position.y));
+						//						compareAnalysisN[0][counter].m_output = spaceSyntaxValuesTemp[i][j];
 						counter++;
 					}
 				}
 			}
 			//}
 		}
+
 	}
 
 	private void test() {
@@ -360,54 +402,68 @@ public class DataAnalysis {
 		}
 	}
 
-	public void calcDifference() {
+	public void calcDifference(int m, MyThread thread, Environment env) {
 		if (compareAnalysis != null) {
 			difference = 0f;
 			precentageNormal = 0f;
 			//test(); // This checks if how I calculate the difference is accurate or not.
 
+			int counter = 0;
+			for (int i = 0; i < thread.spaceSyntax.values.length; i++) {
+				for (int j = 0; j < thread.spaceSyntax.values[i].length; j++) {
+					if (env.editorLayer[i][j].iAmChosen) {
+						difference += Math.pow(thread.spaceSyntax.values[i][j] - Glv.threadNN.net.trainingSet
+								.get(Glv.threadNN.net.shownCardIds.get(m)).rAnalysis[0][counter], 2f) / 2f;
+						precentageNormal += Math.abs(thread.spaceSyntax.values[i][j] - Glv.threadNN.net.trainingSet
+								.get(Glv.threadNN.net.shownCardIds.get(m)).rAnalysis[0][counter]);
+
+						counter++;
+					}
+				}
+			}
+
+			/*
 			for (int i = 0; i < compareAnalysis.length; i++) {
 				for (int j = 0; j < compareAnalysis[i].length; j++) {
 					//										difference += (Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
 					//												2));
-//					p.print("compAna: " + compareAnalysis[i][j] + " - rAnalysis[i][j]: "
-//							+ Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j] + " | ");
-					difference += Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j],
+					//					p.print("compAna: " + compareAnalysis[i][j] + " - rAnalysis[i][j]: "
+					//							+ Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j] + " | ");
+					difference += Math.pow(compareAnalysis[i][j] - Glv.threadNN.net.trainingSet.get(Glv.threadNN.net.shownCardIds.get(m)).rAnalysis[i][j],
 							2f) / 2f;
 					precentageNormal += Math
-							.abs(compareAnalysis[i][j] - Glv.threadNN.net.neuralnet.lastCard.rAnalysis[i][j]);
+							.abs(compareAnalysis[i][j] - Glv.threadNN.net.trainingSet.get(Glv.threadNN.net.shownCardIds.get(m)).rAnalysis[i][j]);
 				}
 			}
-			
-			//p.println("");
+			*/
 
 			precentage = 0;
 			precentage = difference;
 
 			precentageNormal /= (compareAnalysis.length * compareAnalysis[0].length) * 2f;
-			precentage /= (((compareAnalysis.length * compareAnalysis[0].length) * (Math.pow(2f, 2f)) / 2f));
-	
+			precentage /= (((compareAnalysis.length * compareAnalysis[0].length) * 2f)); // IS THE SAME AS == (Math.pow(2f, 2f)) /2f
+
 			precentage *= 100f;
 			precentageNormal *= 100f;
 
 			Glv.bestVGAMSE = setSmaller(precentage, Glv.bestVGAMSE);
 			Glv.bestVGAE = setSmaller(precentageNormal, Glv.bestVGAE);
-			
-			
-			Glv.errorCounter2.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentage));
-			Glv.errorCounter2Normal.add(new PVector(Glv.howManyCycles * Glv.numOfLearning, precentageNormal));
+
+			Glv.errorCounter2.add(new PVector(m * Glv.numOfLearning, precentage));
+			Glv.errorCounter2Normal.add(new PVector(m * Glv.numOfLearning, precentageNormal));
 			//Glv.errorCounter.add(new PVector(Glv.howManyCycles, precentage));
 			//p.println(counter);
 			lineChart2.setData(Glv.errorCounter2);
-			System.out.println("Last sum of VGA difference: " + precentage + "%" + "Difference: " + difference
-					+ "All possible differences: "
-					+ (((compareAnalysis.length * compareAnalysis[0].length) * (Math.pow(2f, 2f)) / 2f)));
+			//			System.out.println("Last sum of VGA difference: " + precentage + "%" + "Difference: " + difference
+			//					+ "All possible differences: "
+			//					+ (((compareAnalysis.length * compareAnalysis[0].length) * (Math.pow(2f, 2f)) / 2f)));
 		}
 	}
-	
-	public  float setSmaller(float input, float comparingTo)
-	{
-		if(input<comparingTo) return input;
-		else return comparingTo;
+
+	public float setSmaller(float input, float comparingTo) {
+		if (input < comparingTo)
+			return input;
+		else
+			return comparingTo;
 	}
 }

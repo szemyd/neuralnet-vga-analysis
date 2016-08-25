@@ -79,10 +79,16 @@ public class GenerateCSV {
 			Environment env, PApplet _p) {
 		File f = new File(sFileName + ".csv");
 		p = _p;
-		final String[][] csvMatrix;
-		if(Glv.errorCounter.size() > env.editorLayer.length)		csvMatrix = new String[Glv.errorCounter.size() + 2][20 + env.editorLayer[0].length];
-		else csvMatrix = new String[env.editorLayer.length + 2][20 + env.editorLayer[0].length];
-		
+		String[][] csvMatrix;
+
+		//		if(Glv.errorCounterNormal.size() > env.editorLayer.length)		csvMatrix = new String[Glv.errorCounterNormal.size() + 2][20 + env.editorLayer[0].length];
+		//		else if(Glv.errorCounter2Normal.size() > Glv.errorCounterNormal.size()) csvMatrix = new String[Glv.errorCounter2Normal.size() + 2][20 + env.editorLayer[0].length];
+		//		else if(Glv.errorCounter2.size()  > Glv.errorCounterNormal.size() && Glv.errorCounter2.size()  >Glv.errorCounterNormal.size()) csvMatrix = new String[Glv.errorCounter2.size() + 2][20 + env.editorLayer[0].length];
+		//		else csvMatrix = new String[env.editorLayer.length + 2][20 + env.editorLayer[0].length];
+		//		
+
+		csvMatrix = new String[2000 + 2][20 + env.editorLayer[0].length];
+
 		csvMatrix[0][0] = Integer.toString(Glv.genOrA) + " | " + counter + " | " + avarageDistanceOfNeurons;
 		csvMatrix[1][0] = "Size of Input";
 		csvMatrix[1][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer.length);
@@ -144,13 +150,22 @@ public class GenerateCSV {
 		csvMatrix[17][1] = Float.toString(Glv.bestVGAMSE);
 		csvMatrix[17][2] = Float.toString(Glv.bestVGAE);
 
-		csvMatrix[18][0] = "Time to Calculate: " + Glv.numOfLearning;
+		csvMatrix[18][0] = "Time to Teach: " + Glv.numOfLearning;
 		float newCounter = 0f;
 		for (Float num : Glv.timeToCalc) {
 			newCounter += num;
 		}
 		newCounter /= Glv.timeToCalc.size();
 		csvMatrix[18][1] = Float.toString(newCounter);
+		
+		
+		csvMatrix[19][0] = "Time to Respond: " + Glv.numOfLearning;
+		float newCounterRespond = 0f;
+		for (Float num : Glv.timeToRespond) {
+			newCounterRespond += num;
+		}
+		newCounterRespond /= Glv.timeToRespond.size();
+		csvMatrix[19][1] = Float.toString(newCounterRespond);
 
 		csvMatrix[0][5] = "Squared Mean Error %";
 		csvMatrix[0][7] = "Normal Error %";
@@ -237,10 +252,18 @@ public class GenerateCSV {
 			System.out.println("File already exists.");
 
 		//Glv.toNN=new ArrayList<String>();
+		Glv.programMode = 0;
+		p.draw();
+		p.saveFrame(sFileName + "\\" + "threeD");
 		Glv.programMode = 1;
-		p.saveFrame(sFileName +"\\" + "neuralNet");
+		p.draw();
+		p.saveFrame(sFileName + "\\" + "neuralNet");
+		Glv.programMode = 2;
+		p.draw();
+		p.saveFrame(sFileName + "\\" + "dataVisualised");
 		Glv.programMode = 3;
-		p.saveFrame(sFileName +"\\" + "editor");
+		p.draw();
+		p.saveFrame(sFileName + "\\" + "editor");
 	}
 
 	public static void saveSettings(String sFileName, String counter, String avarageDistanceOfNeurons,
