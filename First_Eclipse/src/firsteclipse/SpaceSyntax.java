@@ -397,7 +397,7 @@ public class SpaceSyntax {
 
 	public void save(MyBox[][] boxes) { // Saves the calculated information into an ArrayList of Strings.
 
-		values = new float[rectangles.length][rectangles[0].length];
+		values = new float[rectangles.length][rectangles[0].length]; // just to have them stored for each thread.
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
@@ -410,7 +410,11 @@ public class SpaceSyntax {
 
 		for (int j = 0; j < rectangles[0].length; j++) {
 			for (int i = 0; i < rectangles.length; i++) {
-				toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
+				if (Glv.neighbourHoodOrClustering) {
+					toNN.add(Integer.toString(rectangles[i][j].neighbourhood.size()));
+				} else {
+					toNN.add(Float.toString(rectangles[i][j].clusteringSize));
+				}
 				toNN.add(",");
 			}
 			toNN.add("\n");
@@ -530,8 +534,10 @@ public class SpaceSyntax {
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
-				rectangles[i][j].clusteringSize = checkNeighbourhood(i, j);
-				rectangles[i][j].clusteringSize /= possibleConnections;
+				if (rectangles[i][j].neighbourhood.size() > 0) {
+					rectangles[i][j].clusteringSize = checkNeighbourhood(i, j);
+					rectangles[i][j].clusteringSize /= possibleConnections;
+				}
 
 				//p.println("Connections for rect " + i + " | " + j + " = " + rectangles[i][j].clusteringSize);
 			}

@@ -391,7 +391,14 @@ public class FirstEclipse extends PApplet {
 				Glv.howManyUntilNow += Glv.numOfThreads;
 
 				String fileName = Integer.toString(Glv.howManyUntilNow + Glv.initialSeed);
-				String myDirectory = "GeneratedData";
+
+				String myDirectory;
+				if (Glv.neighbourHoodOrClustering) {
+					myDirectory = "GeneratedData";
+				} else {
+					myDirectory = "ClusteringData";
+				}
+
 				GenerateCSV.createDir(myDirectory);
 				GenerateCSV.generateCsvFile(
 						new File("").getAbsolutePath() + "\\" + myDirectory + "\\" + fileName + ".csv");

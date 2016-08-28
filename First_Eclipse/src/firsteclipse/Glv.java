@@ -37,7 +37,7 @@ public class Glv {
 	public static float spaceRoomSizeX = 129.4f * 1.5f; // How big is the SpaceSyntax analysis.
 	public static float spaceRoomSizeY = 160.42f * 1.5f;
 	
-	public static int neighbourhoodRadius = 5;
+	public static int neighbourhoodRadius = 3;
 
 	//---> NEURAL NETWORK
 	public static float LEARNING_RATE = 0.001f; // This damms the speed at which the backpropagation happens: slower learning rate.
