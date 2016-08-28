@@ -89,19 +89,37 @@ public class GenerateCSV {
 
 		csvMatrix = new String[2000 + 2][20 + env.editorLayer[0].length];
 
-		csvMatrix[0][0] = Integer.toString(Glv.genOrA) + " | " + counter + " | " + avarageDistanceOfNeurons;
-		csvMatrix[1][0] = "Size of Input";
-		csvMatrix[1][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer.length);
-		csvMatrix[1][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer[0].length);
+		if(Glv.splitNetwork)
+		{
+			csvMatrix[0][0] = Integer.toString(Glv.genOrA) + " | " + counter + " | " + avarageDistanceOfNeurons;
+			csvMatrix[1][0] = "Size of Input";
+			csvMatrix[1][1] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_input_layer.length);
+			csvMatrix[1][2] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_input_layer[0].length);
 
-		csvMatrix[2][0] = "Size of Hidden";
-		csvMatrix[2][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_hidden_layer.length);
-		csvMatrix[2][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_hidden_layer[0].length);
+			csvMatrix[2][0] = "Size of Hidden";
+			csvMatrix[2][1] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_hidden_layer.length);
+			csvMatrix[2][2] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_hidden_layer[0].length);
 
-		csvMatrix[3][0] = "Size of Output";
-		csvMatrix[3][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_output_layer.length);
-		csvMatrix[3][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+			csvMatrix[3][0] = "Size of Output";
+			csvMatrix[3][1] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_output_layer.length);
+			csvMatrix[3][2] = Integer.toString(Glv.threadNN.net.splitNeuralnets[0].m_output_layer[0].length);
 
+		}
+		else{
+			csvMatrix[0][0] = Integer.toString(Glv.genOrA) + " | " + counter + " | " + avarageDistanceOfNeurons;
+			csvMatrix[1][0] = "Size of Input";
+			csvMatrix[1][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer.length);
+			csvMatrix[1][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_input_layer[0].length);
+
+			csvMatrix[2][0] = "Size of Hidden";
+			csvMatrix[2][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_hidden_layer.length);
+			csvMatrix[2][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_hidden_layer[0].length);
+
+			csvMatrix[3][0] = "Size of Output";
+			csvMatrix[3][1] = Integer.toString(Glv.threadNN.net.neuralnet.m_output_layer.length);
+			csvMatrix[3][2] = Integer.toString(Glv.threadNN.net.neuralnet.m_output_layer[0].length);
+		}
+		
 		csvMatrix[4][0] = "Number of Chosen";
 		csvMatrix[4][1] = counter;
 		//		

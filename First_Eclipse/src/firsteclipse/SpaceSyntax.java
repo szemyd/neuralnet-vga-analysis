@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.sun.glass.ui.Size;
 import com.sun.javafx.geom.Line2D;
 
 import processing.core.PApplet;
@@ -116,6 +117,7 @@ public class SpaceSyntax {
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
 		//meanShortestPath();
 
+		clustering();
 		save(boxes);
 		//return true;
 	}
@@ -520,6 +522,65 @@ public class SpaceSyntax {
 		return adjacency_matrix;
 	}
 
+	private void clustering() {
+		float possibleConnections = (((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1))
+				* ((((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1)) - 1);
+
+		p.println("possibleConnections: " + possibleConnections);
+
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				rectangles[i][j].clusteringSize = checkNeighbourhood(i, j);
+				rectangles[i][j].clusteringSize /= possibleConnections;
+
+				//p.println("Connections for rect " + i + " | " + j + " = " + rectangles[i][j].clusteringSize);
+			}
+		}
+	}
+
+	private float checkNeighbourhood(int num_i, int num_j) {
+		float nSize = 0.0f;
+
+		for (int i = num_i - Glv.neighbourhoodRadius; i <= num_i + Glv.neighbourhoodRadius; i++) {
+			for (int j = num_j - Glv.neighbourhoodRadius; j <= num_j + Glv.neighbourhoodRadius; j++) {
+				nSize += checkNeighbourhoodOfThis(num_i, num_j, i, j);
+			}
+		}
+
+		return nSize;
+	}
+
+	private float checkNeighbourhoodOfThis(int orig_i, int orig_j, int num_i, int num_j) {
+		float nSize = 0.0f;
+
+		if (num_i >= 0 && num_j >= 0 && num_i < rectangles.length && num_j < rectangles[0].length) {
+			for (MyRect rect : rectangles[num_i][num_j].neighbourhood) {
+				nSize += checkNeighbourhoodOfThis2(orig_i, orig_j, num_i, num_j, rect);
+			}
+		}
+
+		//p.println(nSize);
+		return nSize;
+
+	}
+
+	private float checkNeighbourhoodOfThis2(int orig_i, int orig_j, int num_i, int num_j, MyRect rect) {
+		float nSize = 0.0f;
+
+		for (int i = orig_i - Glv.neighbourhoodRadius; i <= orig_i + Glv.neighbourhoodRadius; i++) {
+			for (int j = orig_j - Glv.neighbourhoodRadius; j <= orig_j + Glv.neighbourhoodRadius; j++) {
+				if (i >= 0 && j >= 0 && i < rectangles.length && j < rectangles[0].length) {
+					if (i == num_i && j == num_j) {
+					} else {
+						if (rectangles[i][j] == rect)
+							nSize += 1f;
+					}
+				}
+			}
+		}
+
+		return nSize;
+	}
 }
 
 /*	

@@ -174,11 +174,11 @@ public class Environment {
 				.plugTo(Glv.numOfCycles).moveTo(g3).setValue(10).setLabel("Cycles/Press");
 		cp5.addSlider("hiddenLayerSize").setPosition(205, 20).setSize(20, 100).setRange(0f, 5f).setNumberOfTickMarks(21)
 				.plugTo(Glv.howMuchBiggerHidden).moveTo(g3).setValue(1.5f).setLabel("Hidden Layer");
-		cp5.addSlider("splitSize").setPosition(265, 20).setSize(20, 100).setRange(0, 10).setNumberOfTickMarks(11)
+		cp5.addSlider("splitSize").setPosition(265, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(21)
 				.plugTo(Glv.splitSize).moveTo(g3).setValue(5).setLabel("Split Size");
 
 		//---> Sliders for Generating Data.
-		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(5)
+		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(21)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
 		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(21).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(1).setLabel("Solutions");

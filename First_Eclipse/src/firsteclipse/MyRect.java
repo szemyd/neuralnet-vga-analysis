@@ -17,6 +17,7 @@ public class MyRect {
 	public ArrayList<MyRect> neighbourhood = new ArrayList<MyRect>();
 	int[] shortestPath;
 	Float meanShortestPath;
+	Float clusteringSize = 0.0f;
 
 	public float height = 0.0f;
 
@@ -38,13 +39,13 @@ public class MyRect {
 
 	public void draw(PVector highLow) {
 
-		if (Glv.VGAormeanShort) {
+		if (Glv.neighbourHoodOrClustering) {
 			if (Glv.globalHighLow)
 				p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 0, 255), 360, 360);
 			else
 				p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 0, 255), 360, 360);
-		} else if (meanShortestPath != null)
-			p.fill(p.map(meanShortestPath, 0f, shortestPath.length * 10f, 0, 255), 360, 360);
+		} else if (clusteringSize != null)
+			p.fill(p.map(clusteringSize, 0f, 1f, 0, 255), 360, 360);
 
 		//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
 		//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);

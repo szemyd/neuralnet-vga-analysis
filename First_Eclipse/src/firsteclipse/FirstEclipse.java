@@ -339,6 +339,10 @@ public class FirstEclipse extends PApplet {
 			trainNeurons();
 		}
 
+		if (key == 't') {
+			Glv.neighbourHoodOrClustering = !Glv.neighbourHoodOrClustering;
+		}
+
 		if (keyCode == ENTER) {
 			testNeurons();
 		}
@@ -411,10 +415,13 @@ public class FirstEclipse extends PApplet {
 		if (Glv.programMode == 1) {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net.dataLoaded) {
-					float ellapsedTime = second() + minute() * 60 + hour() * 360;
+					float ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f);
 
-					Glv.threadNN.net.testNN(env);
-					ellapsedTime = (second() + minute() * 60 + hour() * 360) - ellapsedTime;
+					for (int i = 0; i < Glv.numOfLearning; i++) {
+						Glv.threadNN.net.testNN(env);
+					}
+
+					ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f) - ellapsedTime;
 					Glv.timeToRespond.add(ellapsedTime);
 				} else
 					println("Load Cards first.");
@@ -436,13 +443,12 @@ public class FirstEclipse extends PApplet {
 		if (Glv.threadNN != null) {
 			if (Glv.threadNN.net.dataLoaded) {
 				if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets != null) {
-					float ellapsedTime = second() + minute() * 60 + hour() * 360;
-					
-					for (int i = 0; i < Glv.numOfLearning; i++) {
-						Glv.threadNN.net.trainNN(graphs, env);
-					}					
+					//float ellapsedTime = millis() + second()*60 + minute() * 360 + hour() * 360;
+					float ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f);
 
-					ellapsedTime = (second() + minute() * 60 + hour() * 360) - ellapsedTime;
+					Glv.threadNN.net.trainNN(graphs, env);
+
+					ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f) - ellapsedTime;
 					Glv.timeToCalc.add(ellapsedTime / Glv.numOfCycles);
 
 					println("< Training NN. Ellapsed time: " + ellapsedTime + " >");
@@ -680,7 +686,7 @@ public class FirstEclipse extends PApplet {
 		if (env.editorLayer != null) {
 			if (Glv.threadNN != null) {
 				if (Glv.threadNN.net != null) {
-					if (Glv.threadNN.net.neuralnet != null) {
+					if (Glv.threadNN.net.neuralnet != null || Glv.threadNN.net.splitNeuralnets != null) {
 
 						int counter = 0;
 						float avarageDistance = 0.0f;

@@ -819,7 +819,7 @@ public class NeuralNetworkManagment {
 	
 	public  float setSmaller(float input, float comparingTo)
 	{
-		p.println("input: " + input + "comparingTo: " + comparingTo);
+		//p.println("input: " + input + "comparingTo: " + comparingTo);
 		if(input<comparingTo) return input;
 		else return comparingTo;
 	}

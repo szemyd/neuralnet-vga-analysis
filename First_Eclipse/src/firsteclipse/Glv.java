@@ -14,9 +14,11 @@ public class Glv {
 	public static boolean shouldDimReduction = true; // Should the generated cubes be reduced.
 	public static boolean shouldSpaceSyntax = true; // Should the SpaceSyntax Analysis work
 	public static boolean globalHighLow = true; // Should the mapping of the SpaceSyntax colouring be local relative or global relative.
+	public static boolean neighbourHoodOrClustering = false;
 	public static boolean shP = true; // Should it print to the console?
 	public static boolean VGAormeanShort = true;
 	public static boolean shouldICalculateWhole = false;
+	
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
 
@@ -34,6 +36,8 @@ public class Glv {
 
 	public static float spaceRoomSizeX = 129.4f * 1.5f; // How big is the SpaceSyntax analysis.
 	public static float spaceRoomSizeY = 160.42f * 1.5f;
+	
+	public static int neighbourhoodRadius = 5;
 
 	//---> NEURAL NETWORK
 	public static float LEARNING_RATE = 0.001f; // This damms the speed at which the backpropagation happens: slower learning rate.
