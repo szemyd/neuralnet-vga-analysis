@@ -210,17 +210,17 @@ public class DataAnalysis {
 											p.stroke(360, 360, 180 * (1 - Glv.threadNN.net.threads
 													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
 													360);
-											p.fill(360, 80, 180 * (1 - Glv.threadNN.net.threads
+											p.fill(360, 0, 180 * (1 - Glv.threadNN.net.threads
 													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
-													180);
+													360);
 										} else {
 											p.strokeWeight(1.0f);
 											p.stroke(360, 0, 180 * (1 - Glv.threadNN.net.threads
 													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
-													180);
+													360);
 											p.fill(360, 0, 180 * (1 - Glv.threadNN.net.threads
 													.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values[i][j]),
-													180);
+													360);
 										}
 
 										p.translate(8f * p.width / 10f, p.height / 2f);

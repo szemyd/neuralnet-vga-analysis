@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 import com.sun.glass.ui.Size;
+import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
@@ -116,11 +117,11 @@ public class MyData {
 								if (env.editorLayer[i][j].iAmChosen) {
 									p.strokeWeight(1.2f);
 									p.stroke(360, 360, 180 * (1 - _analysis[i][j]), 360);
-									p.fill(360, 80, 180 * (1 - _analysis[i][j]), 180);
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 360);
 								} else {
 									p.strokeWeight(1.0f);
-									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 180);
-									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 180);
+									p.stroke(360, 0, 180 * (1 - _analysis[i][j]), 360);
+									p.fill(360, 0, 180 * (1 - _analysis[i][j]), 360);
 								}
 
 								//							if (env.editorLayer[i][j].iAmChosen)
@@ -313,16 +314,26 @@ public class MyData {
 					if (j >= 0 && j < strings.length) {
 						//if (strings[j].length() > 0 && strings[j].length()<6) {
 						if (Character.isDigit(strings[j].charAt(0))) {
-							float num = (float) Integer.valueOf(strings[j]);
+							float num = Float.valueOf(strings[j]);
 							if (j < _analysis.length && i < _analysis[j].length)
 								//_analysis[i][j] = num; // Without mapping.
+								if (Glv.neighbourHoodOrClustering) {
 								if (num > 1429f)
 								_analysis[j][i] = 1f;
 								else if (num < Glv.highLowForNN.y)
 								_analysis[j][i] = -1f;
 								else
 								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1429f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
-							//}
+								//}
+								} else {
+								if (num > 1.0f)
+								_analysis[j][i] = 1f;
+								else if (num < 0f)
+								_analysis[j][i] = -1f;
+								else
+								_analysis[j][i] = p.map(num, 0, 1f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+
+								}
 						}
 					}
 				}

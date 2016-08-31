@@ -9,6 +9,9 @@ import processing.core.PVector;
 import sun.security.krb5.internal.EncAPRepPart;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import org.gicentre.utils.stat.XYChart;
@@ -41,9 +44,11 @@ public class FirstEclipse extends PApplet {
 	 */
 	public void setup() {
 
-		env.setupGui(); // Sets up the user interface
-		env.loadData(); // 03. Loads the CSV file for the surrounding buildings.
-		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
+		String path = gettingPath();
+
+		env.setupGui(Glv.path); // Sets up the user interface
+		env.loadData(Glv.path); // 03. Loads the CSV file for the surrounding buildings.
+		env.checkFilesUpdateSeed(Glv.path); // Checks how many analysis have been done already.
 
 		randomSeed(Glv.seed);
 		colorMode(PConstants.HSB, 360);
@@ -190,9 +195,13 @@ public class FirstEclipse extends PApplet {
 					Glv.threadNN.net.neuralnet.draw(env);
 
 					if (Glv.threadNN.net.threads != null) {
-						if (Glv.threadNN.net.threads
-								.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
-							graphs.drawNeuron(env); // Draw the comparing neurons.
+
+						if (Glv.threadNN.net.threads.size() > 0) {
+							if (Glv.threadNN.net.threads
+									.get(Glv.threadNN.net.threads.size() - 1).spaceSyntax.values != null) {
+
+								graphs.drawNeuron(env); // Draw the comparing neurons.
+							}
 						}
 					}
 				}
@@ -414,6 +423,27 @@ public class FirstEclipse extends PApplet {
 		}
 	}
 
+	private String gettingPath() {
+		URL url = FirstEclipse.class.getProtectionDomain().getCodeSource().getLocation(); //Gets the path
+		String jarPath = null;
+		try {
+			jarPath = URLDecoder.decode(url.getFile(), "UTF-8"); //Should fix it to be read correctly by the system
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		String parentPath = new File(jarPath).getParentFile().getPath(); //Path of the jar
+		parentPath = parentPath + File.separator;
+
+		System.out.println("Path: " + parentPath);
+		Glv.path = parentPath;
+
+		// parentPath = "C:\\Users\\ucqbdsz\\Desktop\\resources";
+
+		Glv.path = parentPath;
+
+		return parentPath;
+	}
 	/*
 	 * FOR CONTROLLER
 	 */
@@ -483,7 +513,7 @@ public class FirstEclipse extends PApplet {
 
 	public void analysisSetup() {
 		Glv.threads = new ArrayList<MyThread>();
-		env.checkFilesUpdateSeed(); // Checks how many analysis have been done already.
+		env.checkFilesUpdateSeed(Glv.path); // Checks how many analysis have been done already.
 
 		for (int i = 0; i < Glv.numOfThreads; i++) {
 			Glv.threads.add(new MyThread(this, Glv.howManyUntilNow + i));
@@ -559,6 +589,11 @@ public class FirstEclipse extends PApplet {
 	public void splitSize(int theValue) {
 		Glv.splitSize = theValue;
 	}
+
+	public void clustering(boolean theValue) {
+		Glv.neighbourHoodOrClustering = theValue;
+		println(Glv.neighbourHoodOrClustering);
+	}
 	//<---
 
 	public void genOrA(int theValue) {
@@ -601,6 +636,17 @@ public class FirstEclipse extends PApplet {
 	}
 
 	public void selectAll() {
+		if (env.editorLayer != null) {
+			for (int i = 0; i < env.editorLayer.length; i++) {
+				for (int j = 0; j < env.editorLayer[i].length; j++) {
+					env.editorLayer[i][j].iAmChosen = true;
+					env.editorLayer[i][j].colour = 360;
+				}
+			}
+		}
+	}
+
+	public void selectMiddle() {
 		if (env.editorLayer != null) {
 			for (int i = 0; i < env.editorLayer.length; i++) {
 				for (int j = 0; j < env.editorLayer[i].length; j++) {
@@ -687,7 +733,6 @@ public class FirstEclipse extends PApplet {
 	//<---
 
 	//---> For Data analysis
-
 	public void saveData() {
 
 		if (env.editorLayer != null) {

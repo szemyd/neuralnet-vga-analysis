@@ -117,7 +117,15 @@ public class SpaceSyntax {
 		// p.println("high: " + highLow.x + " | low: " + highLow.y);
 		//meanShortestPath();
 
-		clustering();
+		if (!Glv.neighbourHoodOrClustering) {
+			int numBoxes = checkHowManyBoxesUp(boxes);
+
+			if (numBoxes > 112)
+				clustering(); // Calculate Clustering Coefficient
+			else
+				setAllMaximum(); // If there arent enough boxes up set all points to high visibility
+		}
+		
 		save(boxes);
 		//return true;
 	}
@@ -526,17 +534,36 @@ public class SpaceSyntax {
 		return adjacency_matrix;
 	}
 
-	private void clustering() {
-		float possibleConnections = (((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1))
-				* ((((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1)) - 1);
+	private void setAllMaximum() {
 
-		p.println("possibleConnections: " + possibleConnections);
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				if (rectangles[i][j].neighbourhood.size() > 0) {
+					//					float possibleConnections = rectangles[i][j].neighbourhood.size()
+					//							* (rectangles[i][j].neighbourhood.size() - 1);
+					rectangles[i][j].clusteringSize = 1f;
+					//	p.println("possibleConnections: " + possibleConnections);
+				} else
+					rectangles[i][j].clusteringSize = 0f;
+			}
+		}
+	}
+
+	private void clustering() {
+		//		float possibleConnections = (((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1))
+		//				* ((((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1)) - 1);
+
+		//p.println("possibleConnections: " + possibleConnections);
 
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				if (rectangles[i][j].neighbourhood.size() > 0) {
 					rectangles[i][j].clusteringSize = checkNeighbourhood(i, j);
+
+					float possibleConnections = rectangles[i][j].neighbourhood.size()
+							* (rectangles[i][j].neighbourhood.size() - 1);
 					rectangles[i][j].clusteringSize /= possibleConnections;
+					//	p.println("possibleConnections: " + possibleConnections);
 				}
 
 				//p.println("Connections for rect " + i + " | " + j + " = " + rectangles[i][j].clusteringSize);
@@ -544,26 +571,36 @@ public class SpaceSyntax {
 		}
 	}
 
-	private float checkNeighbourhood(int num_i, int num_j) {
+	private float checkNeighbourhood(int i, int j) {
 		float nSize = 0.0f;
 
-		for (int i = num_i - Glv.neighbourhoodRadius; i <= num_i + Glv.neighbourhoodRadius; i++) {
-			for (int j = num_j - Glv.neighbourhoodRadius; j <= num_j + Glv.neighbourhoodRadius; j++) {
-				nSize += checkNeighbourhoodOfThis(num_i, num_j, i, j);
-			}
+		for (MyRect rect : rectangles[i][j].neighbourhood) {
+			nSize += checkNeighbourhoodOfThis(i, j, rect);
 		}
+
+		//		for (int i = num_i - Glv.neighbourhoodRadius; i <= num_i + Glv.neighbourhoodRadius; i++) {
+		//			for (int j = num_j - Glv.neighbourhoodRadius; j <= num_j + Glv.neighbourhoodRadius; j++) {
+		//				nSize += checkNeighbourhoodOfThis(num_i, num_j, i, j);
+		//			}
+		//		}
 
 		return nSize;
 	}
 
-	private float checkNeighbourhoodOfThis(int orig_i, int orig_j, int num_i, int num_j) {
+	private float checkNeighbourhoodOfThis(int i, int j, MyRect rect2) {
 		float nSize = 0.0f;
 
-		if (num_i >= 0 && num_j >= 0 && num_i < rectangles.length && num_j < rectangles[0].length) {
-			for (MyRect rect : rectangles[num_i][num_j].neighbourhood) {
-				nSize += checkNeighbourhoodOfThis2(orig_i, orig_j, num_i, num_j, rect);
-			}
+		for (MyRect rect : rectangles[i][j].neighbourhood) {
+			if (rect2.neighbourhood.contains(rect))
+				nSize++;
 		}
+
+		//nSize += checkNeighbourhoodOfThis(num_i, num_j);
+		//		if (num_i >= 0 && num_j >= 0 && num_i < rectangles.length && num_j < rectangles[0].length) {
+		//			for (MyRect rect : rectangles[num_i][num_j].neighbourhood) {
+		//				nSize += checkNeighbourhoodOfThis2(orig_i, orig_j, num_i, num_j, rect);
+		//			}
+		//		}
 
 		//p.println(nSize);
 		return nSize;
@@ -587,8 +624,84 @@ public class SpaceSyntax {
 
 		return nSize;
 	}
+
+	private int checkHowManyBoxesUp(MyBox[][] boxes) {
+		int numOfBoxes = 0;
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				if (boxes[i][j].height > 0.1f)
+					numOfBoxes++;
+			}
+		}
+		return numOfBoxes;
+	}
+
 }
 
+/*
+private void clustering() {
+	float possibleConnections = (((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1))
+			* ((((Glv.neighbourhoodRadius * 2) + 1) * ((Glv.neighbourhoodRadius * 2) + 1)) - 1);
+
+	p.println("possibleConnections: " + possibleConnections);
+
+	for (int i = 0; i < rectangles.length; i++) {
+		for (int j = 0; j < rectangles[i].length; j++) {
+			if (rectangles[i][j].neighbourhood.size() > 0) {
+				rectangles[i][j].clusteringSize = checkNeighbourhood(i, j);
+				rectangles[i][j].clusteringSize /= possibleConnections;
+			}
+
+			//p.println("Connections for rect " + i + " | " + j + " = " + rectangles[i][j].clusteringSize);
+		}
+	}
+}
+
+
+private float checkNeighbourhood(int num_i, int num_j) {
+	float nSize = 0.0f;
+
+	for (int i = num_i - Glv.neighbourhoodRadius; i <= num_i + Glv.neighbourhoodRadius; i++) {
+		for (int j = num_j - Glv.neighbourhoodRadius; j <= num_j + Glv.neighbourhoodRadius; j++) {
+			nSize += checkNeighbourhoodOfThis(num_i, num_j, i, j);
+		}
+	}
+
+	return nSize;
+}
+
+private float checkNeighbourhoodOfThis(int orig_i, int orig_j, int num_i, int num_j) {
+	float nSize = 0.0f;
+
+	if (num_i >= 0 && num_j >= 0 && num_i < rectangles.length && num_j < rectangles[0].length) {
+		for (MyRect rect : rectangles[num_i][num_j].neighbourhood) {
+			nSize += checkNeighbourhoodOfThis2(orig_i, orig_j, num_i, num_j, rect);
+		}
+	}
+
+	//p.println(nSize);
+	return nSize;
+
+}
+
+private float checkNeighbourhoodOfThis2(int orig_i, int orig_j, int num_i, int num_j, MyRect rect) {
+	float nSize = 0.0f;
+
+	for (int i = orig_i - Glv.neighbourhoodRadius; i <= orig_i + Glv.neighbourhoodRadius; i++) {
+		for (int j = orig_j - Glv.neighbourhoodRadius; j <= orig_j + Glv.neighbourhoodRadius; j++) {
+			if (i >= 0 && j >= 0 && i < rectangles.length && j < rectangles[0].length) {
+				if (i == num_i && j == num_j) {
+				} else {
+					if (rectangles[i][j] == rect)
+						nSize += 1f;
+				}
+			}
+		}
+	}
+
+	return nSize;
+}
+*/
 /*	
 	private static boolean canIsee(MyRect me, MyRect other, MyBox[][] boxes) { // Check if the lines intersect
 

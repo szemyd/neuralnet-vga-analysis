@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -22,6 +24,7 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Group;
 import javafx.scene.input.KeyCode;
+import junit.framework.Test;
 import peasy.PeasyCam;
 import peasy.*;
 import controlP5.*;
@@ -53,7 +56,7 @@ public class Environment {
 	public Neuron[][] editorLayer;
 
 	public Group g1, g2, g3, g4, g5, g6, g7;
-	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16;
+	Bang b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17;
 	public RadioButton modeSwitch, genOrASwitch, newOrNet;
 
 	private boolean closed = false;
@@ -65,7 +68,7 @@ public class Environment {
 		p = _p;
 	}
 
-	public void setupGui() {
+	public void setupGui(String path) {
 
 		cp5 = new ControlP5(p);
 		cam = new PeasyCam(p, 180);
@@ -77,9 +80,13 @@ public class Environment {
 
 		PFont pfont = p.createFont("Arial", 20, true); // use true/false for smooth/no-smooth
 		ControlFont font = new ControlFont(pfont, 241);
+		/*
+				String filePath = new File("").getAbsolutePath();
+				File folder = new File(filePath + "\\" + "GeneratedData");
+				File[] listOfFiles = folder.listFiles();
+				*/
 
-		String filePath = new File("").getAbsolutePath();
-		File folder = new File(filePath + "\\" + "GeneratedData");
+		File folder = new File(path + "\\" + "GeneratedData");
 		File[] listOfFiles = folder.listFiles();
 
 		//cp5.loadProperties(("controlP5.json"));
@@ -103,30 +110,56 @@ public class Environment {
 		//		     .setPosition(175,575)
 		//		     .setImages(loadImage("Arrow-Left.png"), loadImage("Arrow-Right.png"), loadImage("Refresh.png"))
 		//		     .updateSize();
+		//p.println("filePath: " + filePath);
 
+		String folderWithResources = path + "\\" + "src" + "\\" + "data";
+
+		try {
+			String what = new File(".").getCanonicalPath();
+			p.println("what: " + what);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//p.println(new File(".").getCanonicalPath());
+
+		//p.println("newPath: " + path);
+
+		p.println("folderWithResources: " + folderWithResources);
+		//folderWithResources = path;
 		//---> For ProgramModes
-		b1 = cp5.addBang("analysisSetup")
-				.setSize(100, 100).setPosition(10, 20).setImages(p.loadImage("playIconRoll.PNG"),
-						p.loadImage("playIcon.PNG"), p.loadImage("playIconPress.PNG"))
+		//URL tempURL = getClass().getClassLoader().getResource("playIconRoll.png");
+
+		b1 = cp5.addBang("analysisSetup").setSize(100, 100).setPosition(10, 20)
+				.setImages(p.loadImage(folderWithResources + "\\" + "playIconRoll.png"),
+						p.loadImage(folderWithResources + "\\" + "playIcon.png"),
+						p.loadImage(folderWithResources + "\\" + "playIconPress.png"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		b2 = cp5.addBang("loadDataSetup").setPosition(120, 20).setSize(100, 100)
-				.setImages(p.loadImage("loadRoll.PNG"), p.loadImage("load.PNG"), p.loadImage("loadPress.PNG"))
+				.setImages(p.loadImage(folderWithResources + "\\" + "loadRoll.png"),
+						p.loadImage(folderWithResources + "\\" + "load.png"),
+						p.loadImage(folderWithResources + "\\" + "loadPress.png"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		b3 = cp5.addBang("startEditor").setPosition(230, 20).setSize(100, 100)
-				.setImages(p.loadImage("editorRoll.PNG"), p.loadImage("editor.PNG"), p.loadImage("editorPress.PNG"))
+				.setImages(p.loadImage(folderWithResources + "\\" + "editorRoll.png"),
+						p.loadImage(folderWithResources + "\\" + "editor.png"),
+						p.loadImage(folderWithResources + "\\" + "editorPress.png"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 
 		b4 = cp5.addBang("setupNeuralNetwork").setPosition(340, 20).setSize(100, 100)
-				.setImages(p.loadImage("networkRoll.PNG"), p.loadImage("network.PNG"), p.loadImage("networkPress.PNG"))
+				.setImages(p.loadImage(folderWithResources + "\\" + "networkRoll.png"),
+						p.loadImage(folderWithResources + "\\" + "network.png"),
+						p.loadImage(folderWithResources + "\\" + "networkPress.png"))
 				.updateSize().moveTo(g1).plugTo(this, "shuffle");
 		//<---
 
 		b5 = cp5.addBang("closeIt").setPosition(p.width - 40f, 40f).setSize(20, 40);
 
 		b6 = cp5.addBang("resetEditor").setPosition(20, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
-		b13 = cp5.addBang("selectAll").setPosition(90, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+		b13 = cp5.addBang("selectMiddle").setPosition(90, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
+		b17 = cp5.addBang("selectAll").setPosition(160, 20).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 		b10 = cp5.addBang("everySecond").setPosition(20, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 		b11 = cp5.addBang("everyThird").setPosition(90, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
 		b12 = cp5.addBang("everyFourth").setPosition(160, 60).setSize(60, 20).moveTo(g5).plugTo(this, "shuffle");
@@ -161,7 +194,7 @@ public class Environment {
 				.setItemsPerRow(5).addItem("Specified", 0).addItem("Raw", 1).addItem("Analys", 2)
 				.setColorLabel(p.color(360)).activate(0).moveTo(g2).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
-		newOrNet = cp5.addRadioButton("newOrNet").setPosition(190, 80).setItemWidth(20).setItemHeight(50)
+		newOrNet = cp5.addRadioButton("newOrNet").setPosition(200, 80).setItemWidth(20).setItemHeight(50)
 				.setItemsPerRow(5).addItem("new", 0).addItem("net", 1).setColorLabel(p.color(360)).activate(1)
 				.moveTo(g4).hideLabels().setSpacingRow(20).setSpacingColumn(10);
 
@@ -178,24 +211,31 @@ public class Environment {
 				.plugTo(Glv.splitSize).moveTo(g3).setValue(5).setLabel("Split Size");
 
 		//---> Sliders for Generating Data.
-		cp5.addSlider("numberOfThreads").setPosition(25, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(21)
+		cp5.addSlider("numberOfThreads").setPosition(35, 20).setSize(20, 100).setRange(0, 20).setNumberOfTickMarks(21)
 				.plugTo(Glv.numOfThreads).moveTo(g4).setValue(5).setLabel("Threads");
-		cp5.addSlider("numberOfSolutions").setPosition(85, 20).setSize(20, 100).setRange(0, 5000)
+		cp5.addSlider("numberOfSolutions").setPosition(95, 20).setSize(20, 100).setRange(0, 5000)
 				.setNumberOfTickMarks(21).plugTo(Glv.numOfSolutions).moveTo(g4).setValue(1).setLabel("Solutions");
-		cp5.addSlider("numberOfRead").setPosition(145, 20).setSize(20, 100).setRange(0, listOfFiles.length)
-				.setNumberOfTickMarks(21).plugTo(Glv.numOfRead).moveTo(g4).setValue(listOfFiles.length)
-				.setLabel("Reading");
 
-		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(190, 20).setSize(60, 20).moveTo(g4)
-				.plugTo(Glv.shouldDimReduction);
+		if (listOfFiles != null) {
+			cp5.addSlider("numberOfRead").setPosition(155, 20).setSize(20, 100).setRange(0, listOfFiles.length)
+					.setNumberOfTickMarks(21).plugTo(Glv.numOfRead).moveTo(g4).setValue(listOfFiles.length)
+					.setLabel("Reading");
+		} else {
+			cp5.addSlider("numberOfRead").setPosition(145, 20).setSize(20, 100).setRange(0, 1).setNumberOfTickMarks(21)
+					.plugTo(Glv.numOfRead).moveTo(g4).setValue(0).setLabel("Reading");
+		}
+
+		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(200, 20).setSize(60, 20).moveTo(g4)
+				.plugTo(Glv.shouldDimReduction).setLabel("DimReduction");
 		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
-				.plugTo(Glv.editorForAnalysisOn);
+				.plugTo(Glv.editorForAnalysisOn).setLabel("ANAEditor");;
 		cp5.addToggle("splitNetwork").setValue(false).setPosition(90, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.splitNetwork).setLabel("Split");
-		
-		cp5.addToggle("shouldICalculateWhole").setValue(false).setPosition(20, 60).setSize(60, 20).moveTo(g7)
-		.plugTo(Glv.shouldICalculateWhole);
-	
+		cp5.addToggle("clustering").setValue(true).setPosition(160, 100).setSize(60, 20).moveTo(g5)
+		.plugTo(Glv.neighbourHoodOrClustering).setLabel("Neighbourhood");
+
+		cp5.addToggle("shouldICalculateWhole").setValue(true).setPosition(20, 60).setSize(60, 20).moveTo(g7)
+				.plugTo(Glv.shouldICalculateWhole);
 
 		g1.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
 		g2.setColorBackground(p.color(360, 360, 360, 160)).setColorForeground(p.color(360, 360, 360, 250));
@@ -259,16 +299,13 @@ public class Environment {
 
 		for (int i = 0; i < editorRect.length; i++) {
 			for (int j = 0; j < editorRect[i].length; j++) {
-				editorRect[i][j] = new MyRect(
-						p, new PVector(
-								edPosition.x + 20f
-										+ (p.floor((edSize.x - 40f)
-												/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize))))
-												* i,
-								edPosition.y + 20f
-										+ (p.floor((edSize.y - 40f)
-												/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize))))
-												* j),
+				editorRect[i][j] = new MyRect(p, new PVector(
+						edPosition.x + 20f
+								+ (p.floor((edSize.x - 40f)
+										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * i,
+						edPosition.y + 20f
+								+ (p.floor((edSize.y - 40f)
+										/ (editorBoxes.boxes[i].length / (Glv.cubeSizeReduced / Glv.cubeSize)))) * j),
 						new PVector(
 								(p.floor((edSize.x - 40f)
 										/ (editorBoxes.boxes.length / (Glv.cubeSizeReduced / Glv.cubeSize)))),
@@ -350,8 +387,8 @@ public class Environment {
 					p.fill(360, 0, 0, 200);
 					p.rect(30, 40, 470, 150, 30);
 					p.rect(510, 40, 300, 150, 30);
-					p.rect(820, 40, 300, 150, 30);
-					p.rect(1130, 40, 300, 150, 30);
+					p.rect(820, 40, 310, 150, 30);
+					p.rect(1140, 40, 290, 150, 30);
 					p.rect(1440, 40, 300, 150, 30);
 					p.rect(1750, 40, 300, 150, 30);
 					p.rect(2060, 40, 300, 150, 30);
@@ -453,12 +490,13 @@ public class Environment {
 	//<---
 
 	//---> Data Loading for envionrment.
-	public void loadData() {
+	public void loadData(String path) {
 
 		String filePath = new File("").getAbsolutePath();
-		s = p.loadShape(filePath + "/src/data/solid.obj"); // Load the 3D model of the public space.
-
-		String csvFile = filePath + "/src/data/sur.csv";
+		//		s = p.loadShape(filePath + "\\src\\data\\solid.obj"); // Load the 3D model of the public space.
+		s = p.loadShape(path + "\\src\\data\\solid.obj"); // Load the 3D model of the public space.
+		//	String csvFile = filePath + "\\src\\data\\sur.csv";
+		String csvFile = path + "\\src\\data\\sur.csv";
 
 		BufferedReader br = null;
 		String line = "";
@@ -504,10 +542,13 @@ public class Environment {
 			p.println("Environment CSV Data Loaded!");
 	}
 
-	public void checkFilesUpdateSeed() {
+	public void checkFilesUpdateSeed(String path) {
+
+		/*
 		String filePath = new File("").getAbsolutePath();
 		File folder = new File(filePath + "\\" + "GeneratedData");
-
+		*/
+		File folder = new File(path + "\\" + "GeneratedData");
 		File[] listOfFiles = folder.listFiles();
 
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -538,7 +579,7 @@ public class Environment {
 		MyData card = Glv.threadNN.net.testingSet.get(0); //Glv.cardContainingHighest);
 
 		editorLayer = new Neuron[Glv.threadNN.net.trainingSet
-				.get(0)._analysis.length][Glv.threadNN.net.trainingSet.get(0)._analysis[2].length];
+				.get(1)._analysis.length][Glv.threadNN.net.trainingSet.get(1)._analysis[0].length];
 
 		Neuron[][] dummyInput = new Neuron[1][1];
 

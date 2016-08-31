@@ -18,6 +18,8 @@ public class GenerateCSV {
 	public static void createDir(String myDirectory) {
 		String filePath = new File("").getAbsolutePath();
 
+		filePath = Glv.path;
+		
 		File file = new File(filePath + "\\" + myDirectory);
 		if (!file.exists()) {
 			if (file.mkdir()) {

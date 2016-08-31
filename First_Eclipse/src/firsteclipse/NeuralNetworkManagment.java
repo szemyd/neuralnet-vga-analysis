@@ -37,9 +37,9 @@ public class NeuralNetworkManagment {
 
 	public static float[] g_sigmoid = new float[200]; // The precalculated values for the sigmoid function are contained this.
 
-	List <MyThread> threads;
-	List <Integer> shownCardIds= new ArrayList<Integer>();
-	//MyThread thread;
+	List<MyThread> threads;
+	List<Integer> shownCardIds = new ArrayList<Integer>();
+	MyThread singleThread;
 
 	public NeuralNetworkManagment(PApplet _p) {
 		p = _p;
@@ -127,7 +127,7 @@ public class NeuralNetworkManagment {
 
 							for (int j = 0; j < thisRow.length; j++) { // Go through each element of thisRow.
 
-								if (!thisRow[j].isEmpty()) {
+								if (!thisRow[j].isEmpty() && thisRow[j] != "") {
 									char c = thisRow[j].charAt(0);
 
 									if (isItID) { // If this switch is on then store the file as an ID.
@@ -248,7 +248,7 @@ public class NeuralNetworkManagment {
 							if (num < Glv.highLowForNN.y && num > 6)
 								Glv.highLowForNN.y = num;
 						} catch (NumberFormatException ex) { // handle your exception
-							p.println("Was not a number: " + strings[i]);
+							//p.println("Was not a number: " + strings[i]);
 						}
 
 					}
@@ -305,8 +305,8 @@ public class NeuralNetworkManagment {
 	public void setupNeuralNetwork(Environment env) {
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
 
-		threads = new ArrayList<MyThread>();
 		
+
 		if (dataLoaded) {
 			switch (Glv.genOrA) {
 
@@ -566,7 +566,7 @@ public class NeuralNetworkManagment {
 	}
 
 	private int calcSplit() {
-		return p.ceil((trainingSet.get(0).rAnalysis.length * trainingSet.get(0).rAnalysis[0].length) / Glv.splitSize);
+		return p.ceil((trainingSet.get(1).rAnalysis.length * trainingSet.get(1).rAnalysis[0].length) / Glv.splitSize);
 	}
 	//<---
 
@@ -623,17 +623,22 @@ public class NeuralNetworkManagment {
 	//---> Interact with NN.
 	public void trainNN(DataAnalysis graphs, Environment env) {
 
+		
+		
 		if (dataLoaded) {
 			//training(10, graphs, Glv.howManyCycles); // This is so we have the number the NN original performs as.
-
+			threads = new ArrayList<MyThread>();
+			
 			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
 				training(Glv.numOfLearning, graphs, Glv.howManyCycles);
-				
-				if (Glv.genOrA != 2)
-					backTo3D(env); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
-			}
 
-			
+				if (!Glv.shouldICalculateWhole) {
+					if (Glv.genOrA != 2)
+						backTo3D(env); // Crates a new thread and calculates the SpaceSyntax analysis according to the generated form. 
+				}
+			}
+			if (Glv.shouldICalculateWhole)
+				backTo3D(env); // If the whole is calculated than don't do it for each cycle.
 
 		}
 
@@ -644,7 +649,7 @@ public class NeuralNetworkManagment {
 		float counterNormal = 0f;
 		for (int i = 0; i < Glv.numOfLearning; i++) {
 			int row = (int) p.floor(p.random(0, trainingSet.size()));
-			
+
 			switch (Glv.genOrA) {
 			case 0:
 				if (Glv.neuronsStored)
@@ -664,7 +669,7 @@ public class NeuralNetworkManagment {
 				}
 				break;
 			}
-			
+
 			shownCardIds.add(row);
 
 			if (Glv.splitNetwork) {
@@ -712,7 +717,6 @@ public class NeuralNetworkManagment {
 		precentage *= 100f;
 		precentageNormal *= 100f;
 
-
 		Glv.howManyCycles++;
 		Glv.errorCounter.add(new PVector(num * Glv.numOfLearning, precentage));
 		Glv.errorCounterNormal.add(new PVector(num * Glv.numOfLearning, precentageNormal));
@@ -720,11 +724,10 @@ public class NeuralNetworkManagment {
 		//p.println(counter);
 		graphs.lineChart.setData(Glv.errorCounter);
 		System.out.println("Squared Mean Error: " + precentage + "%  |  Error: " + precentageNormal + "%");
-		
 
 		Glv.bestMSE = setSmaller(precentage, Glv.bestMSE);
 		Glv.bestE = setSmaller(precentageNormal, Glv.bestE);
-		
+
 		//p.println("smallest: " + Glv.bestMSE);
 	}
 
@@ -816,12 +819,13 @@ public class NeuralNetworkManagment {
 			testingSet.remove(card);
 		}
 	}
-	
-	public  float setSmaller(float input, float comparingTo)
-	{
+
+	public float setSmaller(float input, float comparingTo) {
 		//p.println("input: " + input + "comparingTo: " + comparingTo);
-		if(input<comparingTo) return input;
-		else return comparingTo;
+		if (input < comparingTo)
+			return input;
+		else
+			return comparingTo;
 	}
 	//<---
 
@@ -830,13 +834,24 @@ public class NeuralNetworkManagment {
 	 */
 	//---> For getting data back into Analysis & 3D
 	public void backTo3D(Environment env) {
-		threads.add(new MyThread(p, 1000, env.editorLayer));
+		if (Glv.shouldICalculateWhole) {
+			threads = new ArrayList<MyThread>();
+			
+			threads.add(new MyThread(p, 1000, env.editorLayer));
 
-		if (!threads.get(threads.size()-1).VGADone) // If it is a new thread then start it!
-			threads.get(threads.size()-1).start();
-		
-//		if (thread.VGADone)
-//			graphs.compare(env);
+		//	if (!threads.get(threads.size() - 1).VGADone) // If it is a new thread then start it!
+				threads.get(threads.size() - 1).start();
+		}
+
+		else
+		{
+			threads.add(new MyThread(p, 1000, env.editorLayer));
+
+			if (!threads.get(threads.size() - 1).VGADone) // If it is a new thread then start it!
+				threads.get(threads.size() - 1).start();
+		}
+		//		if (thread.VGADone)
+		//			graphs.compare(env);
 	}
 
 	//---> Calculating sigmoid

@@ -14,10 +14,10 @@ public class Glv {
 	public static boolean shouldDimReduction = true; // Should the generated cubes be reduced.
 	public static boolean shouldSpaceSyntax = true; // Should the SpaceSyntax Analysis work
 	public static boolean globalHighLow = true; // Should the mapping of the SpaceSyntax colouring be local relative or global relative.
-	public static boolean neighbourHoodOrClustering = false;
+	public static boolean neighbourHoodOrClustering = true; // Am I working with neighbourhood size or Clustering Coefficient?
 	public static boolean shP = true; // Should it print to the console?
-	public static boolean VGAormeanShort = true;
-	public static boolean shouldICalculateWhole = false;
+	public static boolean VGAormeanShort = true; // Not used.
+	public static boolean shouldICalculateWhole = true; // Should I calculate all locations when VGA is run on output form or just check specific neurons
 	
 
 	public static float chance = 99.5f; // How big are the chances that a cube is a seed
@@ -25,7 +25,7 @@ public class Glv {
 	//---> Solution settings and optimal calculation
 	public static int numOfThreads = 1; // How many parallel threads should there be
 	public static int numOfSolutions = 1; // How many solutions do I want to generate
-	public static int numOfRead = 10000;
+	public static int numOfRead = 10000; // How many cards should I read in?
 
 	//---> Form generating settings
 	public static float cubeSize = 5f; // How big is the cube that we are using.
@@ -37,7 +37,7 @@ public class Glv {
 	public static float spaceRoomSizeX = 129.4f * 1.5f; // How big is the SpaceSyntax analysis.
 	public static float spaceRoomSizeY = 160.42f * 1.5f;
 	
-	public static int neighbourhoodRadius = 3;
+	public static int neighbourhoodRadius = 3; // How big should the neighbourhood be for Clustering Coefficient?
 
 	//---> NEURAL NETWORK
 	public static float LEARNING_RATE = 0.001f; // This damms the speed at which the backpropagation happens: slower learning rate.
@@ -66,7 +66,7 @@ public class Glv {
 	//---> For the ENVIRONMENT
 	public static int programMode = 0; // Should it generate data or load Neural Network?
 	public static boolean newOrNet = false; // Should I display in 3D the data generating or the current network?
-	public static boolean editorForAnalysisOn = false;
+	public static boolean editorForAnalysisOn = false; // Is the editor that let's you place boxes active or not?
 
 	/* 
 	 * OTHER GLOBAL VARIABLES
@@ -79,7 +79,7 @@ public class Glv {
 	public static int spaceDivisionX = ((int) spaceRoomSizeX / (int) spaceCubeSize);
 	public static int spaceDivisionY = ((int) spaceRoomSizeY / (int) spaceCubeSize);
 
-	public static int seed = 2020;
+	public static int seed = 10500;
 	public static int initialSeed = seed;
 	public static int whichToDisplay = 0;
 	public static int isDone = 0;
@@ -98,6 +98,8 @@ public class Glv {
 	public static boolean threadSuspended = false;
 
 	public static int neuronSize = 16;
+	
+	public static String path;
 	
 	
 	
