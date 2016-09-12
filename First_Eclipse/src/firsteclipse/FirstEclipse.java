@@ -1,3 +1,18 @@
+/*
+ * This program was created for 
+ * partial fulfillment of the requirements 
+ * for the degree of Master of Science in Adaptive Architecture & Computation 
+ * from University College London.
+ * 
+ * Daniel Szemerey
+ * 01/09/2016
+ * 
+ *  Thesis title: 
+ *  Integrating Visibility Graph Analysis: 
+ *  Training an Artificial Neural Network 
+ *  to recognize the underlying structures of space
+ */
+
 package firsteclipse;
 
 import processing.core.PApplet;
@@ -171,8 +186,11 @@ public class FirstEclipse extends PApplet {
 				if (Glv.editorForAnalysisOn && !Glv.newOrNet) {
 					if (env.spaceSyntax != null) {
 						if (env.spaceSyntax.rectangles != null) {
-							env.spaceSyntax.drawResponded();
-							env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
+							if (!env.isUpdated) {
+								env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
+								env.spaceSyntax.setDrawHeight();
+								env.spaceSyntax.drawResponded();
+							}
 						}
 					}
 
@@ -424,26 +442,16 @@ public class FirstEclipse extends PApplet {
 	}
 
 	private String gettingPath() {
-		URL url = FirstEclipse.class.getProtectionDomain().getCodeSource().getLocation(); //Gets the path
-		String jarPath = null;
-		try {
-			jarPath = URLDecoder.decode(url.getFile(), "UTF-8"); //Should fix it to be read correctly by the system
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
 
-		String parentPath = new File(jarPath).getParentFile().getPath(); //Path of the jar
-		parentPath = parentPath + File.separator;
+		String path = new File("").getAbsolutePath(); // This is for when run in Eclipse.
+		//String path = System.getProperty("user.home") + "\\" + "Desktop"+ "\\" + "Resources"; // This is for when deployed on another PC.
 
-		System.out.println("Path: " + parentPath);
-		Glv.path = parentPath;
+		Glv.path = path;
+		println(path);
 
-		// parentPath = "C:\\Users\\ucqbdsz\\Desktop\\resources";
-
-		Glv.path = parentPath;
-
-		return parentPath;
+		return Glv.path;
 	}
+
 	/*
 	 * FOR CONTROLLER
 	 */
@@ -454,9 +462,9 @@ public class FirstEclipse extends PApplet {
 				if (Glv.threadNN.net.dataLoaded) {
 					float ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f);
 
-					for (int i = 0; i < Glv.numOfLearning; i++) {
-						Glv.threadNN.net.testNN(env);
-					}
+					//for (int i = 0; i < Glv.numOfLearning; i++) {
+					Glv.threadNN.net.testNN(env);
+					//}
 
 					ellapsedTime = ((hour() * 3600f) + (minute() * 60f) + second() + millis() / 1000f) - ellapsedTime;
 					Glv.timeToRespond.add(ellapsedTime);

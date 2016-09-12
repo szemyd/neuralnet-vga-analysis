@@ -320,10 +320,10 @@ public class MyData {
 								if (Glv.neighbourHoodOrClustering) {
 								if (num > 1429f)
 								_analysis[j][i] = 1f;
-								else if (num < Glv.highLowForNN.y)
+								else if (num < 10)
 								_analysis[j][i] = -1f;
 								else
-								_analysis[j][i] = p.map(num, Glv.highLowForNN.y, 1429f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
+								_analysis[j][i] = p.map(num, 10, 1429f, -1f, 1f); //1200f,-1f, 1f); // Mapping the values according to the highest and lowest visibility in the set.
 								//}
 								} else {
 								if (num > 1.0f)

@@ -52,6 +52,8 @@ public class Environment {
 	PeasyCam cam;
 
 	PShape s;
+	
+	public static boolean isUpdated = false;
 
 	public Neuron[][] editorLayer;
 
@@ -346,7 +348,7 @@ public class Environment {
 				p.fill(360, 0, 280);
 
 				p.translate(0, 0, -.005f);
-				p.rect(0, 0, 520f, 560f);
+				//p.rect(0, 0, 520f, 560f);
 
 				p.translate(0, 0, -.01f);
 
@@ -494,7 +496,7 @@ public class Environment {
 
 		String filePath = new File("").getAbsolutePath();
 		//		s = p.loadShape(filePath + "\\src\\data\\solid.obj"); // Load the 3D model of the public space.
-		s = p.loadShape(path + "\\src\\data\\solid.obj"); // Load the 3D model of the public space.
+		s = p.loadShape(path + "\\src\\data\\solid2.obj"); // Load the 3D model of the public space.
 		//	String csvFile = filePath + "\\src\\data\\sur.csv";
 		String csvFile = path + "\\src\\data\\sur.csv";
 
@@ -655,6 +657,8 @@ public class Environment {
 			}
 
 		}
+		
+		isUpdated=false;
 	}
 
 	public void setSpaceSyntaxValues() {
@@ -701,6 +705,8 @@ public class Environment {
 
 								}
 							}
+							
+							isUpdated=true;
 						}
 					}
 				}

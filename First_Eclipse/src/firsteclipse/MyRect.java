@@ -20,6 +20,7 @@ public class MyRect {
 	Float clusteringSize = 0.0f;
 
 	public float height = 0.0f;
+	public float[] corners = new float[4];
 
 	public MyRect(PApplet _p, PVector _position, int _iD) {
 		p = _p;
@@ -39,6 +40,7 @@ public class MyRect {
 
 	public void draw(PVector highLow) {
 
+		p.noStroke();
 		if (Glv.neighbourHoodOrClustering) {
 			if (Glv.globalHighLow)
 				p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 0, 255), 360, 360);
@@ -50,20 +52,7 @@ public class MyRect {
 		//		if (Glv.globalHighLow) p.fill(p.map(neighbourhood.size(), Glv.highLow.y, Glv.highLow.x, 30, 360), 360, 360);
 		//				else p.fill(p.map(neighbourhood.size(), highLow.y, highLow.x, 30, 360), 360, 360);
 
-		if (height < 0.1f) {
-			p.pushMatrix();
-			{
-				// p.translate((Glv.roomSizeX/Glv.divisionX)*0.5f,
-				// (Glv.roomSizeY/Glv.divisionY)*0.5f, 0); // Shift because
-				// boxesare in center mode.
-				p.translate(position.x, position.y, 0f);
-				p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
-				// p.box(Glv.roomSizeX/Glv.divisionX,
-				// Glv.roomSizeY/Glv.divisionY, height*4.0f);
-				// p.point(0, 0, 0);
-			}
-			p.popMatrix();
-		}
+		drawVertex();
 	}
 
 	public void drawResponded(PVector highLow) {
@@ -71,12 +60,123 @@ public class MyRect {
 			p.fill(110);
 		else
 			p.fill(p.map(height, -1f, 1f, 0, 255), 360, 360);
-		p.pushMatrix();
+
+		drawVertex();
+
+		/*p.pushMatrix();
 		{
 			p.translate(position.x, position.y, 0.0f);
 			p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
 		}
 		p.popMatrix();
+		*/
+	}
+
+	void drawVertex() {
+		if (height < 0.1f) {
+			p.pushMatrix();
+			{
+				// p.translate((Glv.roomSizeX/Glv.divisionX)*0.5f,
+				// (Glv.roomSizeY/Glv.divisionY)*0.5f, 0); // Shift because
+				// boxesare in center mode.
+
+				//	float howHigh = p.map(neighbourhood.size(), highLow.y, highLow.x, 0, -20f);
+				//p.translate(position.x, position.y, howHigh);
+				//p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
+
+				//--> Top and bottom triangle 1
+				p.beginShape();
+				{
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[0]);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[1]);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[2]);
+				}
+				p.endShape();
+				p.beginShape();
+				{
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[0] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[1] - 20f);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[2] - 20f);
+				}
+				p.endShape();
+				//<---
+
+				p.beginShape();
+				{
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[0]);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[0] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[1] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[1]);
+
+				}
+				p.endShape();
+
+				p.beginShape();
+				{
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[0]);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[0] - 20f);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[2] - 20f);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[2]);
+
+				}
+				p.endShape();
+
+				//--> Top and bottom triangle 2
+				p.beginShape();
+				{
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[1]);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[2]);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[3]);
+				}
+				p.endShape();
+				p.beginShape();
+				{
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[1] - 20f);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[2] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[3] - 20f);
+				}
+				p.endShape();
+				//<--
+
+				p.beginShape();
+				{
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[2]);
+					p.vertex(position.x - Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[2] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[3] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[3]);
+
+				}
+				p.endShape();
+				p.beginShape();
+				{
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[3]);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f,
+							corners[3] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,
+							corners[1] - 20f);
+					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f, corners[1]);
+
+				}
+				p.endShape();
+
+				// p.box(Glv.roomSizeX/Glv.divisionX,
+				// Glv.roomSizeY/Glv.divisionY, height*4.0f);
+				// p.point(0, 0, 0);
+			}
+			p.popMatrix();
+		}
 	}
 
 	public void drawEditor() {

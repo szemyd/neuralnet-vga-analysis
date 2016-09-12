@@ -56,8 +56,10 @@ public class SpaceSyntax {
 	public void draw() {
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
-				if (highLow != null && rectangles[i][j] != null)
+				if (highLow != null && rectangles[i][j] != null) {
+
 					rectangles[i][j].draw(highLow);
+				}
 			}
 		}
 	}
@@ -67,6 +69,53 @@ public class SpaceSyntax {
 			for (int j = 0; j < rectangles[i].length; j++) {
 				if (highLow != null && rectangles[i][j] != null)
 					rectangles[i][j].drawResponded(highLow);
+			}
+		}
+	}
+
+	public void setDrawHeight() {
+		for (int i = 0; i < rectangles.length; i++) {
+			for (int j = 0; j < rectangles[i].length; j++) {
+				if (highLow != null && rectangles[i][j] != null) {
+
+					float[] corners = new float[4];
+
+					if (i - 1 > 0 && j - 1 > 0) {
+						rectangles[i][j].corners[0] = (rectangles[i - 1][j - 1].neighbourhood.size()
+								+ rectangles[i][j - 1].neighbourhood.size() + rectangles[i - 1][j].neighbourhood.size()
+								+ rectangles[i][j].neighbourhood.size()) * 0.25f;
+					} else {
+						rectangles[i][j].corners[0] = rectangles[i][j].neighbourhood.size();
+					}
+
+					if (i + 1 < rectangles.length && j - 1 > 0) {
+						rectangles[i][j].corners[1] = (rectangles[i + 1][j - 1].neighbourhood.size()
+								+ rectangles[i][j - 1].neighbourhood.size() + rectangles[i + 1][j].neighbourhood.size()
+								+ rectangles[i][j].neighbourhood.size()) * 0.25f;
+					} else {
+						rectangles[i][j].corners[1] = rectangles[i][j].neighbourhood.size();
+					}
+
+					if (i - 1 > 0 && j + 1 < rectangles[i].length) {
+						rectangles[i][j].corners[2] = (rectangles[i - 1][j + 1].neighbourhood.size()
+								+ rectangles[i - 1][j].neighbourhood.size() + rectangles[i][j + 1].neighbourhood.size()
+								+ rectangles[i][j].neighbourhood.size()) * 0.25f;
+					} else {
+						rectangles[i][j].corners[2] = rectangles[i][j].neighbourhood.size();
+					}
+
+					if (i + 1 < rectangles.length && j + 1 < rectangles[i].length) {
+						rectangles[i][j].corners[3] = (rectangles[i + 1][j + 1].neighbourhood.size()
+								+ rectangles[i + 1][j].neighbourhood.size() + rectangles[i][j + 1].neighbourhood.size()
+								+ rectangles[i][j].neighbourhood.size()) * 0.25f;
+					} else {
+						rectangles[i][j].corners[3] = rectangles[i][j].neighbourhood.size();
+					}
+
+					for (int k = 0; k < corners.length; k++) {
+						rectangles[i][j].corners[k] = p.map(rectangles[i][j].corners[k], highLow.x, highLow.y, 5f, -20f);
+					}
+				}
 			}
 		}
 	}
@@ -125,8 +174,9 @@ public class SpaceSyntax {
 			else
 				setAllMaximum(); // If there arent enough boxes up set all points to high visibility
 		}
-		
+
 		save(boxes);
+		setDrawHeight(); // Calculates a smooth surface to draw the rectangles.
 		//return true;
 	}
 
