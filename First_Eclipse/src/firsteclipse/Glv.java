@@ -47,7 +47,7 @@ public class Glv {
 	public static Integer[] netSize = new Integer[6]; // How many neurons should the layer contain. INPUT || HIDDEN || OUTPUT
 	public static int numOfLearning = 500; // How many cards should I show with one click?
 	public static int numOfCycles = 10;
-	public static boolean splitNetwork = false; // Should the system consist of smaller networks
+	public static boolean splitNetwork = true; // Should the system consist of smaller networks
 	public static int splitSize = 2; // How big should the split be?
 
 	public static ArrayList<PVector> errorCounter = new ArrayList<PVector>();

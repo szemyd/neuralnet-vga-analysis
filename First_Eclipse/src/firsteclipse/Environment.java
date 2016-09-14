@@ -232,7 +232,7 @@ public class Environment {
 		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.editorForAnalysisOn).setLabel("ANAEditor");
 		;
-		cp5.addToggle("splitNetwork").setValue(false).setPosition(90, 100).setSize(60, 20).moveTo(g5)
+		cp5.addToggle("splitNetwork").setValue(true).setPosition(90, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.splitNetwork).setLabel("Split");
 		cp5.addToggle("clustering").setValue(true).setPosition(160, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.neighbourHoodOrClustering).setLabel("Neighbourhood");
@@ -298,7 +298,7 @@ public class Environment {
 				.floor(editorBoxes.boxes[0].length / (Glv.cubeSizeReduced / Glv.cubeSize))];
 
 		edSize = new PVector(editorBoxes.boxes.length * 30f, editorBoxes.boxes[0].length * 30f);
-		edPosition = new PVector(p.width - edSize.x - 20, p.height * 0.5f - edSize.y * 0.5f);
+		edPosition = new PVector(p.width - edSize.x - 20, ((p.height-150f) * 0.5f+150f) - edSize.y * 0.5f);
 
 		for (int i = 0; i < editorRect.length; i++) {
 			for (int j = 0; j < editorRect[i].length; j++) {
@@ -407,16 +407,6 @@ public class Environment {
 
 	public void drawEditor() {
 
-		p.pushStyle();
-		{
-			p.rectMode(PConstants.CENTER);
-			p.noStroke();
-			p.stroke(360, 0, 160, 280);
-			p.fill(360, 0, 0, 200);
-			p.rect(p.width * 0.5f, p.height * 0.5f, editorLayer.length * Glv.neuronSize*1.2f+100f, editorLayer[0].length * Glv.neuronSize*1.2f+100f, 30);
-		}
-		p.popStyle();
-
 		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length, "Editor");
 
 		for (int i = 0; i < editorLayer.length; i++) {
@@ -429,9 +419,14 @@ public class Environment {
 	private void drawBoundary(PVector position, int sizeX, int sizeY, String myText) {
 		p.pushStyle();
 		{
+			/*
 			p.noFill();
 			//p.fill(360);
 			p.stroke(360);
+			*/
+			p.stroke(360, 0, 160, 280);
+			p.fill(360, 0, 0, 200);
+			
 			p.pushMatrix();
 			{
 				p.rectMode(PConstants.CORNER);
@@ -475,7 +470,7 @@ public class Environment {
 				p.noStroke();
 				p.stroke(360, 0, 160, 280);
 				p.fill(360, 0, 0, 200);
-				p.rect(edPosition.x, edPosition.y, edSize.x, edSize.y, 30);
+				p.rect(edPosition.x, edPosition.y, edSize.x-25f, edSize.y, 30);
 
 				p.stroke(0);
 				p.fill(280);
@@ -583,7 +578,7 @@ public class Environment {
 	}
 	//<---
 
-	//---> For Editormode.
+	//---> SETUP Editormode.
 	public void myEditor() {
 		p.println("I have reached this.");
 
@@ -599,9 +594,9 @@ public class Environment {
 			for (int j = 0; j < editorLayer[i].length; j++) {
 				PVector position = new PVector(
 						(Glv.neuronSize * 1.2f * i)
-								+ (p.width / 2 - (Glv.neuronSize * 1.2f * editorLayer.length) * 0.5f),
+								+ 60f,//(30f - (Glv.neuronSize * 1.2f * editorLayer.length) * 0.5f),
 						(Glv.neuronSize * 1.2f * j)
-								+ (p.height / 2 - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
+								+ (((p.height-150f) *0.5f + 150f) - (Glv.neuronSize * 1.2f * editorLayer[0].length) * 0.5f));
 
 				editorLayer[i][j] = new Neuron(p, position, dummyInput, new PVector(i, j));
 				if (card._analysis[i][j] != null) {

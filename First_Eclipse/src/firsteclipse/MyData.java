@@ -177,7 +177,7 @@ public class MyData {
 	public void drawOnlyAnalysis(Environment env) {
 		drawBoundary(
 				new PVector(p.width / 5 - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
-						p.height * 0.5f - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
+						((p.height-150f) * 0.5f+150f) - (Glv.neuronSize * 1.2f * _analysis[0].length) * 0.5f),
 				_analysis.length, _analysis[0].length, "Loaded SpaceSyntax");
 
 		//---> THIS DRAWS THE LOADED SPACESYNTAX ANALYSIS ON THE LEFT!
@@ -190,7 +190,7 @@ public class MyData {
 							p.pushStyle();
 							{
 
-								p.translate(p.width / 5, p.height * 0.5f);
+								p.translate(p.width / 5, ((p.height-150f) * 0.5f)+150f);
 								p.translate(
 										(Glv.neuronSize * 1.2f * i) - (Glv.neuronSize * 1.2f * _analysis.length) * 0.5f,
 										(Glv.neuronSize * 1.2f * j)

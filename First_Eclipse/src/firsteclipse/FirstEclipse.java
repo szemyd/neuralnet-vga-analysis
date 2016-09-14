@@ -190,8 +190,8 @@ public class FirstEclipse extends PApplet {
 							if (!env.isUpdated) {
 								env.setSpaceSyntaxValues(); // Constantly update the values: make neuron network react.
 								env.spaceSyntax.setDrawHeight();
-								env.spaceSyntax.drawResponded();
 							}
+							env.spaceSyntax.drawResponded();
 						}
 					}
 
