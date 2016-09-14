@@ -52,7 +52,7 @@ public class Environment {
 	PeasyCam cam;
 
 	PShape s;
-	
+
 	public static boolean isUpdated = false;
 
 	public Neuron[][] editorLayer;
@@ -230,11 +230,12 @@ public class Environment {
 		cp5.addToggle("dimensionalityReduction").setValue(true).setPosition(200, 20).setSize(60, 20).moveTo(g4)
 				.plugTo(Glv.shouldDimReduction).setLabel("DimReduction");
 		cp5.addToggle("editorForAnalysisOn").setValue(false).setPosition(20, 100).setSize(60, 20).moveTo(g5)
-				.plugTo(Glv.editorForAnalysisOn).setLabel("ANAEditor");;
+				.plugTo(Glv.editorForAnalysisOn).setLabel("ANAEditor");
+		;
 		cp5.addToggle("splitNetwork").setValue(false).setPosition(90, 100).setSize(60, 20).moveTo(g5)
 				.plugTo(Glv.splitNetwork).setLabel("Split");
 		cp5.addToggle("clustering").setValue(true).setPosition(160, 100).setSize(60, 20).moveTo(g5)
-		.plugTo(Glv.neighbourHoodOrClustering).setLabel("Neighbourhood");
+				.plugTo(Glv.neighbourHoodOrClustering).setLabel("Neighbourhood");
 
 		cp5.addToggle("shouldICalculateWhole").setValue(true).setPosition(20, 60).setSize(60, 20).moveTo(g7)
 				.plugTo(Glv.shouldICalculateWhole);
@@ -372,8 +373,6 @@ public class Environment {
 
 		if (cp5.isMouseOver()) {
 			cam.setActive(false);
-		} else {
-			cam.setActive(true);
 		}
 
 		cam.beginHUD();
@@ -407,6 +406,17 @@ public class Environment {
 	}
 
 	public void drawEditor() {
+
+		p.pushStyle();
+		{
+			p.rectMode(PConstants.CENTER);
+			p.noStroke();
+			p.stroke(360, 0, 160, 280);
+			p.fill(360, 0, 0, 200);
+			p.rect(p.width * 0.5f, p.height * 0.5f, editorLayer.length * Glv.neuronSize*1.2f+100f, editorLayer[0].length * Glv.neuronSize*1.2f+100f, 30);
+		}
+		p.popStyle();
+
 		drawBoundary(editorLayer[0][0].position, editorLayer.length, editorLayer[0].length, "Editor");
 
 		for (int i = 0; i < editorLayer.length; i++) {
@@ -657,8 +667,8 @@ public class Environment {
 			}
 
 		}
-		
-		isUpdated=false;
+
+		isUpdated = false;
 	}
 
 	public void setSpaceSyntaxValues() {
@@ -705,8 +715,8 @@ public class Environment {
 
 								}
 							}
-							
-							isUpdated=true;
+
+							isUpdated = true;
 						}
 					}
 				}

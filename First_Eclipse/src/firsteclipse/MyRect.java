@@ -61,15 +61,15 @@ public class MyRect {
 		else
 			p.fill(p.map(height, -1f, 1f, 0, 255), 360, 360);
 
-		drawVertex();
+		//drawVertex();
 
-		/*p.pushMatrix();
+		p.pushMatrix();
 		{
 			p.translate(position.x, position.y, 0.0f);
 			p.rect(0, 0, Glv.spaceCubeSize, Glv.spaceCubeSize);
 		}
 		p.popMatrix();
-		*/
+		
 	}
 
 	void drawVertex() {
@@ -136,6 +136,7 @@ public class MyRect {
 					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y + Glv.spaceCubeSize * 0.5f, corners[3]);
 				}
 				p.endShape();
+				
 				p.beginShape();
 				{
 					p.vertex(position.x + Glv.spaceCubeSize * 0.5f, position.y - Glv.spaceCubeSize * 0.5f,

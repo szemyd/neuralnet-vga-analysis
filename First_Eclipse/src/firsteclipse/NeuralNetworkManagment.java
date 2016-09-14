@@ -58,7 +58,14 @@ public class NeuralNetworkManagment {
 	//---> Loading & Managing the data
 	public void loadGenData() {
 		String filePath = new File("").getAbsolutePath();
-		File folder = new File(filePath + "\\" + "GeneratedData");
+
+		String folderName;
+		if (Glv.neighbourHoodOrClustering)
+			folderName = "GeneratedData";
+		else
+			folderName = "ClusteringData";
+		File folder = new File(filePath + "\\" + folderName);
+		
 		File[] listOfFiles = folder.listFiles();
 
 		BufferedReader br = null;
@@ -304,8 +311,6 @@ public class NeuralNetworkManagment {
 	//---> SETUP NN.
 	public void setupNeuralNetwork(Environment env) {
 		//---> The decision here: 1. Have I specified certain input neurons with the editor? 2. Am I doing generating or analysis 3. I am doing analysis optimisation!
-
-		
 
 		if (dataLoaded) {
 			switch (Glv.genOrA) {
@@ -623,12 +628,10 @@ public class NeuralNetworkManagment {
 	//---> Interact with NN.
 	public void trainNN(DataAnalysis graphs, Environment env) {
 
-		
-		
 		if (dataLoaded) {
 			//training(10, graphs, Glv.howManyCycles); // This is so we have the number the NN original performs as.
 			threads = new ArrayList<MyThread>();
-			
+
 			for (int Z = 0; Z < Glv.numOfCycles; Z++) {
 				training(Glv.numOfLearning, graphs, Glv.howManyCycles);
 
@@ -836,15 +839,14 @@ public class NeuralNetworkManagment {
 	public void backTo3D(Environment env) {
 		if (Glv.shouldICalculateWhole) {
 			threads = new ArrayList<MyThread>();
-			
+
 			threads.add(new MyThread(p, 1000, env.editorLayer));
 
-		//	if (!threads.get(threads.size() - 1).VGADone) // If it is a new thread then start it!
-				threads.get(threads.size() - 1).start();
+			//	if (!threads.get(threads.size() - 1).VGADone) // If it is a new thread then start it!
+			threads.get(threads.size() - 1).start();
 		}
 
-		else
-		{
+		else {
 			threads.add(new MyThread(p, 1000, env.editorLayer));
 
 			if (!threads.get(threads.size() - 1).VGADone) // If it is a new thread then start it!

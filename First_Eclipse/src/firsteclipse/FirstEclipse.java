@@ -120,6 +120,7 @@ public class FirstEclipse extends PApplet {
 
 		case 3:
 			env.cam.setActive(false); // Disable rotation of camera
+			draw3D();
 			drawEditor();
 			break;
 		}
