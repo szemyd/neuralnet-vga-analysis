@@ -34,6 +34,7 @@ import org.omg.PortableInterceptor.ACTIVE;
 
 import com.jogamp.opengl.GLStateKeeper.Listener;
 import com.sun.corba.se.impl.orb.ParserTable.TestAcceptor1;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 import com.sun.corba.se.spi.ior.IORFactories;
 import com.sun.glass.ui.TouchInputSupport;
 import com.sun.jmx.snmp.tasks.ThreadService;
@@ -48,6 +49,8 @@ public class FirstEclipse extends PApplet {
 	Environment env = new Environment(this);
 	public DataAnalysis graphs = new DataAnalysis(this);
 	PFont titleFont, smallFont;
+
+	mGraph myGraph = new mGraph();
 	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
@@ -74,7 +77,12 @@ public class FirstEclipse extends PApplet {
 		//noStroke();
 		rectMode(PConstants.CENTER);
 
-		graphs.setup();
+		graphs.setup(); // This is to display data
+
+		String[] myStrings = new String[5];
+
+		mGraph.start();
+		
 
 		if (Glv.programMode == 1)
 			loadDataSetup();

@@ -43,7 +43,6 @@ public class NeuralNetworkManagment {
 
 	public NeuralNetworkManagment(PApplet _p) {
 		p = _p;
-
 		setupSigmoid();
 	}
 
