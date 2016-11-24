@@ -50,7 +50,6 @@ public class FirstEclipse extends PApplet {
 	public DataAnalysis graphs = new DataAnalysis(this);
 	PFont titleFont, smallFont;
 
-	mGraph myGraph = new mGraph();
 	//DataAnalysis dataAnalysis = new DataAnalysis(this);
 
 	public void settings() {
@@ -79,16 +78,10 @@ public class FirstEclipse extends PApplet {
 
 		graphs.setup(); // This is to display data
 
-		String[] myStrings = new String[5];
-
-		mGraph.start();
-		
 
 		if (Glv.programMode == 1)
 			loadDataSetup();
-		//loadDataSetup();
-		//analysisSetup();
-		//dataAnalysis.setup();
+	
 
 		println("cores: " + Runtime.getRuntime().availableProcessors());
 	}

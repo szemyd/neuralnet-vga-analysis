@@ -7,9 +7,11 @@ import java.util.Set;
 
 import com.sun.glass.ui.Size;
 import com.sun.javafx.geom.Line2D;
+import com.sun.javafx.stage.WindowEventDispatcher;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import sun.awt.image.IntegerComponentRaster;
 
 public class SpaceSyntax {
 	private PApplet p;
@@ -17,6 +19,8 @@ public class SpaceSyntax {
 
 	public ArrayList<String> toNN = new ArrayList<String>();
 	public float[][] values;
+
+	public AGraph adjMatrix = new AGraph();
 
 	int threadID;
 
@@ -29,8 +33,12 @@ public class SpaceSyntax {
 
 	public void setup(MyBox[][] boxes) {
 
+		adjMatrix.start();
+
 		for (int i = 0; i < rectangles.length; i++) {
 			for (int j = 0; j < rectangles[i].length; j++) {
+				adjMatrix.unDirected.addVertex(i * rectangles.length + j);
+
 				PVector position = new PVector(
 						(Glv.spaceCubeSize * i) - (Glv.spaceCubeSize * Glv.spaceDivisionX) * 0.5f
 								+ Glv.spaceCubeSize * 0.5f,
@@ -113,7 +121,8 @@ public class SpaceSyntax {
 					}
 
 					for (int k = 0; k < corners.length; k++) {
-						rectangles[i][j].corners[k] = p.map(rectangles[i][j].corners[k], highLow.x, highLow.y, 5f, -20f);
+						rectangles[i][j].corners[k] = p.map(rectangles[i][j].corners[k], highLow.x, highLow.y, 5f,
+								-20f);
 					}
 				}
 			}
@@ -147,10 +156,14 @@ public class SpaceSyntax {
 						if (Glv.shouldDimReduction) {
 							if (canIseeBigCube(rectangles[i][j], rectangles[k][l], boxes)) { // Check big boxes.
 								rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+								if (i * rectangles.length + j != k * rectangles.length + l)
+									adjMatrix.unDirected.addEdge(i * rectangles.length + j, k * rectangles.length + l);
 							}
 						} else {
 							if (canIsee(rectangles[i][j], rectangles[k][l], boxes)) { // Check every box
 								rectangles[i][j].neighbourhood.add(rectangles[k][l]);
+								if (i * rectangles.length + j != k * rectangles.length + l)
+									adjMatrix.unDirected.addEdge(i * rectangles.length + j, k * rectangles.length + l);
 							}
 						}
 					}
@@ -175,6 +188,7 @@ public class SpaceSyntax {
 				setAllMaximum(); // If there arent enough boxes up set all points to high visibility
 		}
 
+		System.out.println(adjMatrix.unDirected.toString());
 		save(boxes);
 		setDrawHeight(); // Calculates a smooth surface to draw the rectangles.
 		//return true;
