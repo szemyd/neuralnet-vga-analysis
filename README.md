@@ -11,3 +11,6 @@ The hypotheses were tested by creating unique setups of an MLP for each mode, al
 Both mode A and mode B was able to achieve satisfying results that prove that an MLP is able to generate –with limitations- configurations based on VGA input and it is able to calculate the neighbourhood size and the clustering coefficient of a 2D layout substantially faster and with negligible error.
 
 All MLPs were created at a generic space, therefore the MLP taught once can be adopted universally to most spaces. The implications of the two systems is that spatial analysis can be integrated into the design process, enabling interactive, instant analysis and the possible deployment of optimisation procedures, for instance a Genetic Algorithm.
+
+Link to a published research paper (page 262, 175.1):
+http://www.11ssslisbon.pt/docs/5-methodological-and-technical-developments-05072017.pdf
